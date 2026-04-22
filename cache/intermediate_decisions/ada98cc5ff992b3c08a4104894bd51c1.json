@@ -1,0 +1,23 @@
+{
+  "decisions": [
+    {
+      "after_tool_idx": 0,
+      "tool": "get_mol_properties_and_fg",
+      "decision": "B",
+      "confidence": "committed",
+      "evidence": "Taken together, the molecule appears too polar and too weakly lipophilic to behave like a typical CYP3A4 substrate, so it is more likely not a substrate to CYP3A4.",
+      "is_last_before_final": false
+    },
+    {
+      "after_tool_idx": 1,
+      "tool": "compare_similar_mols",
+      "decision": "A",
+      "confidence": "committed",
+      "evidence": "Taken together, the neighbor comparisons support option (A): the molecule is not a substrate to CYP3A4.",
+      "is_last_before_final": true
+    }
+  ],
+  "final_answer": "A",
+  "n_windows": 2,
+  "version": 1
+}

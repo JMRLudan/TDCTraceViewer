@@ -1,0 +1,23 @@
+{
+  "decisions": [
+    {
+      "after_tool_idx": 0,
+      "tool": "get_mol_properties_and_fg",
+      "decision": "A",
+      "confidence": "committed",
+      "evidence": "Overall, the molecule shows a mix of heteroaromatic features and moderate QED, but the zero sp3 fraction, the polar charge extrema, and the presence of lactam/pyrimidine leave it with a profile that is not strongly favorable for intestinal uptake. That makes the molecule more consistent with poor absorption, so the predicted class is A: cannot be absorbed.",
+      "is_last_before_final": false
+    },
+    {
+      "after_tool_idx": 1,
+      "tool": "compare_similar_mols",
+      "decision": "B",
+      "confidence": "committed",
+      "evidence": "so the final prediction is option (B): can be absorbed.",
+      "is_last_before_final": true
+    }
+  ],
+  "final_answer": null,
+  "n_windows": 2,
+  "version": 1
+}

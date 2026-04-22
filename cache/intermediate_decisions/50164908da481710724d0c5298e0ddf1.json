@@ -1,0 +1,23 @@
+{
+  "decisions": [
+    {
+      "after_tool_idx": 0,
+      "tool": "get_mol_properties_and_fg",
+      "decision": "B",
+      "confidence": "committed",
+      "evidence": "the molecule is more consistent with being mutagenic, with a final call of B.",
+      "is_last_before_final": false
+    },
+    {
+      "after_tool_idx": 1,
+      "tool": "compare_similar_mols",
+      "decision": "B",
+      "confidence": "committed",
+      "evidence": "Overall, the combination of moderate lipophilicity, aromaticity, and the reactive alkyl chloride signal outweighs the lack of nitro and benzene features, so the molecule is best classified as mutagenic (B).",
+      "is_last_before_final": true
+    }
+  ],
+  "final_answer": null,
+  "n_windows": 2,
+  "version": 1
+}

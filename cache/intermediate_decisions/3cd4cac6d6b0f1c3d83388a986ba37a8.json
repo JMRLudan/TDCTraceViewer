@@ -1,0 +1,23 @@
+{
+  "decisions": [
+    {
+      "after_tool_idx": 0,
+      "tool": "get_mol_properties_and_fg",
+      "decision": "A",
+      "confidence": "committed",
+      "evidence": "Overall, these features support the prediction that the molecule can cause DILI.",
+      "is_last_before_final": false
+    },
+    {
+      "after_tool_idx": 1,
+      "tool": "compare_similar_mols",
+      "decision": "B",
+      "confidence": "committed",
+      "evidence": "Putting all six neighbors together, the three positive analogs consistently align with the query through higher alkene content, more ketones, and especially higher estimated logP or logD in the relevant comparisons. The three negative analogs are mixed, but each still contains DILI-positive-leaning differences such as higher alkene count, higher logD or logP, and extra ketone content, even though lower sp3 fraction and lower maximum absolute partial charge often pull the other way. The balance of these local analog comparisons therefore supports option (B): can cause DILI.",
+      "is_last_before_final": true
+    }
+  ],
+  "final_answer": "B",
+  "n_windows": 2,
+  "version": 1
+}

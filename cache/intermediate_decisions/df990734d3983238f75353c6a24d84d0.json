@@ -1,0 +1,23 @@
+{
+  "decisions": [
+    {
+      "after_tool_idx": 0,
+      "tool": "get_mol_properties_and_fg",
+      "decision": "B",
+      "confidence": "committed",
+      "evidence": "Overall, the combination of a protonatable tertiary amine, high basicity at 9.0411, estimated logP of 3.4131, TPSA of 16.91, and aromatic content supports option (B): blocks hERG.",
+      "is_last_before_final": false
+    },
+    {
+      "after_tool_idx": 1,
+      "tool": "compare_similar_mols",
+      "decision": "B",
+      "confidence": "committed",
+      "evidence": "The final prediction is option (B): blocks hERG.",
+      "is_last_before_final": true
+    }
+  ],
+  "final_answer": "B",
+  "n_windows": 2,
+  "version": 1
+}

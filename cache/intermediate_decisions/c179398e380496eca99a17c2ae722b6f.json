@@ -1,0 +1,15 @@
+{
+  "decisions": [
+    {
+      "after_tool_idx": 0,
+      "tool": "compare_similar_mols",
+      "decision": "A",
+      "confidence": "committed",
+      "evidence": "The recurring pyridine difference, the mixed but generally unfavorable logP, sp3, and charge pattern, and the lower QED in the negative analogs all point to the same conclusion: the query is more consistent with option (A), does not bind SARS-CoV-2 3CL protease.",
+      "is_last_before_final": true
+    }
+  ],
+  "final_answer": "A",
+  "n_windows": 1,
+  "version": 1
+}

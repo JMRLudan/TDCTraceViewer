@@ -1,0 +1,23 @@
+{
+  "decisions": [
+    {
+      "after_tool_idx": 0,
+      "tool": "get_mol_properties_and_fg",
+      "decision": null,
+      "confidence": "none",
+      "evidence": "",
+      "is_last_before_final": false
+    },
+    {
+      "after_tool_idx": 1,
+      "tool": "compare_similar_mols",
+      "decision": "A",
+      "confidence": "committed",
+      "evidence": "Taken together, the three positive neighbors and the three negative neighbors all point in the same direction: the query is markedly more polar, more ionized, and less lipophilic than the neighbors, with very high rotatable-bond count and a very large topological polar surface area. Although one or two individual substructure differences appear favorably on some neighbors, they are consistently outweighed by the broader physicochemical profile. The combined evidence therefore supports option (A): does not inhibit SARS-CoV-2 replication.",
+      "is_last_before_final": true
+    }
+  ],
+  "final_answer": "A",
+  "n_windows": 2,
+  "version": 1
+}

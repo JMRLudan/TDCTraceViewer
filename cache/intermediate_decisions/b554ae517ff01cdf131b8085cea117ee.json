@@ -1,0 +1,23 @@
+{
+  "decisions": [
+    {
+      "after_tool_idx": 0,
+      "tool": "get_mol_properties_and_fg",
+      "decision": "A",
+      "confidence": "committed",
+      "evidence": "The final prediction is A: is not mutagenic, with high confidence (score 0.894).",
+      "is_last_before_final": false
+    },
+    {
+      "after_tool_idx": 1,
+      "tool": "compare_similar_mols",
+      "decision": "A",
+      "confidence": "committed",
+      "evidence": "The overall balance therefore supports option A: is not mutagenic.",
+      "is_last_before_final": true
+    }
+  ],
+  "final_answer": "A",
+  "n_windows": 2,
+  "version": 1
+}

@@ -1,0 +1,23 @@
+{
+  "decisions": [
+    {
+      "after_tool_idx": 0,
+      "tool": "get_mol_properties_and_fg",
+      "decision": "B",
+      "confidence": "committed",
+      "evidence": "Overall, the combination of large molecular size, substantial lipophilicity, multiple basic/ionizable sites, and heteroatom-containing functional groups is more consistent with a compound that can reach and be handled by CYP3A4 than with a clear non-substrate. Despite the polarity burden, the balance of these properties favors option (B): is a substrate to the enzyme CYP3A4.",
+      "is_last_before_final": false
+    },
+    {
+      "after_tool_idx": 1,
+      "tool": "compare_similar_mols",
+      "decision": "B",
+      "confidence": "committed",
+      "evidence": "Because the substrate-favoring evidence is consistently stronger across all six analogs, the final prediction is option B: is a substrate to the enzyme CYP3A4.",
+      "is_last_before_final": true
+    }
+  ],
+  "final_answer": "B",
+  "n_windows": 2,
+  "version": 1
+}

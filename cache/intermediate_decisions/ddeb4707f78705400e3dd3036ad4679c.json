@@ -1,0 +1,23 @@
+{
+  "decisions": [
+    {
+      "after_tool_idx": 0,
+      "tool": "get_mol_properties_and_fg",
+      "decision": "A",
+      "confidence": "committed",
+      "evidence": "Overall, the presence of 2,4-thiazolidinedione together with moderate-to-high logP, multiple heteroatoms, and a recognizable ionizable profile makes the compound look more consistent with a toxic scaffold than with a clean, non-toxic one. I would therefore classify it as toxic, with high confidence.",
+      "is_last_before_final": false
+    },
+    {
+      "after_tool_idx": 1,
+      "tool": "compare_similar_mols",
+      "decision": "B",
+      "confidence": "committed",
+      "evidence": "The overall neighborhood therefore supports option (B): is toxic.",
+      "is_last_before_final": true
+    }
+  ],
+  "final_answer": "B",
+  "n_windows": 2,
+  "version": 1
+}

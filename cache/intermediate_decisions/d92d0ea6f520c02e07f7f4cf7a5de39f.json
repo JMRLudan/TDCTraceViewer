@@ -1,0 +1,23 @@
+{
+  "decisions": [
+    {
+      "after_tool_idx": 0,
+      "tool": "get_mol_properties_and_fg",
+      "decision": "B",
+      "confidence": "committed",
+      "evidence": "Overall, the balance of evidence supports option (B): blocks hERG, with high confidence.",
+      "is_last_before_final": false
+    },
+    {
+      "after_tool_idx": 1,
+      "tool": "compare_similar_mols",
+      "decision": "B",
+      "confidence": "committed",
+      "evidence": "The analog comparison is consistent with this view, because the closest neighbors most similar to the query are the blocker-like ones, while the non-blocking neighbors differ mainly in ways that are not enough to outweigh the query\u2019s repeated pattern of high rotatable-bond count and bulky surface area. Overall, the balance of structural and comparative evidence favors hERG blockade.",
+      "is_last_before_final": true
+    }
+  ],
+  "final_answer": "B",
+  "n_windows": 2,
+  "version": 1
+}

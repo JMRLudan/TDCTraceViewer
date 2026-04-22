@@ -1,0 +1,23 @@
+{
+  "decisions": [
+    {
+      "after_tool_idx": 0,
+      "tool": "get_mol_properties_and_fg",
+      "decision": "B",
+      "confidence": "committed",
+      "evidence": "Overall, the molecule is predicted to be not mutagenic, with the structural alerts outweighed by the low-risk physicochemical profile and lack of aromatic or ring-based activating features.",
+      "is_last_before_final": false
+    },
+    {
+      "after_tool_idx": 1,
+      "tool": "compare_similar_mols",
+      "decision": "A",
+      "confidence": "committed",
+      "evidence": "Across all six neighbors, the recurring mutagenicity-leaning feature is the presence of alkyl chloride in the query, especially against mutagenic neighbors that lack it or have more copies. But in every comparison the query is also much smaller, with lower heavy-atom count or molecular weight, lower Labute surface area, fewer rings, and in several cases lower QED or altered charge features that do not overcome the size-based differences. The three mutagenic neighbors and the three non-mutagenic neighbors all end up with a net comparison that favors option (A): is not mutagenic.",
+      "is_last_before_final": true
+    }
+  ],
+  "final_answer": "A",
+  "n_windows": 2,
+  "version": 1
+}

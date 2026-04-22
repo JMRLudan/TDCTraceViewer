@@ -1,0 +1,15 @@
+{
+  "decisions": [
+    {
+      "after_tool_idx": 0,
+      "tool": "compare_similar_mols",
+      "decision": "A",
+      "confidence": "committed",
+      "evidence": "Taken together, the three positive neighbors are mixed but overall do not overturn the non-mutagenic conclusion: Neighbor 1 and Neighbor 2 are outweighed by the 3-pyrroline and imide acidic differences, and Neighbor 3 is the main mutagenic counterexample because of nitrosamide and the lower sp3 fraction. The three negative neighbors are more consistent with the final label, since the query repeatedly shows 3-pyrroline and imide acidic relative to them, along with smaller Labute surface area and, in one case, a lower exact molecular weight. Although some size and heteroatom differences sometimes favor mutagenicity in individual comparisons, the repeated structural-alert pattern across the neighbors is more consistent with option (A): is not mutagenic.",
+      "is_last_before_final": true
+    }
+  ],
+  "final_answer": "A",
+  "n_windows": 1,
+  "version": 1
+}

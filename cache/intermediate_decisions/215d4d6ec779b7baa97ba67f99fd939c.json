@@ -1,0 +1,23 @@
+{
+  "decisions": [
+    {
+      "after_tool_idx": 0,
+      "tool": "get_mol_properties_and_fg",
+      "decision": "A",
+      "confidence": "committed",
+      "evidence": "Overall, despite the small size and good drug-likeness, the furan and pyridine features, along with the two basic sites, make the scaffold less convincing for 3CL protease binding, so the molecule is more likely to fall into option (A): does not bind SARS-CoV-2 3CL protease.",
+      "is_last_before_final": false
+    },
+    {
+      "after_tool_idx": 1,
+      "tool": "compare_similar_mols",
+      "decision": "A",
+      "confidence": "committed",
+      "evidence": "Across the six neighbors support option (A): does not bind SARS-CoV-2 3CL protease.",
+      "is_last_before_final": true
+    }
+  ],
+  "final_answer": "A",
+  "n_windows": 2,
+  "version": 1
+}

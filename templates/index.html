@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>GRPO viewer · {{ active_run_id }}</title>
+<link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<header class="app-header">
+  <div>
+    <h1>
+      <a href="/" title="home">GRPO viewer</a>
+      &nbsp;·&nbsp; run <code>{{ active_run_id }}</code>
+    </h1>
+    <div class="meta">{{ total_shown }} of {{ total_all }} groups &middot; <code>{{ run_dir }}</code></div>
+  </div>
+  <div class="run-switch">
+    {% for r in runs %}
+      <a class="pill {% if r.run_id == active_run_id %}active{% endif %}"
+         href="/runs/{{ r.run_id }}/">grpo · {{ r.run_id }}
+         <span class="pill-count">{{ r.n_groups }}</span></a>
+    {% endfor %}
+    {% for a in sft_archives %}
+      <a class="pill pill-sft" href="/sft/{{ a.archive_id }}/">sft · {{ a.archive_id }}
+         <span class="pill-count">{{ a.n_steps }}×{{ a.n_tasks }}</span></a>
+    {% endfor %}
+    <a class="pill pill-ann" href="/annotations/">claude annotations
+       <span class="pill-count">{{ n_annotations }}</span></a>
+    {% if has_analysis %}
+    <a class="pill pill-analysis" href="/analysis/">analysis</a>
+    {% endif %}
+  </div>
+</header>
+
+<main class="layout">
+
+  <aside class="filters">
+    <form method="get" action="/runs/{{ active_run_id }}/">
+      <label>step
+        <select name="step">
+          <option value="">(all)</option>
+          {% for s in steps %}
+            <option value="{{ s }}" {% if current.step == s %}selected{% endif %}>{{ s }}</option>
+          {% endfor %}
+        </select>
+      </label>
+
+      <label>type
+        <select name="type">
+          <option value="">(all)</option>
+          {% for t in types %}
+            <option value="{{ t }}" {% if current.type == t %}selected{% endif %}>{{ t }}</option>
+          {% endfor %}
+        </select>
+      </label>
+
+      <label>datasource
+        <select name="datasource">
+          <option value="">(all)</option>
+          {% for ds in datasources %}
+            <option value="{{ ds }}" {% if current.datasource == ds %}selected{% endif %}>{{ ds }}</option>
+          {% endfor %}
+        </select>
+      </label>
+
+      <label>sort
+        <select name="sort">
+          <option value="step" {% if current.sort == 'step' %}selected{% endif %}>step &uarr;</option>
+          <option value="mean_reward" {% if current.sort == 'mean_reward' %}selected{% endif %}>mean reward &uarr;</option>
+          <option value="mean_reward_desc" {% if current.sort == 'mean_reward_desc' %}selected{% endif %}>mean reward &darr;</option>
+          <option value="spread" {% if current.sort == 'spread' %}selected{% endif %}>reward spread &darr;</option>
+        </select>
+      </label>
+
+      <div class="btn-row">
+        <button type="submit">Apply</button>
+        <a class="btn-link" href="/runs/{{ active_run_id }}/">reset</a>
+      </div>
+    </form>
+  </aside>
+
+  <section class="results">
+    <table class="groups">
+      <thead>
+        <tr>
+          <th>step</th>
+          <th>type</th>
+          <th>datasource</th>
+          <th>label</th>
+          <th>n</th>
+          <th>mean r</th>
+          <th>min / max</th>
+          <th>correct</th>
+          <th>file</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for s in summaries %}
+        <tr>
+          <td>{{ s.step }}</td>
+          <td><span class="tag tag-{{ s.type }}">{{ s.type }}</span></td>
+          <td>{{ s.datasource }}</td>
+          <td><code>{{ s.label }}</code></td>
+          <td>{{ s.n_samples }}</td>
+          <td class="r r-{{ 'pos' if s.mean_reward > 0.5 else ('mid' if s.mean_reward > 0 else 'neg') }}">{{ "%.2f"|format(s.mean_reward) }}</td>
+          <td class="minmax">{{ "%.2f"|format(s.min_reward) }} / {{ "%.2f"|format(s.max_reward) }}</td>
+          <td>{{ s.n_correct }} / {{ s.n_samples }}</td>
+          <td class="file"><code>{{ s.source_file }}</code></td>
+          <td><a href="/runs/{{ active_run_id }}/group/{{ s.group_id }}">open &rarr;</a></td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </section>
+
+</main>
+</body>
+</html>

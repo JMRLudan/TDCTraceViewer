@@ -1,0 +1,23 @@
+{
+  "decisions": [
+    {
+      "after_tool_idx": 0,
+      "tool": "get_mol_properties_and_fg",
+      "decision": "B",
+      "confidence": "committed",
+      "evidence": "The net result is that the molecule is predicted not to bind SARS-CoV-2 3CL protease.",
+      "is_last_before_final": false
+    },
+    {
+      "after_tool_idx": 1,
+      "tool": "compare_similar_mols",
+      "decision": "A",
+      "confidence": "committed",
+      "evidence": "Overall, the balance of the neighbor comparisons is mixed but ends up slightly favoring the query as a binder, so the final prediction is that it does bind SARS-CoV-2 3CL protease.",
+      "is_last_before_final": true
+    }
+  ],
+  "final_answer": null,
+  "n_windows": 2,
+  "version": 1
+}

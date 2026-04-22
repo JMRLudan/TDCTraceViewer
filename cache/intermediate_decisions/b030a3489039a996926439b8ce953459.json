@@ -1,0 +1,23 @@
+{
+  "decisions": [
+    {
+      "after_tool_idx": 0,
+      "tool": "get_mol_properties_and_fg",
+      "decision": "A",
+      "confidence": "committed",
+      "evidence": "Balancing these features, the molecule is more consistent with a non-mutagenic outcome, so the final prediction is option (A): is not mutagenic.",
+      "is_last_before_final": false
+    },
+    {
+      "after_tool_idx": 1,
+      "tool": "compare_similar_mols",
+      "decision": "A",
+      "confidence": "committed",
+      "evidence": "Taken together, the three positive neighbors and the three negative neighbors all end up leaning toward the non-mutagenic label overall. In every comparison, the query repeatedly shows lower minimum absolute partial charge and lower maximum partial charge, higher fraction of sp3 carbons, and in several cases a lower neutral fraction, with only the strongest basic pKa and, in some neighbors, rotatable-bond count pointing toward mutagenicity. Because the non-mutagenic signals are consistently stronger across all six analogs, the combined evidence supports option (A): is not mutagenic.",
+      "is_last_before_final": true
+    }
+  ],
+  "final_answer": "A",
+  "n_windows": 2,
+  "version": 1
+}

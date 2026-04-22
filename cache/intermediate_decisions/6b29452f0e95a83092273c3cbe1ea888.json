@@ -1,0 +1,23 @@
+{
+  "decisions": [
+    {
+      "after_tool_idx": 0,
+      "tool": "get_mol_properties_and_fg",
+      "decision": "A",
+      "confidence": "committed",
+      "evidence": "the model's reasoning slice states: \"Taken together, the molecule has several properties that could support activity, but the overall balance remains slightly unfavorable, so the prediction is that it does not inhibit SARS-CoV-2 replication.\"",
+      "is_last_before_final": false
+    },
+    {
+      "after_tool_idx": 1,
+      "tool": "compare_similar_mols",
+      "decision": "A",
+      "confidence": "tentative",
+      "evidence": "Overall, the neighbor evidence is more consistent with option (A): does not inhibit SARS-CoV-2 replication.",
+      "is_last_before_final": true
+    }
+  ],
+  "final_answer": "A",
+  "n_windows": 2,
+  "version": 1
+}

@@ -1,0 +1,15 @@
+{
+  "decisions": [
+    {
+      "after_tool_idx": 0,
+      "tool": "compare_similar_mols",
+      "decision": "A",
+      "confidence": "committed",
+      "evidence": "Across all six neighbors, the toxic-side analogs do show several concerning shifts in the query, especially around partial charge, acidic pKa, and lipophilicity, but the non-toxic-side analogs repeatedly provide local support through the added alkene, added primary hydroxyl in two cases, and generally more favorable logP or charge balance. The nearest toxic neighbors are not decisive enough to outweigh the safer pattern seen in the three non-toxic neighbors, so the overall comparison is more consistent with option (A): is not toxic.",
+      "is_last_before_final": true
+    }
+  ],
+  "final_answer": "A",
+  "n_windows": 1,
+  "version": 1
+}

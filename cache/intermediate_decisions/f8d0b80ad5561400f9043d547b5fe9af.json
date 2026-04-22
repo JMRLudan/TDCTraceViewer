@@ -1,0 +1,23 @@
+{
+  "decisions": [
+    {
+      "after_tool_idx": 0,
+      "tool": "get_mol_properties_and_fg",
+      "decision": "B",
+      "confidence": "committed",
+      "evidence": "the overall pattern is still more consistent with a non-binder than with a clear 3CL protease binder.",
+      "is_last_before_final": false
+    },
+    {
+      "after_tool_idx": 1,
+      "tool": "compare_similar_mols",
+      "decision": "A",
+      "confidence": "committed",
+      "evidence": "Across all six neighbors, the three positive examples do not provide a strong binding-like pattern for the query, and the three negative examples also keep the query on the non-binder side despite a few favorable shifts in minimum absolute partial charge or QED. The repeated presence of the secondary mixed amine difference, along with the lower sp3 fraction and the unfavorable charge-related shifts in several comparisons, makes the overall neighborhood evidence lean toward option (A): does not bind SARS-CoV-2 3CL protease.",
+      "is_last_before_final": true
+    }
+  ],
+  "final_answer": "A",
+  "n_windows": 2,
+  "version": 1
+}

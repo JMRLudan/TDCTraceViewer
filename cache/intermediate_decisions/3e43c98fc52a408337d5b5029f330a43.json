@@ -1,0 +1,15 @@
+{
+  "decisions": [
+    {
+      "after_tool_idx": 0,
+      "tool": "compare_similar_mols",
+      "decision": "B",
+      "confidence": "committed",
+      "evidence": "Because the positive neighbors all support substrate status and the negative neighbors still compare more favorably to the query on the key CYP2D6-relevant features, the overall prediction is option (B): is a substrate to the enzyme CYP2D6.",
+      "is_last_before_final": true
+    }
+  ],
+  "final_answer": "B",
+  "n_windows": 1,
+  "version": 1
+}

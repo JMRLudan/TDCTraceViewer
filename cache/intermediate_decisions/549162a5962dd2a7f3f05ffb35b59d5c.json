@@ -1,0 +1,15 @@
+{
+  "decisions": [
+    {
+      "after_tool_idx": 0,
+      "tool": "compare_similar_mols",
+      "decision": "B",
+      "confidence": "committed",
+      "evidence": "Since the positive neighbors all favor blockade and the negative neighbors also contain strong blocker-like local signals, the overall prediction is option (B): blocks hERG.",
+      "is_last_before_final": true
+    }
+  ],
+  "final_answer": "B",
+  "n_windows": 1,
+  "version": 1
+}

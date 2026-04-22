@@ -1,0 +1,15 @@
+{
+  "decisions": [
+    {
+      "after_tool_idx": 0,
+      "tool": "compare_similar_mols",
+      "decision": "A",
+      "confidence": "committed",
+      "evidence": "The recurring absence of strong mutagenic alerts such as nitroso in the query and the consistent reduction in ring count, molecular size, and surface area makes option (A): is not mutagenic the best-supported final prediction.",
+      "is_last_before_final": true
+    }
+  ],
+  "final_answer": "A",
+  "n_windows": 1,
+  "version": 1
+}

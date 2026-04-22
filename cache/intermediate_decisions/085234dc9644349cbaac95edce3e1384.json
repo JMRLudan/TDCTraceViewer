@@ -1,0 +1,23 @@
+{
+  "decisions": [
+    {
+      "after_tool_idx": 0,
+      "tool": "get_mol_properties_and_fg",
+      "decision": "A",
+      "confidence": "committed",
+      "evidence": "Overall, the combination of low neutral fraction 0.0044, acidic pKa 5.049, estimated logD 0.9469, TPSA 118.87, H-bond acceptor count 8, number of basic sites 5, minimum absolute partial charge 0.2615, maximum absolute partial charge 0.2978, and aromatic heterocycle count 3 supports a prediction of option (A): is not permeable to cell membranes in a PAMPA assay.",
+      "is_last_before_final": false
+    },
+    {
+      "after_tool_idx": 1,
+      "tool": "compare_similar_mols",
+      "decision": "B",
+      "confidence": "committed",
+      "evidence": "Overall, the compound is best classified as not permeable to cell membranes in a PAMPA assay.",
+      "is_last_before_final": true
+    }
+  ],
+  "final_answer": "A",
+  "n_windows": 2,
+  "version": 1
+}

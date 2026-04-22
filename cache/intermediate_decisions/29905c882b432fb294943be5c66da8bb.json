@@ -1,0 +1,23 @@
+{
+  "decisions": [
+    {
+      "after_tool_idx": 0,
+      "tool": "get_mol_properties_and_fg",
+      "decision": null,
+      "confidence": "none",
+      "evidence": "",
+      "is_last_before_final": false
+    },
+    {
+      "after_tool_idx": 1,
+      "tool": "compare_similar_mols",
+      "decision": "A",
+      "confidence": "committed",
+      "evidence": "Across the nearest analogs those features are repeatedly counterbalanced by the thionyl change and by less favorable charge, QED, or neutral-fraction shifts. Taken together, the balance is slightly below the profile expected for a reliable SARS-CoV-2 replication inhibitor, so the best classification is does not inhibit SARS-CoV-2 replication.",
+      "is_last_before_final": true
+    }
+  ],
+  "final_answer": "A",
+  "n_windows": 2,
+  "version": 1
+}

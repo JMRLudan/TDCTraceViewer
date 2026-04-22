@@ -1,0 +1,15 @@
+{
+  "decisions": [
+    {
+      "after_tool_idx": 0,
+      "tool": "compare_similar_mols",
+      "decision": "B",
+      "confidence": "committed",
+      "evidence": "Across all six neighbors, the same theme repeats: the query consistently retains nitro functionality, sometimes with even more nitro groups than the neighbor, and nitro is the most important Ames-relevant alert in these comparisons. The exposure-limiting descriptors such as lower estimated logD/logP, fewer rings, and higher polar surface area in some cases can temper the concern, but they do not outweigh the persistent nitro toxicophore. The retained mutagenic alert dominates, and the overall evidence supports option (B): mutagenic.",
+      "is_last_before_final": true
+    }
+  ],
+  "final_answer": null,
+  "n_windows": 1,
+  "version": 1
+}

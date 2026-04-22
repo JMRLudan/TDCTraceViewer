@@ -1,0 +1,15 @@
+{
+  "decisions": [
+    {
+      "after_tool_idx": 0,
+      "tool": "compare_similar_mols",
+      "decision": "A",
+      "confidence": "committed",
+      "evidence": "Across all six neighbors, the same pattern repeats: the query often has lower TPSA than some neighbors, which is the main BBB-favorable feature, but that advantage is repeatedly outweighed by other local comparisons such as higher sp3 fraction, extra heterocycle burden, lower QED, lower logD in several cases, and the recurring azetidin-2-one motif. The three positive neighbors and the three negative neighbors all end up favoring the non-BBB side overall, so the combined neighbor evidence supports option (A): does not cross the BBB.",
+      "is_last_before_final": true
+    }
+  ],
+  "final_answer": "A",
+  "n_windows": 1,
+  "version": 1
+}

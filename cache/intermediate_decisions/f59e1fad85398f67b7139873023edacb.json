@@ -1,0 +1,23 @@
+{
+  "decisions": [
+    {
+      "after_tool_idx": 0,
+      "tool": "get_mol_properties_and_fg",
+      "decision": "A",
+      "confidence": "committed",
+      "evidence": "Overall, the molecule lacks aromaticity, has very low lipophilicity, and is dominated by polar, saturated functionality, which makes poor membrane penetration and low bacterial bioavailability more likely than activation by a classic mutagenic toxicophore. Taken together, these features support the prediction that the compound is not mutagenic, option (A), with confidence.",
+      "is_last_before_final": false
+    },
+    {
+      "after_tool_idx": 1,
+      "tool": "compare_similar_mols",
+      "decision": "A",
+      "confidence": "committed",
+      "evidence": "Taken together, the nearest analogs support option (A): is not mutagenic.",
+      "is_last_before_final": true
+    }
+  ],
+  "final_answer": "A",
+  "n_windows": 2,
+  "version": 1
+}

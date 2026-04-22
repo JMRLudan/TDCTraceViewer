@@ -1,0 +1,23 @@
+{
+  "decisions": [
+    {
+      "after_tool_idx": 0,
+      "tool": "get_mol_properties_and_fg",
+      "decision": "A",
+      "confidence": "committed",
+      "evidence": "Taken together, the combination of multiple polar/ionizable heteroatom-containing motifs, a high TPSA of 147.21, a low QED of 0.3483, and a strongly acidic site with pKa 2.474 supports the conclusion that the molecule is more likely to have oral bioavailability below 20%.",
+      "is_last_before_final": false
+    },
+    {
+      "after_tool_idx": 1,
+      "tool": "compare_similar_mols",
+      "decision": "B",
+      "confidence": "committed",
+      "evidence": "The overall balance is therefore best matched by option (B): has oral bioavailability \u226520%.",
+      "is_last_before_final": true
+    }
+  ],
+  "final_answer": "B",
+  "n_windows": 2,
+  "version": 1
+}

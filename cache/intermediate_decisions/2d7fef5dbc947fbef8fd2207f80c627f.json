@@ -1,0 +1,23 @@
+{
+  "decisions": [
+    {
+      "after_tool_idx": 0,
+      "tool": "get_mol_properties_and_fg",
+      "decision": "B",
+      "confidence": "committed",
+      "evidence": "On balance, the polarity and ionization pattern dominate, so the molecule is predicted to be not a substrate to CYP3A4.",
+      "is_last_before_final": false
+    },
+    {
+      "after_tool_idx": 1,
+      "tool": "compare_similar_mols",
+      "decision": "A",
+      "confidence": "committed",
+      "evidence": "Taken together, the three positive neighbors all end up leaning to option (A) once the charge, logD, and scaffold details are considered, and the three negative neighbors also support option (A) for the same overall reason. The recurring pattern is that the query does have a few substrate-like features such as dialkyl ether, piperidine, and a somewhat high basic pKa, but it also has a very low neutral fraction, low logD, and charge patterns that repeatedly move it away from the substrate-like neighbors. On balance, the six comparisons support the final prediction: option (A), is not a substrate to the enzyme CYP3A4.",
+      "is_last_before_final": true
+    }
+  ],
+  "final_answer": "A",
+  "n_windows": 2,
+  "version": 1
+}

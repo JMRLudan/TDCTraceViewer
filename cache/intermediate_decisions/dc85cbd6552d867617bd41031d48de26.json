@@ -1,0 +1,23 @@
+{
+  "decisions": [
+    {
+      "after_tool_idx": 0,
+      "tool": "get_mol_properties_and_fg",
+      "decision": "B",
+      "confidence": "tentative",
+      "evidence": "the overall assessment is that the molecule is more likely not mutagenic, despite some exposure- and charge-related features that are not entirely unfavorable.",
+      "is_last_before_final": false
+    },
+    {
+      "after_tool_idx": 1,
+      "tool": "compare_similar_mols",
+      "decision": "B",
+      "confidence": "committed",
+      "evidence": "Overall, the neighbor set more strongly resembles mutagenic compounds, so the final prediction is option (B): is mutagenic.",
+      "is_last_before_final": true
+    }
+  ],
+  "final_answer": "B",
+  "n_windows": 2,
+  "version": 1
+}

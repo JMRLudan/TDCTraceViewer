@@ -1,0 +1,23 @@
+{
+  "decisions": [
+    {
+      "after_tool_idx": 0,
+      "tool": "get_mol_properties_and_fg",
+      "decision": "B",
+      "confidence": "committed",
+      "evidence": "Overall, the mixed structural cues are not strongly aligned with the common 3CLpro-recognition motifs, so the molecule is more likely to be a non-binder, despite the favorable size and drug-likeness descriptors.",
+      "is_last_before_final": false
+    },
+    {
+      "after_tool_idx": 1,
+      "tool": "compare_similar_mols",
+      "decision": "A",
+      "confidence": "committed",
+      "evidence": "On balance, the analog evidence supports the query as a non-binder, so the final call is option (A): does not bind SARS-CoV-2 3CL protease.",
+      "is_last_before_final": true
+    }
+  ],
+  "final_answer": "A",
+  "n_windows": 2,
+  "version": 1
+}

@@ -1,0 +1,23 @@
+{
+  "decisions": [
+    {
+      "after_tool_idx": 0,
+      "tool": "get_mol_properties_and_fg",
+      "decision": "B",
+      "confidence": "committed",
+      "evidence": "Taken together, the combination of a low nitrogen/oxygen atom count (2), high neutral fraction (0.9977), moderate estimated logD (2.1283), and small Labute surface area (72.1093) supports skin exposure, while the presence of an alkene and the overall descriptor pattern make a skin reaction more plausible than not. Despite the counterbalancing presence of a phenol and the absence of sulfonate and aromatic amine, the balance of evidence favors option (B): causes a skin reaction.",
+      "is_last_before_final": false
+    },
+    {
+      "after_tool_idx": 1,
+      "tool": "compare_similar_mols",
+      "decision": "B",
+      "confidence": "committed",
+      "evidence": "Overall, the combined evidence supports a skin-reactive classification, so the molecule is best assigned to option (B): causes a skin reaction.",
+      "is_last_before_final": true
+    }
+  ],
+  "final_answer": "B",
+  "n_windows": 2,
+  "version": 1
+}

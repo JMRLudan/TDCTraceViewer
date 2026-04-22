@@ -1,0 +1,15 @@
+{
+  "decisions": [
+    {
+      "after_tool_idx": 0,
+      "tool": "compare_similar_mols",
+      "decision": "A",
+      "confidence": "committed",
+      "evidence": "Because the three positive neighbors still end up more consistent with the non-mutagenic label and the three negative neighbors already sit in the non-mutagenic class while matching the query\u2019s low-neutral-fraction, high-polarity profile, the combined evidence supports option (A): is not mutagenic.",
+      "is_last_before_final": true
+    }
+  ],
+  "final_answer": "A",
+  "n_windows": 1,
+  "version": 1
+}

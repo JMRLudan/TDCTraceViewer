@@ -1,0 +1,23 @@
+{
+  "decisions": [
+    {
+      "after_tool_idx": 0,
+      "tool": "get_mol_properties_and_fg",
+      "decision": null,
+      "confidence": "none",
+      "evidence": "Overall, despite the size and polarity penalties, the very high neutral fraction together with high logP/logD support classification as permeable to cell membranes in a PAMPA assay.",
+      "is_last_before_final": false
+    },
+    {
+      "after_tool_idx": 1,
+      "tool": "compare_similar_mols",
+      "decision": "B",
+      "confidence": "committed",
+      "evidence": "Because the positive-neighbor evidence is at least as strong overall and the molecule retains very high lipophilicity with a near-unity neutral fraction, the combined interpretation supports option (B): is permeable to cell membranes in a PAMPA assay.",
+      "is_last_before_final": true
+    }
+  ],
+  "final_answer": "B",
+  "n_windows": 2,
+  "version": 1
+}

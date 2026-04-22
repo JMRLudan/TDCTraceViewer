@@ -1,0 +1,31 @@
+{
+  "decisions": [
+    {
+      "after_tool_idx": 0,
+      "tool": "get_mol_properties_and_fg",
+      "decision": "A",
+      "confidence": "committed",
+      "evidence": "the overall pattern is more consistent with option (A): is not mutagenic, with a final score of 0.8523.",
+      "is_last_before_final": false
+    },
+    {
+      "after_tool_idx": 1,
+      "tool": "compare_similar_mols",
+      "decision": "B",
+      "confidence": "committed",
+      "evidence": "the molecule is better classified as not mutagenic.",
+      "is_last_before_final": false
+    },
+    {
+      "after_tool_idx": 2,
+      "tool": "get_mol_properties_and_fg",
+      "decision": "B",
+      "confidence": "committed",
+      "evidence": "Taken together, the absence of strong mutagenicity alerts outweighs the basicity and lipophilicity, so the molecule is best classified as not mutagenic.",
+      "is_last_before_final": true
+    }
+  ],
+  "final_answer": "A",
+  "n_windows": 3,
+  "version": 1
+}

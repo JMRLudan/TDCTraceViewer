@@ -1,0 +1,15 @@
+{
+  "decisions": [
+    {
+      "after_tool_idx": 0,
+      "tool": "compare_similar_mols",
+      "decision": "A",
+      "confidence": "committed",
+      "evidence": "Even though some individual features like TPSA, partial charge, or surface area sometimes point toward substrate-like behavior, the repeated absence of a basic center together with the simpler ring architecture makes the query more consistent with option (A): is not a substrate to the enzyme CYP2D6.",
+      "is_last_before_final": true
+    }
+  ],
+  "final_answer": "A",
+  "n_windows": 1,
+  "version": 1
+}

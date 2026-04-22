@@ -1,0 +1,47 @@
+{
+  "id": "grpo_0420_1223_mixed_step0_s0",
+  "title": "Pgp_Broccatelli step 0 sample #0 — wrong (A) despite strong positive-neighbor evidence",
+  "verdict": "wrong",
+  "tags": ["pgp", "step0", "neighbor-evidence", "overruled-analogs"],
+  "created_at": "2026-04-21T19:00:00Z",
+  "source": {
+    "kind": "grpo",
+    "run_id": "0420_1223",
+    "group_id": "mixed_step0",
+    "sample_idx": 0
+  },
+  "summary": "Step-0 (untrained) behavior on a Pgp inhibitor prediction. The model correctly gathers both structural descriptors and analog evidence, then overrules a clearly-positive neighbor by reasoning about surface-feature differences. Gold label is (B) inhibitor; model commits to (A) non-inhibitor with reward 0.20. Classic failure mode: treating retrieved positive analogs as weak priors rather than strong evidence.",
+  "segment_notes": [
+    {
+      "segment_idx": 0,
+      "heading": "Task framing",
+      "note": "Restates the task in its own words and spots the polarity correctly (predicting inhibitor status, NOT non-inhibitor). Plans a two-step analysis: compute properties, then compare against analogs."
+    },
+    {
+      "segment_idx": 1,
+      "heading": "Descriptor lookup",
+      "note": "Calls get_mol_properties_and_fg on the query SMILES. Reasonable first move — gives logP, surface area, donor/acceptor counts, and the functional-group fingerprint before looking at analogs."
+    },
+    {
+      "segment_idx": 3,
+      "heading": "Feature-based priors",
+      "note": "Reads the properties back and builds a qualitative prior: 'contains several motifs often seen in Pgp inhibitors'. So at this point it is *leaning toward* (B). The following tool call should in principle confirm that lean."
+    },
+    {
+      "segment_idx": 4,
+      "heading": "Analog retrieval",
+      "note": "Second tool call (compare_similar_mols) is the correct choice — analog evidence is the strongest signal available at this scale. The framework populates both positive-neighbor and negative-neighbor slots."
+    },
+    {
+      "segment_idx": 6,
+      "heading": "Overruling the analog",
+      "note": "This is where the sample goes wrong. Positive neighbor 1 is a clear structural match with the 'is inhibitor' label, but the model latches onto small delta values (surface area, logD) and argues those differences are enough to flip the prediction. No mechanistic basis for why those deltas would invert Pgp binding — it's a post-hoc rationalization."
+    },
+    {
+      "segment_idx": 7,
+      "heading": "Final commit",
+      "note": "Answers (A) despite both its own feature-based prior AND the positive analog pointing at (B). Gold is (B); reward lands at 0.20 (format-points only)."
+    }
+  ],
+  "conclusion": "Two things to watch as training progresses. (1) Does the analog-overrule behavior persist? A trained model should treat a high-similarity positive neighbor as near-decisive unless a specific mechanistic reason contradicts it. (2) Does the model stop building qualitative feature-based priors *before* retrieval? Those priors should come *after* seeing the analogs, not before, to avoid anchoring bias. If later steps show the model flipping to (B) on prompts like this one, that's evidence neighbor-evidence-weighting is improving."
+}

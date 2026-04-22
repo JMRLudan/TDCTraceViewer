@@ -1,0 +1,23 @@
+{
+  "decisions": [
+    {
+      "after_tool_idx": 0,
+      "tool": "get_mol_properties_and_fg",
+      "decision": "A",
+      "confidence": "committed",
+      "evidence": "Balancing these factors, the low logP and logD, the high TPSA, and the presence of polar groups outweigh the moderate basicity and aromatic ring content, so the molecule is more consistent with option (A), does not block hERG.",
+      "is_last_before_final": false
+    },
+    {
+      "after_tool_idx": 1,
+      "tool": "compare_similar_mols",
+      "decision": "A",
+      "confidence": "committed",
+      "evidence": "Since the non-blocking signals are repeated across all six comparisons, the overall evidence supports option (A): does not block hERG.",
+      "is_last_before_final": true
+    }
+  ],
+  "final_answer": "A",
+  "n_windows": 2,
+  "version": 1
+}

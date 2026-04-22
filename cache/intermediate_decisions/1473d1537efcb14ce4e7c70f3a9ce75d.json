@@ -1,0 +1,23 @@
+{
+  "decisions": [
+    {
+      "after_tool_idx": 0,
+      "tool": "get_mol_properties_and_fg",
+      "decision": "A",
+      "confidence": "committed",
+      "evidence": "so the molecule is more likely to be mutagenic.",
+      "is_last_before_final": false
+    },
+    {
+      "after_tool_idx": 1,
+      "tool": "compare_similar_mols",
+      "decision": "B",
+      "confidence": "committed",
+      "evidence": "Across all six neighbors, the three mutagenic neighbors consistently align the query with mutagenicity through combinations of partial charge, QED, pKa, acceptor count, and ring features, while the three non-mutagenic neighbors are outweighed by the query\u2019s stronger mutagenicity-associated changes, especially the presence of a primary aromatic amine and several charge/pKa differences. The lower heavy-atom molecular weight appears repeatedly as a countervailing factor, but it is not strong enough to overturn the mutagenicity-leaning signals. Taken together, the neighborhood evidence supports option (B): is mutagenic. The molecule carries a primary aromatic amine, a well-established mutagenicity alert, and it also has an ionizable basic site plus charge features consistent with a reactive, bacterial-accumulative scaffold. The comparison set reinforces this view: even where lower molecular weight works against mutagenicity, the query repeatedly shifts toward the mutagenic side through charge, pKa, QED, and the presence of the aromatic amine, while the non-mutagenic neighbors are not strong enough to offset those signals. Overall, the structural alert and the neighborhood pattern both support a mutagenic classification.",
+      "is_last_before_final": true
+    }
+  ],
+  "final_answer": "B",
+  "n_windows": 2,
+  "version": 1
+}

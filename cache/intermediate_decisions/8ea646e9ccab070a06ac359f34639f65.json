@@ -1,0 +1,23 @@
+{
+  "decisions": [
+    {
+      "after_tool_idx": 0,
+      "tool": "get_mol_properties_and_fg",
+      "decision": "A",
+      "confidence": "committed",
+      "evidence": "Overall, the balance of evidence supports option (A): is not mutagenic, with moderate confidence.",
+      "is_last_before_final": false
+    },
+    {
+      "after_tool_idx": 1,
+      "tool": "compare_similar_mols",
+      "decision": "A",
+      "confidence": "committed",
+      "evidence": "Across all six neighbors, the three mutagenic analogs are all larger, more lipophilic, and more ring-rich than the query, while the three non-mutagenic analogs are mixed but still leave the query as the smaller, less complex molecule overall. The most repeated pattern is the query\u2019s much lower molecular size and lower logP relative to the mutagenic neighbors, which outweighs the isolated partial-charge signal in the non-mutagenic neighbors. Taken together, the neighbor set supports option (A): is not mutagenic.",
+      "is_last_before_final": true
+    }
+  ],
+  "final_answer": "A",
+  "n_windows": 2,
+  "version": 1
+}

@@ -1,0 +1,15 @@
+{
+  "decisions": [
+    {
+      "after_tool_idx": 0,
+      "tool": "compare_similar_mols",
+      "decision": "A",
+      "confidence": "committed",
+      "evidence": "Putting the six comparisons together, all three mutagenic neighbors still look less like the query than their own mutagenic structures, because the query is consistently smaller, less lipophilic, less ring-rich, and more sp3-rich than those positive analogs. Across both sets, the query most often looks like the lower-exposure, less structurally elaborate scaffold, so the combined evidence supports option (A): is not mutagenic.",
+      "is_last_before_final": true
+    }
+  ],
+  "final_answer": "A",
+  "n_windows": 1,
+  "version": 1
+}

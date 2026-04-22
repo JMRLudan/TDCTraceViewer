@@ -1,0 +1,23 @@
+{
+  "decisions": [
+    {
+      "after_tool_idx": 0,
+      "tool": "get_mol_properties_and_fg",
+      "decision": "A",
+      "confidence": "committed",
+      "evidence": "Overall, the combination of 0 rings, high sp3 fraction at 0.875, heteroatom count of 1, TPSA of 17.07, H-bond acceptor count of 1, Labute surface area of 57.4554, estimated logP of 2.4017, and maximum absolute partial charge of 0.3031 supports a prediction of option (A): is not mutagenic, with only the aldehyde at 1 providing a limited counter-signal.",
+      "is_last_before_final": false
+    },
+    {
+      "after_tool_idx": 1,
+      "tool": "compare_similar_mols",
+      "decision": "A",
+      "confidence": "committed",
+      "evidence": "Final classification: option (A), is not mutagenic.",
+      "is_last_before_final": true
+    }
+  ],
+  "final_answer": null,
+  "n_windows": 2,
+  "version": 1
+}

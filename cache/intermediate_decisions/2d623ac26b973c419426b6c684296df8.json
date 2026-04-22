@@ -1,0 +1,23 @@
+{
+  "decisions": [
+    {
+      "after_tool_idx": 0,
+      "tool": "get_mol_properties_and_fg",
+      "decision": "B",
+      "confidence": "committed",
+      "evidence": "Overall, the low TPSA of 34.47, the neutral fraction of 0.3144, the piperidine present (1), the 1H-indole present (1), the aliphatic ring count of 3, and the favorable QED of 0.7802 outweigh the weaker signals from the carboxylic ester present (1), maximum partial charge of 0.3545, and the presence of 2 basic sites. Taken together, the molecule is more consistent with oral bioavailability \u2265 20%, so option (B) is the better prediction.",
+      "is_last_before_final": false
+    },
+    {
+      "after_tool_idx": 1,
+      "tool": "compare_similar_mols",
+      "decision": "B",
+      "confidence": "committed",
+      "evidence": "Overall, the six comparisons support option (B): has oral bioavailability \u226520%.",
+      "is_last_before_final": true
+    }
+  ],
+  "final_answer": "B",
+  "n_windows": 2,
+  "version": 1
+}

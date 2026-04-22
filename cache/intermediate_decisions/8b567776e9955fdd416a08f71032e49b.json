@@ -1,0 +1,23 @@
+{
+  "decisions": [
+    {
+      "after_tool_idx": 0,
+      "tool": "get_mol_properties_and_fg",
+      "decision": "B",
+      "confidence": "committed",
+      "evidence": "Overall, the combination of phenothiazine, piperidine, high basicity at pKa 10.0381, high estimated logP at 4.9011, and low neutral fraction 0.0023 is more consistent with a compound that inhibits SARS-CoV-2 replication than with a non-inhibitory scaffold, so the final prediction is option B.",
+      "is_last_before_final": false
+    },
+    {
+      "after_tool_idx": 1,
+      "tool": "compare_similar_mols",
+      "decision": "A",
+      "confidence": "committed",
+      "evidence": "With the negative neighbors weighted alongside the mixed positive evidence, the overall balance still favors option (A): does not inhibit SARS-CoV-2 replication.",
+      "is_last_before_final": true
+    }
+  ],
+  "final_answer": "A",
+  "n_windows": 2,
+  "version": 1
+}

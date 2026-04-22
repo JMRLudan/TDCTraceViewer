@@ -1,0 +1,23 @@
+{
+  "decisions": [
+    {
+      "after_tool_idx": 0,
+      "tool": "get_mol_properties_and_fg",
+      "decision": "A",
+      "confidence": "committed",
+      "evidence": "The final prediction is option (A): is not a substrate to the enzyme CYP2C9.",
+      "is_last_before_final": false
+    },
+    {
+      "after_tool_idx": 1,
+      "tool": "compare_similar_mols",
+      "decision": "A",
+      "confidence": "committed",
+      "evidence": "Across all six neighbors, the same pattern repeats: the query is consistently penalized by having guanidine and tetrahydroquinoline, and in several comparisons also by piperidine, lower QED, lower logD, higher strongest basic pKa, and larger surface-area or ionization features. The few favorable offsets, such as shared absence of dialkyl ether or the higher TPSA in Neighbor 4, are not enough to overturn the repeated non-substrate signals. With three substrate neighbors and three non-substrate neighbors, the negative evidence is more chemically specific and more consistent, so the overall comparison supports option (A): is not a substrate to the enzyme CYP2C9.",
+      "is_last_before_final": true
+    }
+  ],
+  "final_answer": "A",
+  "n_windows": 2,
+  "version": 1
+}

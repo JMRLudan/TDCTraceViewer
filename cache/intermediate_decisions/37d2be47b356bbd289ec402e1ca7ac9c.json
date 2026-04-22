@@ -1,0 +1,23 @@
+{
+  "decisions": [
+    {
+      "after_tool_idx": 0,
+      "tool": "get_mol_properties_and_fg",
+      "decision": "A",
+      "confidence": "committed",
+      "evidence": "Overall, the profile is dominated by hydroxyls, heterocycles, and ionizable groups rather than high lipophilicity or extensive aromaticity, which is more consistent with a lower DILI liability. While the hydrogen-bond acceptor count of 8 and basic-site count of 4 are not especially reassuring on their own, the combined picture of low aromatic burden, strong polarity, and multiple heteroatom-containing motifs supports option (A): cannot cause DILI.",
+      "is_last_before_final": false
+    },
+    {
+      "after_tool_idx": 1,
+      "tool": "compare_similar_mols",
+      "decision": "A",
+      "confidence": "committed",
+      "evidence": "Overall, the combined neighborhood therefore supports option (A): cannot cause DILI.",
+      "is_last_before_final": true
+    }
+  ],
+  "final_answer": "A",
+  "n_windows": 2,
+  "version": 1
+}

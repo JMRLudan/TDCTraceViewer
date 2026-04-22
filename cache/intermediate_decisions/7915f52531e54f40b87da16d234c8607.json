@@ -1,0 +1,23 @@
+{
+  "decisions": [
+    {
+      "after_tool_idx": 0,
+      "tool": "get_mol_properties_and_fg",
+      "decision": "B",
+      "confidence": "committed",
+      "evidence": "Overall, the molecule is more likely to not bind SARS-CoV-2 3CL protease.",
+      "is_last_before_final": false
+    },
+    {
+      "after_tool_idx": 1,
+      "tool": "compare_similar_mols",
+      "decision": "B",
+      "confidence": "committed",
+      "evidence": "the six comparisons therefore collectively support the conclusion that the query is more likely to not bind SARS-CoV-2 3CL protease. The molecule has some fragment-like, drug-like features, but those positives are not strong enough to outweigh the repeated unfavorable structural cues. Its highly flat, low-sp3, heteroaromatic-rich scaffold with multiple ionizable/basic sites and the presence of furan makes it less convincing as a 3CL protease binder.",
+      "is_last_before_final": true
+    }
+  ],
+  "final_answer": "A",
+  "n_windows": 2,
+  "version": 1
+}

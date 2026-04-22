@@ -1,0 +1,23 @@
+{
+  "decisions": [
+    {
+      "after_tool_idx": 0,
+      "tool": "get_mol_properties_and_fg",
+      "decision": "B",
+      "confidence": "committed",
+      "evidence": "Overall, the low polarity and modest acceptor burden are somewhat reassuring, but the aromatic halide, charge pattern, and strongly basic amine create enough mixed liability signals that the molecule is best classified as option (B), can cause DILI, with moderate confidence.",
+      "is_last_before_final": false
+    },
+    {
+      "after_tool_idx": 1,
+      "tool": "compare_similar_mols",
+      "decision": "B",
+      "confidence": "committed",
+      "evidence": "Because the positive neighbors also favor option (B), the combined neighbor evidence supports the final prediction: the query cannot be called DILI-negative, and the best classification is option (B), can cause DILI.",
+      "is_last_before_final": true
+    }
+  ],
+  "final_answer": null,
+  "n_windows": 2,
+  "version": 1
+}

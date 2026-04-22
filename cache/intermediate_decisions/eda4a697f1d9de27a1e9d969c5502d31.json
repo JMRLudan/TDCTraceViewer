@@ -1,0 +1,15 @@
+{
+  "decisions": [
+    {
+      "after_tool_idx": 0,
+      "tool": "compare_similar_mols",
+      "decision": "B",
+      "confidence": "tentative",
+      "evidence": "Overall, Neighbor 1 still leans toward the non-inhibitor side because the lower logD, lower acidic pKa, and lower sp3 fraction dominate the comparison.",
+      "is_last_before_final": true
+    }
+  ],
+  "final_answer": null,
+  "n_windows": 1,
+  "version": 1
+}

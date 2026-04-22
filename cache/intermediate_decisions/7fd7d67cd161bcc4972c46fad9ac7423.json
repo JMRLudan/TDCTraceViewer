@@ -1,0 +1,23 @@
+{
+  "decisions": [
+    {
+      "after_tool_idx": 0,
+      "tool": "get_mol_properties_and_fg",
+      "decision": "B",
+      "confidence": "committed",
+      "evidence": "On balance, the molecule is better classified as not a substrate to CYP3A4.",
+      "is_last_before_final": false
+    },
+    {
+      "after_tool_idx": 1,
+      "tool": "compare_similar_mols",
+      "decision": "B",
+      "confidence": "committed",
+      "evidence": "Across all six neighbors, the three substrate neighbors consistently share or strengthen substrate-associated motifs such as piperidine and dialkyl ether, with additional support from the query\u2019s basicity and neutral-fraction pattern. The three non-substrate neighbors do contain some opposing signals, especially lower QED, lower partial-charge values in a few cases, and the absence of benzofuran, aryl bromide, or acetal in the query, but those negatives are not strong enough to outweigh the repeated substrate-associated similarities. Taken together, the local analog evidence supports option (B): the query is a substrate to the enzyme CYP3A4.",
+      "is_last_before_final": true
+    }
+  ],
+  "final_answer": "B",
+  "n_windows": 2,
+  "version": 1
+}

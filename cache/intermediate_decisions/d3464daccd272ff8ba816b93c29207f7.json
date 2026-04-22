@@ -1,0 +1,23 @@
+{
+  "decisions": [
+    {
+      "after_tool_idx": 0,
+      "tool": "get_mol_properties_and_fg",
+      "decision": "A",
+      "confidence": "tentative",
+      "evidence": "Weighing the moderate polarity and basicity against the clear aromatic amine and the overall aromatic character, the molecule still looks more likely to be mutagenic, with the aromatic amine being the most chemically compelling feature despite some permeability-reducing polarity.",
+      "is_last_before_final": false
+    },
+    {
+      "after_tool_idx": 1,
+      "tool": "compare_similar_mols",
+      "decision": "A",
+      "confidence": "committed",
+      "evidence": "Therefore, it is predicted to be mutagenic.",
+      "is_last_before_final": true
+    }
+  ],
+  "final_answer": "B",
+  "n_windows": 2,
+  "version": 1
+}

@@ -1,0 +1,15 @@
+{
+  "decisions": [
+    {
+      "after_tool_idx": 0,
+      "tool": "compare_similar_mols",
+      "decision": "A",
+      "confidence": "committed",
+      "evidence": "Across all six neighbors, the repeated appearance of phosphoric monoesterdiamide and multiple alkyl chloride copies in the query is a recurring unfavorable motif, and the three negative neighbors already support the non-substrate class directly. The positive neighbors do show some substrate-like features such as higher estimated logD, higher logP, and greater saturation in the query, but those signals are inconsistent and never fully offset the stronger negative evidence. Taken together, the local analogs support option (A): the query is not a substrate to CYP3A4.",
+      "is_last_before_final": true
+    }
+  ],
+  "final_answer": "A",
+  "n_windows": 1,
+  "version": 1
+}

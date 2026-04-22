@@ -1,0 +1,23 @@
+{
+  "decisions": [
+    {
+      "after_tool_idx": 0,
+      "tool": "get_mol_properties_and_fg",
+      "decision": "A",
+      "confidence": "tentative",
+      "evidence": "Taken together, the most chemically meaningful alert is the alkyl iodide, and although several descriptors describe a nonpolar, ring-free scaffold that would not be expected to be intrinsically mutagenic, the presence of that electrophilic halide together with the overall physicochemical pattern makes a mutagenic outcome more plausible than a non-mutagenic one.",
+      "is_last_before_final": false
+    },
+    {
+      "after_tool_idx": 1,
+      "tool": "compare_similar_mols",
+      "decision": "B",
+      "confidence": "committed",
+      "evidence": "the overall prediction is option (B): is mutagenic.",
+      "is_last_before_final": true
+    }
+  ],
+  "final_answer": "B",
+  "n_windows": 2,
+  "version": 1
+}

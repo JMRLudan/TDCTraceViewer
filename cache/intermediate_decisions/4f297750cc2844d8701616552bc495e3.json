@@ -1,0 +1,23 @@
+{
+  "decisions": [
+    {
+      "after_tool_idx": 0,
+      "tool": "get_mol_properties_and_fg",
+      "decision": "A",
+      "confidence": "committed",
+      "evidence": "Overall, the aromatic nitro group is the most concerning structural alert, but the remaining profile is not dominated by strong mutagenic toxicophore patterns, so the balance of evidence supports option (A): is not mutagenic.",
+      "is_last_before_final": false
+    },
+    {
+      "after_tool_idx": 1,
+      "tool": "compare_similar_mols",
+      "decision": "A",
+      "confidence": "committed",
+      "evidence": "Taken together, the balance of nearby evidence is consistent with a non-mutagenic outcome for the query, with score 0.9879 supporting option (A).",
+      "is_last_before_final": true
+    }
+  ],
+  "final_answer": "A",
+  "n_windows": 2,
+  "version": 1
+}

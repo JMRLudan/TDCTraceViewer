@@ -1,0 +1,23 @@
+{
+  "decisions": [
+    {
+      "after_tool_idx": 0,
+      "tool": "get_mol_properties_and_fg",
+      "decision": "A",
+      "confidence": "committed",
+      "evidence": "Overall, the low neutral fraction together with the primary aliphatic amine makes the molecule more likely to remain ionized and less permeable, despite the high QED and the moderate charge extrema. The balance of evidence therefore favors option (A): does not cross the BBB.",
+      "is_last_before_final": false
+    },
+    {
+      "after_tool_idx": 1,
+      "tool": "compare_similar_mols",
+      "decision": "A",
+      "confidence": "committed",
+      "evidence": "The balance of these analog comparisons therefore supports option (A): does not cross the BBB.",
+      "is_last_before_final": true
+    }
+  ],
+  "final_answer": null,
+  "n_windows": 2,
+  "version": 1
+}

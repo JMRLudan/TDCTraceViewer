@@ -1,0 +1,23 @@
+{
+  "decisions": [
+    {
+      "after_tool_idx": 0,
+      "tool": "get_mol_properties_and_fg",
+      "decision": "B",
+      "confidence": "committed",
+      "evidence": "Overall, the balance of evidence favors option (B), is a substrate to the enzyme CYP3A4.",
+      "is_last_before_final": false
+    },
+    {
+      "after_tool_idx": 1,
+      "tool": "compare_similar_mols",
+      "decision": "A",
+      "confidence": "committed",
+      "evidence": "The overall balance therefore supports option (A): is not a substrate to the enzyme CYP3A4. The molecule does have a substrate-like core in its aromatic lactone scaffold and moderate size, which leaves some room for CYP3A4 binding, but that is outweighed by its strong ionization at physiological pH and low estimated logD, both of which point to poor passive permeability. The closest-neighbor comparisons reinforce that conclusion: across multiple nearby compounds, the repeated 2H-chromen-2-one motif and the low fraction of sp3 carbons consistently favor the non-substrate side, and the lower lipophilicity/charge pattern further weakens substrate-like behavior. Overall, the balance of structural and physicochemical evidence supports that this compound is not a CYP3A4 substrate.",
+      "is_last_before_final": true
+    }
+  ],
+  "final_answer": "A",
+  "n_windows": 2,
+  "version": 1
+}

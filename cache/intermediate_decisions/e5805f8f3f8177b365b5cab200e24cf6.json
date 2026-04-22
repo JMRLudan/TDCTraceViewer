@@ -1,0 +1,23 @@
+{
+  "decisions": [
+    {
+      "after_tool_idx": 0,
+      "tool": "get_mol_properties_and_fg",
+      "decision": "B",
+      "confidence": "committed",
+      "evidence": "Overall, the combination of a neutral, compact, low-PSA molecule with an alkene and some localized charge features provides enough evidence for skin-accessibility and possible protein-reactive potential that the molecule is predicted to cause a skin reaction (B), despite the absence of a basic site and the presence of an alkyl aryl ether.",
+      "is_last_before_final": false
+    },
+    {
+      "after_tool_idx": 1,
+      "tool": "compare_similar_mols",
+      "decision": "B",
+      "confidence": "committed",
+      "evidence": "the overall prediction is option (B): causes a skin reaction.",
+      "is_last_before_final": true
+    }
+  ],
+  "final_answer": "B",
+  "n_windows": 2,
+  "version": 1
+}

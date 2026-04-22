@@ -1,0 +1,15 @@
+{
+  "decisions": [
+    {
+      "after_tool_idx": 0,
+      "tool": "compare_similar_mols",
+      "decision": "B",
+      "confidence": "committed",
+      "evidence": "Putting the six neighbors together, the three positive neighbors consistently match the query\u2019s 2H-chromen-2-one motif and its more favorable charge/lipophilicity profile, while the three negative neighbors still show the query as more skin-accessible and electronically more compatible with a reactive outcome than the non-reactive references. The repeated presence of 2H-chromen-2-one in the query, along with the higher logD/logP and the charge-pattern differences, makes the overall local analog evidence support option (B): causes a skin reaction.",
+      "is_last_before_final": true
+    }
+  ],
+  "final_answer": "B",
+  "n_windows": 1,
+  "version": 1
+}

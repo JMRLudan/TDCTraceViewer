@@ -1,0 +1,23 @@
+{
+  "decisions": [
+    {
+      "after_tool_idx": 0,
+      "tool": "get_mol_properties_and_fg",
+      "decision": "A",
+      "confidence": "committed",
+      "evidence": "Taken together, the combination of neutral fraction 1, 1,3-dioxolane 1, alkyl fluoride 2, alkene 2, ketone 2, carboxylic ester 1, aliphatic carbocycle count 4, alkene 2, maximum partial charge 0.3026, and saturated carbocycle count 3 supports option (A): does not inhibit SARS-CoV-2 replication.",
+      "is_last_before_final": false
+    },
+    {
+      "after_tool_idx": 1,
+      "tool": "compare_similar_mols",
+      "decision": "A",
+      "confidence": "committed",
+      "evidence": "The balance of these local analogs is therefore most consistent with option (A): does not inhibit SARS-CoV-2 replication.",
+      "is_last_before_final": true
+    }
+  ],
+  "final_answer": null,
+  "n_windows": 2,
+  "version": 1
+}

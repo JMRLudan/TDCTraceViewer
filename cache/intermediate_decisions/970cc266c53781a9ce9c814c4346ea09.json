@@ -1,0 +1,15 @@
+{
+  "decisions": [
+    {
+      "after_tool_idx": 0,
+      "tool": "compare_similar_mols",
+      "decision": "A",
+      "confidence": "committed",
+      "evidence": "Taken together, the six neighbors are consistent: the three positive neighbors all show the query as less DILI-like than the positive analogs on the main charge and lipophilicity features, and the three negative neighbors also keep the query on the non-DILI side despite one recurring logD signal that points toward DILI. The repeated pattern is that the query has more extreme partial-charge values, much lower estimated logP, and several structural differences that align with option (A) in these local comparisons. The isolated logD shifts toward option (B) are not enough to overturn the broader pattern, so the final prediction is option (A): cannot cause DILI.",
+      "is_last_before_final": true
+    }
+  ],
+  "final_answer": "A",
+  "n_windows": 1,
+  "version": 1
+}

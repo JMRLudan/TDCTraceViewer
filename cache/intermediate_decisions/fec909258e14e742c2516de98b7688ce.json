@@ -1,0 +1,15 @@
+{
+  "decisions": [
+    {
+      "after_tool_idx": 0,
+      "tool": "compare_similar_mols",
+      "decision": "B",
+      "confidence": "committed",
+      "evidence": "Across all six neighbors, the same pattern repeats: the query consistently carries the alkyl chloride that appears in the mutagenic neighbors and that is absent in the non-mutagenic ones, while the remaining descriptors are mostly secondary exposure or polarity descriptors that do not reverse that structural alert. The alkyl chloride dominates the local analog evidence, and the combined comparisons support option (B): is mutagenic.",
+      "is_last_before_final": true
+    }
+  ],
+  "final_answer": null,
+  "n_windows": 1,
+  "version": 1
+}

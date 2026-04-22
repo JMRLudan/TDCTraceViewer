@@ -1,0 +1,23 @@
+{
+  "decisions": [
+    {
+      "after_tool_idx": 0,
+      "tool": "get_mol_properties_and_fg",
+      "decision": "B",
+      "confidence": "committed",
+      "evidence": "Overall, the mixed signals still lean away from a CYP2D6 substrate classification, so the molecule is predicted to be not a substrate to CYP2D6.",
+      "is_last_before_final": false
+    },
+    {
+      "after_tool_idx": 1,
+      "tool": "compare_similar_mols",
+      "decision": "A",
+      "confidence": "committed",
+      "evidence": "Taken together, the three substrate neighbors do not resemble the query strongly enough to overturn the structural pattern, and the combined neighbor evidence therefore supports the final prediction: option (A), is not a substrate to the enzyme CYP2D6. The molecule is therefore best classified as not a substrate to CYP2D6.",
+      "is_last_before_final": true
+    }
+  ],
+  "final_answer": "A",
+  "n_windows": 2,
+  "version": 1
+}

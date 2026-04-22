@@ -1,0 +1,23 @@
+{
+  "decisions": [
+    {
+      "after_tool_idx": 0,
+      "tool": "get_mol_properties_and_fg",
+      "decision": "B",
+      "confidence": "tentative",
+      "evidence": "On balance, the evidence is mixed, but the acidic group and charge pattern make the non-substrate assignment more plausible.",
+      "is_last_before_final": false
+    },
+    {
+      "after_tool_idx": 1,
+      "tool": "compare_similar_mols",
+      "decision": "A",
+      "confidence": "committed",
+      "evidence": "Since the strongest recurring signal is a more polar, acid-containing profile rather than the classic lipophilic basic-substrate pattern, the six neighbors together support option (A): is not a substrate to the enzyme CYP2D6.",
+      "is_last_before_final": true
+    }
+  ],
+  "final_answer": "A",
+  "n_windows": 2,
+  "version": 1
+}

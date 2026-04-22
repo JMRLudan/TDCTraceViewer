@@ -1,0 +1,23 @@
+{
+  "decisions": [
+    {
+      "after_tool_idx": 0,
+      "tool": "get_mol_properties_and_fg",
+      "decision": "B",
+      "confidence": "committed",
+      "evidence": "Overall, the combination of a primary aromatic amine, sulfuric monoester, amine functionality, moderate polarity/lipophilicity, and charge-related features is more consistent with a mutagenic outcome, so the molecule is predicted to be mutagenic (B) with a score of 0.8912.",
+      "is_last_before_final": false
+    },
+    {
+      "after_tool_idx": 1,
+      "tool": "compare_similar_mols",
+      "decision": "B",
+      "confidence": "committed",
+      "evidence": "Because the query repeatedly matches the mutagenic-side patterns in several positive analogs and the positive neighbors are clearly on the mutagenic side, the overall local evidence supports option (B): is mutagenic.",
+      "is_last_before_final": true
+    }
+  ],
+  "final_answer": "B",
+  "n_windows": 2,
+  "version": 1
+}

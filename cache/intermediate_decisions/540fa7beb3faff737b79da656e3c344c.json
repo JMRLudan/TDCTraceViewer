@@ -1,0 +1,23 @@
+{
+  "decisions": [
+    {
+      "after_tool_idx": 0,
+      "tool": "get_mol_properties_and_fg",
+      "decision": "A",
+      "confidence": "committed",
+      "evidence": "Taken together, despite the relatively high TPSA of 104.81, the combination of large Labute surface area 228.3483, alkyl aryl ether count 4, rotatable-bond count 14, nitro (1), tertiary amide (1), low neutral fraction 0.0158, and no acidic site makes the molecule more likely to block hERG.",
+      "is_last_before_final": false
+    },
+    {
+      "after_tool_idx": 1,
+      "tool": "compare_similar_mols",
+      "decision": "B",
+      "confidence": "committed",
+      "evidence": "Overall, the balance of evidence supports option (B): blocks hERG.",
+      "is_last_before_final": true
+    }
+  ],
+  "final_answer": "B",
+  "n_windows": 2,
+  "version": 1
+}

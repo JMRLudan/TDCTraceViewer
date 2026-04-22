@@ -1,0 +1,23 @@
+{
+  "decisions": [
+    {
+      "after_tool_idx": 0,
+      "tool": "get_mol_properties_and_fg",
+      "decision": "A",
+      "confidence": "committed",
+      "evidence": "Overall, the balance of evidence favors option (A), is not mutagenic.",
+      "is_last_before_final": false
+    },
+    {
+      "after_tool_idx": 1,
+      "tool": "compare_similar_mols",
+      "decision": "A",
+      "confidence": "committed",
+      "evidence": "Across all six neighbors, the same pattern repeats: the query has some mutagenicity-leaning features such as chloroalkene, higher alkyl chloride count, and in several comparisons a higher partial charge, but it also repeatedly shows much lower estimated logD, lower estimated logP in the one relevant neighbor, higher carboxylic acid count, and in one case a much lower Labute surface area. The three positive neighbors and the three negative neighbors all end up with overall non-mutagenic local analogies, so the combined neighborhood evidence supports option (A): is not mutagenic.",
+      "is_last_before_final": true
+    }
+  ],
+  "final_answer": null,
+  "n_windows": 2,
+  "version": 1
+}

@@ -1,0 +1,23 @@
+{
+  "decisions": [
+    {
+      "after_tool_idx": 0,
+      "tool": "get_mol_properties_and_fg",
+      "decision": "A",
+      "confidence": "tentative",
+      "evidence": "Overall, the evidence is mixed but tilts toward cannot cause DILI, with the low lipophilicity and low neutral fraction outweighing the more cautionary heterocycle and charge-related features.",
+      "is_last_before_final": false
+    },
+    {
+      "after_tool_idx": 1,
+      "tool": "compare_similar_mols",
+      "decision": "A",
+      "confidence": "committed",
+      "evidence": "overall neighborhood pattern supports option (A): cannot cause DILI; the conclusion that this compound is unlikely to cause DILI.",
+      "is_last_before_final": true
+    }
+  ],
+  "final_answer": "A",
+  "n_windows": 2,
+  "version": 1
+}

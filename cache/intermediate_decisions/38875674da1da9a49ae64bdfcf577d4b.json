@@ -1,0 +1,15 @@
+{
+  "decisions": [
+    {
+      "after_tool_idx": 0,
+      "tool": "compare_similar_mols",
+      "decision": "A",
+      "confidence": "committed",
+      "evidence": "Across the full set of neighbors, the query repeatedly shows the same pattern: stronger thioamide content and several charge/polarity changes point toward mutagenicity, but several comparisons also repeatedly emphasize lower ring count, higher sp3 character, and a less permeable/basic profile that favor the non-mutagenic side. The positive neighbors and the negative neighbors both contain mixed evidence, yet the non-mutagenic analogies are strong enough overall to support option (A): is not mutagenic.",
+      "is_last_before_final": true
+    }
+  ],
+  "final_answer": "A",
+  "n_windows": 1,
+  "version": 1
+}

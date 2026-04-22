@@ -1,0 +1,23 @@
+{
+  "decisions": [
+    {
+      "after_tool_idx": 0,
+      "tool": "get_mol_properties_and_fg",
+      "decision": "A",
+      "confidence": "committed",
+      "evidence": "Overall, the low aromaticity, absence of obvious mutagenic toxicophores, and the presence of a highly polar acid-containing framework make the molecule look more consistent with option (A): is not mutagenic, despite a few features that can influence exposure or chemistry slightly in a less favorable direction.",
+      "is_last_before_final": false
+    },
+    {
+      "after_tool_idx": 1,
+      "tool": "compare_similar_mols",
+      "decision": "A",
+      "confidence": "committed",
+      "evidence": "Therefore, the best classification is option (A): is not mutagenic.",
+      "is_last_before_final": true
+    }
+  ],
+  "final_answer": null,
+  "n_windows": 2,
+  "version": 1
+}

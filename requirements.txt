@@ -1,0 +1,8 @@
+fastapi>=0.115,<1.0
+uvicorn[standard]>=0.30,<1.0
+jinja2>=3.1,<4.0
+python-multipart>=0.0.9
+# NOTE: openai, pandas are only needed by intermediate_decisions.py +
+# llm_tracker.py, which are excluded from the public Render deploy via
+# .gitignore. Install them locally (pip install openai pandas) for
+# backfill / live extraction.

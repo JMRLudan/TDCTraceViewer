@@ -1,0 +1,23 @@
+{
+  "decisions": [
+    {
+      "after_tool_idx": 0,
+      "tool": "get_mol_properties_and_fg",
+      "decision": "A",
+      "confidence": "committed",
+      "evidence": "Overall, the low logP of 1.7207, low logD of 0.1234, TPSA of 103.86, and the polar functionalities of secondary hydroxyl (1) and sulfonamide (1) outweigh the moderate aromaticity from benzene count 2 and aromatic ring count 2, so the molecule is predicted to not block hERG, despite some mixed signals from size and ring content.",
+      "is_last_before_final": false
+    },
+    {
+      "after_tool_idx": 1,
+      "tool": "compare_similar_mols",
+      "decision": "A",
+      "confidence": "committed",
+      "evidence": "Overall, the neighbor evidence supports option (A): does not block hERG.",
+      "is_last_before_final": true
+    }
+  ],
+  "final_answer": "A",
+  "n_windows": 2,
+  "version": 1
+}

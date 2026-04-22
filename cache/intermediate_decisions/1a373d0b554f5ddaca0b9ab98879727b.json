@@ -1,0 +1,15 @@
+{
+  "decisions": [
+    {
+      "after_tool_idx": 0,
+      "tool": "compare_similar_mols",
+      "decision": "B",
+      "confidence": "committed",
+      "evidence": "Because the positive neighbors remain supportive overall and the negative neighbors do not overturn that pattern, the combined evidence is most consistent with option (B): has oral bioavailability \u2265 20%.",
+      "is_last_before_final": true
+    }
+  ],
+  "final_answer": "B",
+  "n_windows": 1,
+  "version": 1
+}

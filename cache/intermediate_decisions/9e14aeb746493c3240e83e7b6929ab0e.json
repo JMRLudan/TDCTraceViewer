@@ -1,0 +1,23 @@
+{
+  "decisions": [
+    {
+      "after_tool_idx": 0,
+      "tool": "get_mol_properties_and_fg",
+      "decision": "A",
+      "confidence": "committed",
+      "evidence": "Overall, the combination of a saturated, ring-rich scaffold with only one aromatic ring and very high neutral fraction outweighs the single favorable phenol feature, so the molecule is more consistent with option (A): is not a substrate to the enzyme CYP2C9.",
+      "is_last_before_final": false
+    },
+    {
+      "after_tool_idx": 1,
+      "tool": "compare_similar_mols",
+      "decision": "A",
+      "confidence": "committed",
+      "evidence": "Taken together, the six local analogs are more consistent with option (A): is not a substrate to the enzyme CYP2C9.",
+      "is_last_before_final": true
+    }
+  ],
+  "final_answer": "A",
+  "n_windows": 2,
+  "version": 1
+}

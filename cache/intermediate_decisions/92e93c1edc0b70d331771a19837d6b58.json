@@ -1,0 +1,15 @@
+{
+  "decisions": [
+    {
+      "after_tool_idx": 0,
+      "tool": "compare_similar_mols",
+      "decision": "B",
+      "confidence": "committed",
+      "evidence": "On balance, the three permeable neighbors are more similar to the query in the key charge and structural features that matter for passive PAMPA transport, especially the repeated matching of minimum absolute partial charge, maximum partial charge, and minimum partial charge, along with the lower aromatic burden or heteroaromatic burden where reported. The three non-permeable neighbors do show a repeated weakness for the query in estimated logD, but that is offset by the consistent charge pattern and the fact that the query is not a close match to the non-permeable aromatic/lipophilic profile. On balance, the final permeable call.",
+      "is_last_before_final": true
+    }
+  ],
+  "final_answer": "B",
+  "n_windows": 1,
+  "version": 1
+}

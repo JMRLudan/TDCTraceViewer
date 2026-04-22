@@ -1,0 +1,23 @@
+{
+  "decisions": [
+    {
+      "after_tool_idx": 0,
+      "tool": "get_mol_properties_and_fg",
+      "decision": "A",
+      "confidence": "committed",
+      "evidence": "Overall, despite the single tertiary aliphatic amine and the low logD being favorable in isolation, the combination of tertiary hydroxyl count 2, enol count 2, number of ionizable sites 9, primary amide 1, QED drug-likeness 0.3283, number of acidic sites 7, number of basic sites 2, phenol 1, estimated logD -2.7347, and Labute surface area 192.7325 supports the conclusion that the compound is more likely to have oral bioavailability < 20%.",
+      "is_last_before_final": false
+    },
+    {
+      "after_tool_idx": 1,
+      "tool": "compare_similar_mols",
+      "decision": "A",
+      "confidence": "committed",
+      "evidence": "Taken together, the neighbor comparisons support option (A), oral bioavailability < 20%.",
+      "is_last_before_final": true
+    }
+  ],
+  "final_answer": "A",
+  "n_windows": 2,
+  "version": 1
+}

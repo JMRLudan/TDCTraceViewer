@@ -1,0 +1,23 @@
+{
+  "decisions": [
+    {
+      "after_tool_idx": 0,
+      "tool": "get_mol_properties_and_fg",
+      "decision": "B",
+      "confidence": "tentative",
+      "evidence": "Overall, the non-substrate features slightly outweigh the substrate-like ones, so the molecule is more likely not to be a CYP2D6 substrate.",
+      "is_last_before_final": false
+    },
+    {
+      "after_tool_idx": 1,
+      "tool": "compare_similar_mols",
+      "decision": "A",
+      "confidence": "committed",
+      "evidence": "The balance of evidence therefore supports option (A): is not a substrate to the enzyme CYP2D6. Taken together, the evidence leans away from CYP2D6 substrate behavior, so the molecule is not a substrate to CYP2D6.",
+      "is_last_before_final": true
+    }
+  ],
+  "final_answer": "A",
+  "n_windows": 2,
+  "version": 1
+}

@@ -1,0 +1,15 @@
+{
+  "decisions": [
+    {
+      "after_tool_idx": 0,
+      "tool": "compare_similar_mols",
+      "decision": "A",
+      "confidence": "committed",
+      "evidence": "Across the full set of neighbors, the two nearest substrate analogs still end up favoring option A because their key substrate-like signals are offset by weaker basicity, higher neutral fraction, or loss of important polar motifs, while the three non-substrate analogs consistently remain compatible with the query through its low PSA, relatively modest lipophilicity, and charge/flexibility profile. The positive neighbors are not decisive enough to overcome the repeated non-substrate-like evidence from the negative neighbors, so the overall prediction is option (A): is not a substrate to the enzyme CYP2D6.",
+      "is_last_before_final": true
+    }
+  ],
+  "final_answer": "A",
+  "n_windows": 1,
+  "version": 1
+}

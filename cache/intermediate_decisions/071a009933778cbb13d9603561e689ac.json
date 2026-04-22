@@ -1,0 +1,15 @@
+{
+  "decisions": [
+    {
+      "after_tool_idx": 0,
+      "tool": "compare_similar_mols",
+      "decision": "A",
+      "confidence": "committed",
+      "evidence": "Across all six neighbors, the same pattern repeats: the query is consistently much less lipophilic by estimated logD, has a higher maximum absolute partial charge, and often shows higher hydrogen-bond acceptor or heteroatom counts than the neighbors, while the few B-leaning features such as nitrosamide absence, hemiacetal presence, sulfuric monoester presence, or slightly higher QED are not strong enough to outweigh the repeated A-leaning differences. Because both the positive and negative neighbor sets point in the same direction, the overall comparison supports option (A): cannot cause DILI.",
+      "is_last_before_final": true
+    }
+  ],
+  "final_answer": "A",
+  "n_windows": 1,
+  "version": 1
+}

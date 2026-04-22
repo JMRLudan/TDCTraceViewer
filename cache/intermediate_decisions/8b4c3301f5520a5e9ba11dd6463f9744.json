@@ -1,0 +1,23 @@
+{
+  "decisions": [
+    {
+      "after_tool_idx": 0,
+      "tool": "get_mol_properties_and_fg",
+      "decision": "A",
+      "confidence": "committed",
+      "evidence": "\"Overall, despite the moderate polarity and the low neutral fraction, the combination of reasonably good lipophilicity at logP 3.2065, the absence of basic sites, and the structural motifs that are not overly polarity-heavy supports the conclusion that the molecule is permeable to cell membranes in a PAMPA assay.\"",
+      "is_last_before_final": false
+    },
+    {
+      "after_tool_idx": 1,
+      "tool": "compare_similar_mols",
+      "decision": "A",
+      "confidence": "committed",
+      "evidence": "the final prediction is that the query is permeable to cell membranes in a PAMPA assay.",
+      "is_last_before_final": true
+    }
+  ],
+  "final_answer": "B",
+  "n_windows": 2,
+  "version": 1
+}

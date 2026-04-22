@@ -1,0 +1,23 @@
+{
+  "decisions": [
+    {
+      "after_tool_idx": 0,
+      "tool": "get_mol_properties_and_fg",
+      "decision": "B",
+      "confidence": "committed",
+      "evidence": "Overall, the combination of an amine, three basic sites, eight heteroatoms, six ionizable sites, a QED of 0.3965, and a TPSA of 87.14 gives a mixed but net mutagenicity-leaning profile, so the molecule is predicted to be mutagenic, option (B).",
+      "is_last_before_final": false
+    },
+    {
+      "after_tool_idx": 1,
+      "tool": "compare_similar_mols",
+      "decision": "B",
+      "confidence": "committed",
+      "evidence": "Because the query repeatedly aligns with the mutagenic neighbors on the more chemically salient features and less so with the non-mutagenic ones, the overall comparison supports option (B): is mutagenic.",
+      "is_last_before_final": true
+    }
+  ],
+  "final_answer": "B",
+  "n_windows": 2,
+  "version": 1
+}

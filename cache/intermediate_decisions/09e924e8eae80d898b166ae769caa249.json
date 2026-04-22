@@ -1,0 +1,15 @@
+{
+  "decisions": [
+    {
+      "after_tool_idx": 0,
+      "tool": "compare_similar_mols",
+      "decision": "B",
+      "confidence": "committed",
+      "evidence": "Overall, the three non-absorbed neighbors are even more decisive: the query lacks the ammonium and amidine burdens seen in those poor-absorption analogs, and it has a more favorable lipophilicity profile than the very extreme examples. The main caution is the query\u2019s higher TPSA and lower QED relative to some absorbed neighbors, but the overall balance of evidence still favors option (B): can be absorbed.",
+      "is_last_before_final": true
+    }
+  ],
+  "final_answer": "B",
+  "n_windows": 1,
+  "version": 1
+}

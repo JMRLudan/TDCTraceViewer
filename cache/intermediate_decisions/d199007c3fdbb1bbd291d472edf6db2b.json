@@ -1,0 +1,23 @@
+{
+  "decisions": [
+    {
+      "after_tool_idx": 0,
+      "tool": "get_mol_properties_and_fg",
+      "decision": "A",
+      "confidence": "committed",
+      "evidence": "Overall, the favorable QED of 0.7802, low TPSA of 34.47, and substantial neutral fraction of 0.3144 outweigh the unfavorable piperidine presence (1) and the charge-related signal at minimum absolute partial charge 0.3545, so the molecule is more likely to have oral bioavailability \u2265 20%.",
+      "is_last_before_final": false
+    },
+    {
+      "after_tool_idx": 1,
+      "tool": "compare_similar_mols",
+      "decision": "B",
+      "confidence": "committed",
+      "evidence": "The overall comparison supports option (B): has oral bioavailability \u2265 20%.",
+      "is_last_before_final": true
+    }
+  ],
+  "final_answer": "B",
+  "n_windows": 2,
+  "version": 1
+}

@@ -1,0 +1,23 @@
+{
+  "decisions": [
+    {
+      "after_tool_idx": 0,
+      "tool": "get_mol_properties_and_fg",
+      "decision": "A",
+      "confidence": "committed",
+      "evidence": "Taken together, the most chemically salient pattern is a saturated, non-aromatic scaffold with no obvious strong mutagenic toxicophore, so the molecule is more likely not mutagenic, option (A), with high confidence.",
+      "is_last_before_final": false
+    },
+    {
+      "after_tool_idx": 1,
+      "tool": "compare_similar_mols",
+      "decision": "A",
+      "confidence": "committed",
+      "evidence": "Since the non-mutagenic-leaning evidence is more coherent across the negative neighbors and the mutagenic neighbors are counterweighted by unfavorable charge/ester/QED differences, the overall prediction is option (A): is not mutagenic.",
+      "is_last_before_final": true
+    }
+  ],
+  "final_answer": "A",
+  "n_windows": 2,
+  "version": 1
+}

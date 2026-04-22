@@ -1,0 +1,23 @@
+{
+  "decisions": [
+    {
+      "after_tool_idx": 0,
+      "tool": "get_mol_properties_and_fg",
+      "decision": "A",
+      "confidence": "committed",
+      "evidence": "Overall, the combination of alkyl chloride count 5, chloroalkene count 2, ring count 3, and the additional alkene, together with the lipophilic, surface-characteristic profile, supports a prediction of mutagenic behavior, despite the opposing signals from topological polar surface area 0 and hydrogen-bond acceptor count 0.",
+      "is_last_before_final": false
+    },
+    {
+      "after_tool_idx": 1,
+      "tool": "compare_similar_mols",
+      "decision": "B",
+      "confidence": "committed",
+      "evidence": "so the final prediction is option (B): is mutagenic.",
+      "is_last_before_final": true
+    }
+  ],
+  "final_answer": "B",
+  "n_windows": 2,
+  "version": 1
+}

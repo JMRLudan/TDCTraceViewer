@@ -1,0 +1,23 @@
+{
+  "decisions": [
+    {
+      "after_tool_idx": 0,
+      "tool": "get_mol_properties_and_fg",
+      "decision": "A",
+      "confidence": "tentative",
+      "evidence": "Overall, despite the low neutral fraction and the polar/charged features, the combination of moderate lipophilicity, low TPSA, and the favorable ring/aryl chloride/partial-charge signals is more consistent with a molecule that can permeate cell membranes in a PAMPA assay.",
+      "is_last_before_final": false
+    },
+    {
+      "after_tool_idx": 1,
+      "tool": "compare_similar_mols",
+      "decision": "B",
+      "confidence": "committed",
+      "evidence": "Therefore, the final prediction is option (B): is permeable to cell membranes in a PAMPA assay.",
+      "is_last_before_final": true
+    }
+  ],
+  "final_answer": "B",
+  "n_windows": 2,
+  "version": 1
+}

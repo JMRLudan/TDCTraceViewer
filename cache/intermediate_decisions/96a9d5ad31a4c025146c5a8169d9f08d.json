@@ -1,0 +1,23 @@
+{
+  "decisions": [
+    {
+      "after_tool_idx": 0,
+      "tool": "get_mol_properties_and_fg",
+      "decision": "B",
+      "confidence": "committed",
+      "evidence": "the molecule does not inhibit SARS-CoV-2 replication, with high confidence.",
+      "is_last_before_final": false
+    },
+    {
+      "after_tool_idx": 1,
+      "tool": "compare_similar_mols",
+      "decision": "A",
+      "confidence": "committed",
+      "evidence": "The combined local evidence therefore supports option (A): does not inhibit SARS-CoV-2 replication. The molecule's neutral, ketone-rich, ring-heavy scaffold lacks the weakly basic cationic amphiphilic character that often accompanies SARS-CoV-2 Vero-E6 inhibition. Taken together, the structural profile and nearest-neighbor pattern both support a non-inhibitory assignment.",
+      "is_last_before_final": true
+    }
+  ],
+  "final_answer": null,
+  "n_windows": 2,
+  "version": 1
+}

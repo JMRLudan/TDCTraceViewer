@@ -1,0 +1,15 @@
+{
+  "decisions": [
+    {
+      "after_tool_idx": 0,
+      "tool": "compare_similar_mols",
+      "decision": "A",
+      "confidence": "committed",
+      "evidence": "Putting the six neighbors together, the three carcinogenic neighbors do not provide a consistent carcinogen-like match: each one is offset by charge, acceptor, or ester differences that keep the query closer to the non-carcinogen side. The three non-carcinogenic neighbors are more coherent overall, especially Neighbor 4 and Neighbor 6, where the query's lower charge extrema, lower acceptor burden, and in Neighbor 6 the much lower TPSA fit better with the non-carcinogen class. Although the query is more basic and more lipophilic than several neighbors, the local analog evidence as a whole still favors option (A): is not a carcinogen.",
+      "is_last_before_final": true
+    }
+  ],
+  "final_answer": "A",
+  "n_windows": 1,
+  "version": 1
+}

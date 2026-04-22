@@ -1,0 +1,23 @@
+{
+  "decisions": [
+    {
+      "after_tool_idx": 0,
+      "tool": "get_mol_properties_and_fg",
+      "decision": "A",
+      "confidence": "committed",
+      "evidence": "the most reasonable conclusion is option (A): does not inhibit SARS-CoV-2 replication.",
+      "is_last_before_final": false
+    },
+    {
+      "after_tool_idx": 1,
+      "tool": "compare_similar_mols",
+      "decision": "A",
+      "confidence": "committed",
+      "evidence": "Putting the six comparisons together, the three inhibiting neighbors are all matched by a query that is much less lipophilic and more heavily functionalized with acids, amides, NH/OH groups, and polar heteroatoms, while the three non-inhibiting neighbors show that the query\u2019s large increase in flexibility and polarity does not resemble the compact, moderate-lipophilicity patterns associated with inhibition. The repeated shifts toward higher NH/OH burden, higher rotatable-bond count, and lower logP/logD strongly support option (A): does not inhibit SARS-CoV-2 replication.",
+      "is_last_before_final": true
+    }
+  ],
+  "final_answer": null,
+  "n_windows": 2,
+  "version": 1
+}

@@ -1,0 +1,23 @@
+{
+  "decisions": [
+    {
+      "after_tool_idx": 0,
+      "tool": "get_mol_properties_and_fg",
+      "decision": "A",
+      "confidence": "committed",
+      "evidence": "Overall, the moderate QED, large surface area, polar heterocyclic content, and tertiary hydroxyl create absorption liabilities, but the favorable indole and the limited number of basic sites, together with a TPSA that is not prohibitive, are enough to support the conclusion of oral bioavailability \u2265 20%.",
+      "is_last_before_final": false
+    },
+    {
+      "after_tool_idx": 1,
+      "tool": "compare_similar_mols",
+      "decision": "B",
+      "confidence": "committed",
+      "evidence": "overall nearest-neighbor evidence supports option (B): has oral bioavailability \u2265 20%.",
+      "is_last_before_final": true
+    }
+  ],
+  "final_answer": "B",
+  "n_windows": 2,
+  "version": 1
+}

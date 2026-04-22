@@ -1,0 +1,23 @@
+{
+  "decisions": [
+    {
+      "after_tool_idx": 0,
+      "tool": "get_mol_properties_and_fg",
+      "decision": "A",
+      "confidence": "tentative",
+      "evidence": "Taken together, the very low molecular weight, very high neutral fraction, and moderate surface area outweigh the heteroaromatic and partial-charge polarity concerns, so the molecule is more consistent with can be absorbed, although the QED of 0.5192 and the zero sp3 fraction prevent it from looking optimally drug-like.",
+      "is_last_before_final": false
+    },
+    {
+      "after_tool_idx": 1,
+      "tool": "compare_similar_mols",
+      "decision": "B",
+      "confidence": "committed",
+      "evidence": "Overall, the local analog evidence supports option (B): can be absorbed.",
+      "is_last_before_final": true
+    }
+  ],
+  "final_answer": "B",
+  "n_windows": 2,
+  "version": 1
+}

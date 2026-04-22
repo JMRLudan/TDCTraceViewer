@@ -1,0 +1,23 @@
+{
+  "decisions": [
+    {
+      "after_tool_idx": 0,
+      "tool": "get_mol_properties_and_fg",
+      "decision": "B",
+      "confidence": "committed",
+      "evidence": "the balance of evidence favors is not mutagenic.",
+      "is_last_before_final": false
+    },
+    {
+      "after_tool_idx": 1,
+      "tool": "compare_similar_mols",
+      "decision": "A",
+      "confidence": "committed",
+      "evidence": "Across all six comparisons, the recurring query features that repeatedly support the non-mutagenic side are the reduced ring count, the presence of a primary amide, and the lower sp3 fraction or lower charge-related measures, while the mutagenicity-favoring basic-site and size/charge changes are not sufficient to dominate. The combined neighbor evidence therefore supports option (A): is not mutagenic.",
+      "is_last_before_final": true
+    }
+  ],
+  "final_answer": "A",
+  "n_windows": 2,
+  "version": 1
+}

@@ -1,0 +1,23 @@
+{
+  "decisions": [
+    {
+      "after_tool_idx": 0,
+      "tool": "get_mol_properties_and_fg",
+      "decision": "B",
+      "confidence": "committed",
+      "evidence": "Overall, the positive structural and exposure-related signals are outweighed by the countervailing properties, so the molecule is best classified as not causing a skin reaction.",
+      "is_last_before_final": false
+    },
+    {
+      "after_tool_idx": 1,
+      "tool": "compare_similar_mols",
+      "decision": "A",
+      "confidence": "committed",
+      "evidence": "Across all six neighbors, the positive-similarity neighbors 1 to 3 each end up favoring non-reactivity overall despite a few reactive-leaning features such as lower minimum absolute partial charge and, in some cases, higher logD or molecular weight. The negative-similarity neighbors 4 to 6 also end up favoring non-reactivity overall, even though they include some features that would otherwise support skin reaction. Because every neighbor comparison lands on the non-reactive side, the combined local evidence supports option (A): does not cause a skin reaction.",
+      "is_last_before_final": true
+    }
+  ],
+  "final_answer": "A",
+  "n_windows": 2,
+  "version": 1
+}

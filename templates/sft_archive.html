@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>SFT · {{ active_sft_id }}</title>
+<link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<header class="app-header">
+  <div>
+    <h1>
+      <a href="/" title="home">viewer</a>
+      &nbsp;·&nbsp; sft archive <code>{{ active_sft_id }}</code>
+    </h1>
+    <div class="meta">{{ archive.n_steps }} steps &middot; {{ archive.n_tasks }} tasks &middot; <code>{{ archive.root }}</code></div>
+  </div>
+  <div class="run-switch">
+    {% for r in runs %}
+      <a class="pill" href="/runs/{{ r.run_id }}/">grpo · {{ r.run_id }}
+         <span class="pill-count">{{ r.n_groups }}</span></a>
+    {% endfor %}
+    {% for a in sft_archives %}
+      <a class="pill pill-sft {% if a.archive_id == active_sft_id %}active{% endif %}"
+         href="/sft/{{ a.archive_id }}/">sft · {{ a.archive_id }}
+         <span class="pill-count">{{ a.n_steps }}×{{ a.n_tasks }}</span></a>
+    {% endfor %}
+    <a class="pill pill-ann" href="/annotations/">claude annotations
+       <span class="pill-count">{{ n_annotations }}</span></a>
+    {% if has_analysis %}
+    <a class="pill pill-analysis" href="/analysis/">analysis</a>
+    {% endif %}
+  </div>
+</header>
+
+<main class="sft-main">
+
+  <div class="sft-filter">
+    <form method="get" action="/sft/{{ active_sft_id }}/">
+      <label>step
+        <select name="step" onchange="this.form.submit()">
+          <option value="">(all)</option>
+          {% for s in steps %}
+            <option value="{{ s }}" {% if current_step == s %}selected{% endif %}>step {{ s }}</option>
+          {% endfor %}
+        </select>
+      </label>
+      <a class="btn-link" href="/sft/{{ active_sft_id }}/">reset</a>
+    </form>
+  </div>
+
+  <div class="sft-grid-wrap">
+  <table class="sft-grid">
+    <thead>
+      <tr>
+        <th class="step-col">step</th>
+        {% for t in tasks %}
+          <th class="task-col" title="{{ t }}">{{ t }}</th>
+        {% endfor %}
+      </tr>
+    </thead>
+    <tbody>
+      {% for row in rows %}
+        <tr>
+          <td class="step-col">{{ row.step }}</td>
+          {% for c in row.cells %}
+            <td class="task-cell {% if not c.present %}absent{% endif %}">
+              {% if c.present %}
+                <a href="/sft/{{ active_sft_id }}/step/{{ row.step }}/{{ c.task }}"
+                   title="{{ c.num_sampled }} sampled from {{ c.num_results }} total">
+                  <span class="cell-main">{{ c.num_sampled }}</span>
+                  <span class="cell-sub">/ {{ c.num_results }}</span>
+                </a>
+              {% else %}
+                <span class="cell-dash">—</span>
+              {% endif %}
+            </td>
+          {% endfor %}
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  </div>
+
+</main>
+</body>
+</html>

@@ -1,0 +1,23 @@
+{
+  "decisions": [
+    {
+      "after_tool_idx": 0,
+      "tool": "get_mol_properties_and_fg",
+      "decision": "B",
+      "confidence": "committed",
+      "evidence": "Taken together, these features favor option (B): is a substrate to the enzyme CYP2D6.",
+      "is_last_before_final": false
+    },
+    {
+      "after_tool_idx": 1,
+      "tool": "compare_similar_mols",
+      "decision": "B",
+      "confidence": "committed",
+      "evidence": "On balance, the local analog evidence supports option (B): is a substrate to the enzyme CYP2D6. The molecule\u2019s overall physicochemical profile is compatible with CYP2D6 substrate space: it combines a phenothiazine aromatic core with a protonatable piperazine, low-to-moderate polar surface area, and lipophilic substituents, which outweighs the weaker counter-signals from larger surface area and limited basic-nitrogen counting. Taken together, the balance of evidence favors the compound being a CYP2D6 substrate.",
+      "is_last_before_final": true
+    }
+  ],
+  "final_answer": "B",
+  "n_windows": 2,
+  "version": 1
+}

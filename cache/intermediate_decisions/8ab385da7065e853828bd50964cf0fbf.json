@@ -1,0 +1,15 @@
+{
+  "decisions": [
+    {
+      "after_tool_idx": 0,
+      "tool": "compare_similar_mols",
+      "decision": "B",
+      "confidence": "committed",
+      "evidence": "Taken together, all three positive neighbors and all three negative neighbors remain closer to the mutagenic side once the shared or gained nitroso motif is weighed against the smaller size, lower surface area, and lower QED of the query. The repeated presence of nitroso is the dominant chemical signal across the neighborhood, while the smaller size, lower surface area, fewer heavy atoms, and lower QED mainly modulate exposure rather than overturn the alert. Taken together, the neighborhood evidence supports option (B): is mutagenic.",
+      "is_last_before_final": true
+    }
+  ],
+  "final_answer": "B",
+  "n_windows": 1,
+  "version": 1
+}

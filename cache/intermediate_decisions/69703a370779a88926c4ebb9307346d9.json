@@ -1,0 +1,15 @@
+{
+  "decisions": [
+    {
+      "after_tool_idx": 0,
+      "tool": "compare_similar_mols",
+      "decision": "B",
+      "confidence": "committed",
+      "evidence": "Across all six neighbors, the positive-neighbor set and the negative-neighbor set both end up favoring the same conclusion: the query consistently shows stronger drug-likeness, higher neutral fraction, and several favorable structural differences, while the main recurring unfavorable feature is the absence of a basic site relative to neighbors that do carry a strongest basic pKa. Because the favorable signals are more numerous and more coherent across the six comparisons, the combined local evidence supports option (B), meaning oral bioavailability \u226520%.",
+      "is_last_before_final": true
+    }
+  ],
+  "final_answer": "B",
+  "n_windows": 1,
+  "version": 1
+}

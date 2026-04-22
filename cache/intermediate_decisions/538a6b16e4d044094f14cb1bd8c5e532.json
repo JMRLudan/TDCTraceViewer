@@ -1,0 +1,23 @@
+{
+  "decisions": [
+    {
+      "after_tool_idx": 0,
+      "tool": "get_mol_properties_and_fg",
+      "decision": "A",
+      "confidence": "tentative",
+      "evidence": "Overall, the low TPSA of 16.91, estimated logP of 3.4131, strongest basic pKa of 9.0411, tertiary mixed amine (1), two aromatic carbocycles, benzene count of 2, and rotatable-bond count of 10 together make the molecule look hERG-prone, despite the moderate molecular weight of 367.557 and the absence of an acidic site.",
+      "is_last_before_final": false
+    },
+    {
+      "after_tool_idx": 1,
+      "tool": "compare_similar_mols",
+      "decision": "B",
+      "confidence": "committed",
+      "evidence": "Overall, the balance of analog evidence supports option (B): blocks hERG.",
+      "is_last_before_final": true
+    }
+  ],
+  "final_answer": "B",
+  "n_windows": 2,
+  "version": 1
+}

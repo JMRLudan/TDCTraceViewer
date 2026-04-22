@@ -1,0 +1,23 @@
+{
+  "decisions": [
+    {
+      "after_tool_idx": 0,
+      "tool": "get_mol_properties_and_fg",
+      "decision": "B",
+      "confidence": "committed",
+      "evidence": "Taken together, the moderate lipophilicity, substantial polarity, lack of classic alert flags, and only weak basicity outweigh the weaker concerns, so the molecule is best classified as not toxic.",
+      "is_last_before_final": false
+    },
+    {
+      "after_tool_idx": 1,
+      "tool": "compare_similar_mols",
+      "decision": null,
+      "confidence": "none",
+      "evidence": "Overall, the combination of moderate size, substantial polarity, lack of classic alert flags, and weak basicity outweighs the weaker CNS-related and size-related cautions, supporting a not toxic classification.",
+      "is_last_before_final": true
+    }
+  ],
+  "final_answer": "A",
+  "n_windows": 2,
+  "version": 1
+}

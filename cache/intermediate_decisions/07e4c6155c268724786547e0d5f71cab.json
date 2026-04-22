@@ -1,0 +1,15 @@
+{
+  "decisions": [
+    {
+      "after_tool_idx": 0,
+      "tool": "compare_similar_mols",
+      "decision": "A",
+      "confidence": "committed",
+      "evidence": "Across all six neighbors, the mutagenic references are distinguished by stronger structural alerts such as phenazine and primary aromatic amine, whereas the query mainly differs by having benzo[d]oxazole and by shifts in logD, logP, charge, and basicity that mostly affect exposure rather than indicating a clear reactive toxicophore. The non-mutagenic neighbors also remain more consistent with the query than the mutagenic ones are, and the balance of evidence across both sets supports option (A): is not mutagenic.",
+      "is_last_before_final": true
+    }
+  ],
+  "final_answer": "A",
+  "n_windows": 1,
+  "version": 1
+}

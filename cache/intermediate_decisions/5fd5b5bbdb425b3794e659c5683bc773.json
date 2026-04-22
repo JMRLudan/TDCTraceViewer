@@ -1,0 +1,23 @@
+{
+  "decisions": [
+    {
+      "after_tool_idx": 0,
+      "tool": "get_mol_properties_and_fg",
+      "decision": "A",
+      "confidence": "committed",
+      "evidence": "Overall, the moderate lipophilicity and the presence of a tertiary amide, aryl chloride, pyrazole, piperidine, pyridine, and pyrrolidine outweigh the moderate polarity and charge-related concerns, so the molecule is more likely to be permeable to cell membranes in a PAMPA assay.",
+      "is_last_before_final": false
+    },
+    {
+      "after_tool_idx": 1,
+      "tool": "compare_similar_mols",
+      "decision": "B",
+      "confidence": "committed",
+      "evidence": "Overall, the neighbor evidence supports option (B): is permeable to cell membranes in a PAMPA assay.",
+      "is_last_before_final": true
+    }
+  ],
+  "final_answer": "B",
+  "n_windows": 2,
+  "version": 1
+}

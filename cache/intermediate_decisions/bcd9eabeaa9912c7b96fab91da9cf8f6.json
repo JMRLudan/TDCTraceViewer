@@ -1,0 +1,23 @@
+{
+  "decisions": [
+    {
+      "after_tool_idx": 0,
+      "tool": "get_mol_properties_and_fg",
+      "decision": "B",
+      "confidence": "committed",
+      "evidence": "Overall, the strong polarity burden from the amides, hydroxyl group, and especially the very high TPSA dominates the more favorable logP and MW, so the molecule is more likely to be classified as not crossing the BBB.",
+      "is_last_before_final": false
+    },
+    {
+      "after_tool_idx": 1,
+      "tool": "compare_similar_mols",
+      "decision": "B",
+      "confidence": "committed",
+      "evidence": "Overall, the balance of evidence supports a non-BBB-crossing profile, with the heavy polarity from amides, hydroxyl, and the high TPSA outweighing the modestly favorable size and logP.",
+      "is_last_before_final": true
+    }
+  ],
+  "final_answer": "A",
+  "n_windows": 2,
+  "version": 1
+}

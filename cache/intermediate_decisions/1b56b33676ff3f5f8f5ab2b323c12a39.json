@@ -1,0 +1,23 @@
+{
+  "decisions": [
+    {
+      "after_tool_idx": 0,
+      "tool": "get_mol_properties_and_fg",
+      "decision": "A",
+      "confidence": "committed",
+      "evidence": "Overall, the molecule has some permeability-friendly features, especially low TPSA, moderate lipophilicity, and high sp3 content, but it also has a saturated, non-aromatic scaffold with only modest heteroatom content and no clear signal of the weakly basic cationic amphiphilic character often associated with Vero-active compounds. Taken together, the balance of evidence supports option (A): does not inhibit SARS-CoV-2 replication, with score 0.7466.",
+      "is_last_before_final": false
+    },
+    {
+      "after_tool_idx": 1,
+      "tool": "compare_similar_mols",
+      "decision": "A",
+      "confidence": "committed",
+      "evidence": "The overall balance therefore remains on the non-inhibitory side, matching option (A): does not inhibit SARS-CoV-2 replication.",
+      "is_last_before_final": true
+    }
+  ],
+  "final_answer": "A",
+  "n_windows": 2,
+  "version": 1
+}

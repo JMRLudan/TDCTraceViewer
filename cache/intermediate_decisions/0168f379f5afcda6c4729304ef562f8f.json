@@ -1,0 +1,23 @@
+{
+  "decisions": [
+    {
+      "after_tool_idx": 0,
+      "tool": "get_mol_properties_and_fg",
+      "decision": null,
+      "confidence": "none",
+      "evidence": "Overall, despite the polar liabilities from the primary amine and the partial-charge pattern, the low TPSA, good drug-likeness, absence of acidic functionality, and modestly favorable lipophilicity make BBB crossing the more likely outcome.",
+      "is_last_before_final": false
+    },
+    {
+      "after_tool_idx": 1,
+      "tool": "compare_similar_mols",
+      "decision": "B",
+      "confidence": "committed",
+      "evidence": "Therefore the final prediction is option (B): crosses the BBB.",
+      "is_last_before_final": true
+    }
+  ],
+  "final_answer": "B",
+  "n_windows": 2,
+  "version": 1
+}

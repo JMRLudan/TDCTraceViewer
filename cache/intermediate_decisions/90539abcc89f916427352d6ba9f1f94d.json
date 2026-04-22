@@ -1,0 +1,15 @@
+{
+  "decisions": [
+    {
+      "after_tool_idx": 0,
+      "tool": "compare_similar_mols",
+      "decision": "A",
+      "confidence": "committed",
+      "evidence": "Across all six neighbors, the same overall pattern appears repeatedly: the query keeps a primary hydroxyl feature, has a high neutral fraction, and carries a diaryl thioether, but those are countered by a mixture of less favorable physicochemical differences and a number of local analogs that are themselves non-inhibitors. The three negative neighbors provide the more coherent match to the query\u2019s profile, so the combined neighbor evidence supports option (A): does not inhibit SARS-CoV-2 replication.",
+      "is_last_before_final": true
+    }
+  ],
+  "final_answer": "A",
+  "n_windows": 1,
+  "version": 1
+}

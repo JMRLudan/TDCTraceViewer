@@ -1,0 +1,23 @@
+{
+  "decisions": [
+    {
+      "after_tool_idx": 0,
+      "tool": "get_mol_properties_and_fg",
+      "decision": "A",
+      "confidence": "committed",
+      "evidence": "Taken together, there is no obvious mutagenic toxicophore such as an aromatic nitro group, aromatic amine, epoxide, aziridine, nitroso, or a polycyclic aromatic system, and the mostly non-aromatic, low-heteroatom scaffold is more consistent with option (A), is not mutagenic, despite the presence of one descriptor that could modestly increase exposure.",
+      "is_last_before_final": false
+    },
+    {
+      "after_tool_idx": 1,
+      "tool": "compare_similar_mols",
+      "decision": "A",
+      "confidence": "committed",
+      "evidence": "the best final prediction is option (A): is not mutagenic.",
+      "is_last_before_final": true
+    }
+  ],
+  "final_answer": "A",
+  "n_windows": 2,
+  "version": 1
+}

@@ -1,0 +1,37 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.egg-info/
+.venv/
+venv/
+.env
+.env.*
+
+# Editor / OS
+.DS_Store
+.idea/
+.vscode/
+*.swp
+
+# Runtime
+logs/
+*.log
+
+# Tracker CSVs (noisy, regenerated on every run)
+cache/llm_tracker_logs/
+
+# NOTE: cache/intermediate_decisions/ IS committed — those are the backfilled
+# gpt-5-nano extractions worth many dollars and hours of wall time.
+
+# LLM-running code is deliberately excluded from the public/Render repo.
+# These files stay local so Josh can run backfill / live extraction.
+# The deployed viewer is READ-ONLY over the committed cache.
+intermediate_decisions.py
+backfill_intermediate_decisions.py
+llm_tracker.py
+
+# Large local traces — the deployed viewer reads these from /data (Render disk),
+# not from the repo. Uncomment if you want the traces in-repo for some reason.
+# traces/

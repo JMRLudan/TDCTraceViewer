@@ -1,0 +1,23 @@
+{
+  "decisions": [
+    {
+      "after_tool_idx": 0,
+      "tool": "get_mol_properties_and_fg",
+      "decision": "A",
+      "confidence": "committed",
+      "evidence": "Overall, the strong hydroxamic acid functionality and the presence of a basic site outweigh the modestly reassuring low ring counts, so the molecule is best classified as mutagenic.",
+      "is_last_before_final": false
+    },
+    {
+      "after_tool_idx": 1,
+      "tool": "compare_similar_mols",
+      "decision": "B",
+      "confidence": "committed",
+      "evidence": "Putting all six neighbors together, the three positive neighbors consistently share hydroxamic acid and a basic site with the query, and they also keep a basic pKa in the same general range while differing mainly in lipophilicity and sp3 content. The three negative neighbors are structurally simpler but are outweighed by the query\u2019s hydroxamic acid and basic site relative to them. Although the query is less lipophilic and more sp3-rich in several comparisons, those offsets do not overcome the repeated hydroxamic-acid-based and basic-site-based signals. The neighborhood as a whole therefore supports option (B): is mutagenic.",
+      "is_last_before_final": true
+    }
+  ],
+  "final_answer": "B",
+  "n_windows": 2,
+  "version": 1
+}

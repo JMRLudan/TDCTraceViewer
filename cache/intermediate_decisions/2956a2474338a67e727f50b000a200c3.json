@@ -1,0 +1,23 @@
+{
+  "decisions": [
+    {
+      "after_tool_idx": 0,
+      "tool": "get_mol_properties_and_fg",
+      "decision": "A",
+      "confidence": "committed",
+      "evidence": "Taken together, the molecule has some favorable saturated ring and carbocycle features, but the lack of a basic cationic motif, the fully aromatic-free scaffold, and the overall charge profile make it more consistent with option (A): does not inhibit SARS-CoV-2 replication.",
+      "is_last_before_final": false
+    },
+    {
+      "after_tool_idx": 1,
+      "tool": "compare_similar_mols",
+      "decision": "A",
+      "confidence": "committed",
+      "evidence": "Overall, the modest favorable lipophilicity signals are outweighed by the non-cationic, non-aromatic scaffold and the analog pattern, supporting a non-inhibitory classification.",
+      "is_last_before_final": true
+    }
+  ],
+  "final_answer": null,
+  "n_windows": 2,
+  "version": 1
+}

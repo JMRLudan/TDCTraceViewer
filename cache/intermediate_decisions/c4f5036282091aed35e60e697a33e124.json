@@ -1,0 +1,23 @@
+{
+  "decisions": [
+    {
+      "after_tool_idx": 0,
+      "tool": "get_mol_properties_and_fg",
+      "decision": "A",
+      "confidence": "committed",
+      "evidence": "Overall, the presence of the sulfanylidene functionality together with the charge features outweighs the absence of rings and the small size, so the molecule is more likely to be mutagenic.",
+      "is_last_before_final": false
+    },
+    {
+      "after_tool_idx": 1,
+      "tool": "compare_similar_mols",
+      "decision": "B",
+      "confidence": "committed",
+      "evidence": "Because the mutagenicity-associated structural alerts in the neighbors are more chemically specific than the mostly size- and exposure-related offsets, the positive neighbors collectively support option (B): is mutagenic more strongly than the negative neighbors do.",
+      "is_last_before_final": true
+    }
+  ],
+  "final_answer": "B",
+  "n_windows": 2,
+  "version": 1
+}

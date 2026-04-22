@@ -1,0 +1,23 @@
+{
+  "decisions": [
+    {
+      "after_tool_idx": 0,
+      "tool": "get_mol_properties_and_fg",
+      "decision": "A",
+      "confidence": "committed",
+      "evidence": "Therefore, the molecule is predicted to be not a substrate to CYP2D6, option (A).",
+      "is_last_before_final": false
+    },
+    {
+      "after_tool_idx": 1,
+      "tool": "compare_similar_mols",
+      "decision": "A",
+      "confidence": "committed",
+      "evidence": "Across the full set, the three substrate neighbors consistently sit on the higher-PSA, more heteroatom-rich, more basic, and more sp3-rich side of the comparison, while the three non-substrate neighbors similarly remain more polar or otherwise more substrate-like than the query. Because the query repeatedly lacks the basic site, basic pKa, H-bond acceptors, nitrogen/oxygen atoms, and other features that characterize the substrate neighbors, the combined analog evidence supports option (A): is not a substrate to the enzyme CYP2D6.",
+      "is_last_before_final": true
+    }
+  ],
+  "final_answer": null,
+  "n_windows": 2,
+  "version": 1
+}

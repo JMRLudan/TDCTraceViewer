@@ -1,0 +1,23 @@
+{
+  "decisions": [
+    {
+      "after_tool_idx": 0,
+      "tool": "get_mol_properties_and_fg",
+      "decision": "A",
+      "confidence": "committed",
+      "evidence": "so the final prediction is that it is a substrate to the enzyme CYP2D6.",
+      "is_last_before_final": false
+    },
+    {
+      "after_tool_idx": 1,
+      "tool": "compare_similar_mols",
+      "decision": "B",
+      "confidence": "committed",
+      "evidence": "The combined neighbor evidence therefore supports option (B): is a substrate to the enzyme CYP2D6. The molecule\u2019s overall profile is consistent with CYP2D6 substrate recognition: it has a strongly basic, readily protonatable center, low polar surface area, and high lipophilicity, along with a drug-like heterocyclic/aromatic scaffold.",
+      "is_last_before_final": true
+    }
+  ],
+  "final_answer": "B",
+  "n_windows": 2,
+  "version": 1
+}

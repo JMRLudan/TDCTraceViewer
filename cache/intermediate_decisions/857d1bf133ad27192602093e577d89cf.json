@@ -1,0 +1,23 @@
+{
+  "decisions": [
+    {
+      "after_tool_idx": 0,
+      "tool": "get_mol_properties_and_fg",
+      "decision": "A",
+      "confidence": "committed",
+      "evidence": "Overall, the combination of no rings, no nitro group, high sp3 character, and a polar ionizable profile supports a prediction of not mutagenic, option (A), with high confidence.",
+      "is_last_before_final": false
+    },
+    {
+      "after_tool_idx": 1,
+      "tool": "compare_similar_mols",
+      "decision": "A",
+      "confidence": "committed",
+      "evidence": "Putting the six neighbors together, all three positive neighbors and both negative neighbors point the query away from the mutagenic class and toward a non-mutagenic interpretation. The most defensible classification is therefore not mutagenic.",
+      "is_last_before_final": true
+    }
+  ],
+  "final_answer": "A",
+  "n_windows": 2,
+  "version": 1
+}

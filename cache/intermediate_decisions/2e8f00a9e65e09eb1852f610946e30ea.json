@@ -1,0 +1,23 @@
+{
+  "decisions": [
+    {
+      "after_tool_idx": 0,
+      "tool": "get_mol_properties_and_fg",
+      "decision": "B",
+      "confidence": "tentative",
+      "evidence": "Overall, the balance of descriptors still leans toward option (B): causes a skin reaction, but with a somewhat tempered confidence because the polar surface area, rotatable-bond count, and heteroatom content can hinder skin entry.",
+      "is_last_before_final": false
+    },
+    {
+      "after_tool_idx": 1,
+      "tool": "compare_similar_mols",
+      "decision": "A",
+      "confidence": "committed",
+      "evidence": "Overall, the exposure and accessibility balance is not strong enough to support a skin-reactive classification, so the molecule is best classified as not causing a skin reaction.",
+      "is_last_before_final": true
+    }
+  ],
+  "final_answer": "A",
+  "n_windows": 2,
+  "version": 1
+}

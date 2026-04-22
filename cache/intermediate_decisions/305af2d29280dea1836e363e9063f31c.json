@@ -1,0 +1,15 @@
+{
+  "decisions": [
+    {
+      "after_tool_idx": 0,
+      "tool": "compare_similar_mols",
+      "decision": "A",
+      "confidence": "committed",
+      "evidence": "Across all six neighbors, the strongest and most consistent signals come from the toxic neighbors showing more extreme donor burden, less favorable lipophilicity, or missing structural motifs that are present in the query, while the three not-toxic neighbors show that the query\u2019s combination of charge distribution and lipophilicity is acceptable for a non-toxic outcome. The toxic neighbors are outweighed by the multiple not-toxic analogs, and the balance of evidence supports option (A): is not toxic.",
+      "is_last_before_final": true
+    }
+  ],
+  "final_answer": "A",
+  "n_windows": 1,
+  "version": 1
+}

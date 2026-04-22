@@ -1,0 +1,23 @@
+{
+  "decisions": [
+    {
+      "after_tool_idx": 0,
+      "tool": "get_mol_properties_and_fg",
+      "decision": "B",
+      "confidence": "committed",
+      "evidence": "Final prediction: B, with score 0.5534.",
+      "is_last_before_final": false
+    },
+    {
+      "after_tool_idx": 1,
+      "tool": "compare_similar_mols",
+      "decision": "B",
+      "confidence": "committed",
+      "evidence": "Across the six neighbors, all three positive neighbors directly support the substrate label, and the three negative neighbors do not overturn that pattern because their feature-by-feature comparisons still come out on the substrate side overall. The recurring supportive signals are the aryl bromide, lactam, imine, extra basic site, and in some cases higher logD or higher QED, while the opposing signals are mainly lower sp3 fraction, lower Labute surface area, or lower strongest basic pKa. With all six neighbors examined together, the balance of evidence supports option (B): is a substrate to the enzyme CYP3A4.",
+      "is_last_before_final": true
+    }
+  ],
+  "final_answer": "B",
+  "n_windows": 2,
+  "version": 1
+}

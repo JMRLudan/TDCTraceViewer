@@ -1,0 +1,15 @@
+{
+  "decisions": [
+    {
+      "after_tool_idx": 0,
+      "tool": "compare_similar_mols",
+      "decision": null,
+      "confidence": "none",
+      "evidence": "Neighbor 1 is a weak positive analog for carcinogenicity, but several of its features are actually less consistent with the query than with a carcinogen.",
+      "is_last_before_final": true
+    }
+  ],
+  "final_answer": null,
+  "n_windows": 1,
+  "version": 1
+}

@@ -1,0 +1,15 @@
+{
+  "decisions": [
+    {
+      "after_tool_idx": 0,
+      "tool": "compare_similar_mols",
+      "decision": "B",
+      "confidence": "committed",
+      "evidence": "The three non-mutagenic neighbors mainly differ by having slightly more aromatic ring content and higher estimated logP/logD, but they still resemble the query\u2019s aromatic scaffold and charge pattern closely enough that the overall local analog evidence supports option (B): is mutagenic.",
+      "is_last_before_final": true
+    }
+  ],
+  "final_answer": "B",
+  "n_windows": 1,
+  "version": 1
+}

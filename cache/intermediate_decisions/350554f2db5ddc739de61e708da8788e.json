@@ -1,0 +1,23 @@
+{
+  "decisions": [
+    {
+      "after_tool_idx": 0,
+      "tool": "get_mol_properties_and_fg",
+      "decision": "B",
+      "confidence": "committed",
+      "evidence": "Overall, the structure is moderately polar, aromatic, and heteroatom-rich, with a weak basic center and no hydroxyl donor; these combined features make it less convincingly a CYP3A4 substrate, so the prediction is that it is not a substrate to CYP3A4.",
+      "is_last_before_final": false
+    },
+    {
+      "after_tool_idx": 1,
+      "tool": "compare_similar_mols",
+      "decision": "B",
+      "confidence": "committed",
+      "evidence": "Because the non-substrate comparisons are at least as persuasive as the substrate ones, and because several of the substrate neighbors still end up closer to the non-substrate side on the full set of observed features, the overall prediction is that the molecule is not a substrate to CYP3A4.",
+      "is_last_before_final": true
+    }
+  ],
+  "final_answer": "A",
+  "n_windows": 2,
+  "version": 1
+}

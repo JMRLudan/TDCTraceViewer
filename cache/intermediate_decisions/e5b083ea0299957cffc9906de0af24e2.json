@@ -1,0 +1,23 @@
+{
+  "decisions": [
+    {
+      "after_tool_idx": 0,
+      "tool": "get_mol_properties_and_fg",
+      "decision": "A",
+      "confidence": "tentative",
+      "evidence": "The molecule carries several structural and physicochemical features that are more consistent with Ames mutagenicity.",
+      "is_last_before_final": false
+    },
+    {
+      "after_tool_idx": 1,
+      "tool": "compare_similar_mols",
+      "decision": "B",
+      "confidence": "committed",
+      "evidence": "Since the mutagenicity-associated features recur across every neighbor comparison and repeatedly outweigh the non-mutagenic offsets, the combined evidence supports option (B): is mutagenic. The mutagenicity-associated structural alerts outweigh the exposure-limiting features. Overall, the balance of evidence supports a mutagenic classification.",
+      "is_last_before_final": true
+    }
+  ],
+  "final_answer": "B",
+  "n_windows": 2,
+  "version": 1
+}

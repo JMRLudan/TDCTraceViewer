@@ -1,0 +1,23 @@
+{
+  "decisions": [
+    {
+      "after_tool_idx": 0,
+      "tool": "get_mol_properties_and_fg",
+      "decision": "A",
+      "confidence": "committed",
+      "evidence": "Overall, the structural picture is more suggestive of a small, moderately permeable molecule rather than one dominated by a strong skin-sensitization alert. Despite the low polar surface area, the lack of a clear electrophilic sensitizer motif and the overall profile still favor option (A): does not cause a skin reaction, with high confidence.",
+      "is_last_before_final": false
+    },
+    {
+      "after_tool_idx": 1,
+      "tool": "compare_similar_mols",
+      "decision": "A",
+      "confidence": "committed",
+      "evidence": "evidence supports a non-sensitizer profile, so the molecule is best classified as does not cause a skin reaction.",
+      "is_last_before_final": true
+    }
+  ],
+  "final_answer": null,
+  "n_windows": 2,
+  "version": 1
+}

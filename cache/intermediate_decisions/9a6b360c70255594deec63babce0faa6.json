@@ -1,0 +1,15 @@
+{
+  "decisions": [
+    {
+      "after_tool_idx": 0,
+      "tool": "compare_similar_mols",
+      "decision": null,
+      "confidence": "none",
+      "evidence": "Putting the six neighbors together, the three positive neighbors are not truly convincing binding analogs: ... Taken as a whole, the local analog set supports the conclusion that the query does not bind SARS-CoV-2 3CL protease.",
+      "is_last_before_final": true
+    }
+  ],
+  "final_answer": "A",
+  "n_windows": 1,
+  "version": 1
+}

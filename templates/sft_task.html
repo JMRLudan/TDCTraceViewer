@@ -1,0 +1,335 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>SFT · {{ archive_id }} · step {{ step }} · {{ task }}</title>
+<link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+<header class="app-header">
+  <div>
+    <h1>
+      <a href="{{ back_url or '/' }}">&larr;</a>
+      <span class="run-chip">sft {{ archive_id }}</span>
+      step {{ step }} &middot; {{ task }}
+    </h1>
+    <div class="meta">
+      n = {{ stats.n_correct }}/{{ stats.n_samples }} correct (reward &gt; 0.5) &middot;
+      mean = {{ stats.mean }} &middot;
+      median = {{ stats.median }} &middot;
+      min = {{ stats.min }} &middot;
+      max = {{ stats.max }} &middot;
+      stdev = {{ stats.stdev }} &middot;
+      {{ stats.num_results }} total rows (sampled every {{ stats.sampled_every }})
+    </div>
+  </div>
+  <div class="meta">
+    <div class="step-nav">
+      {% if prev_step is not none %}
+        <a class="pill" href="/sft/{{ archive_id }}/step/{{ prev_step }}/{{ task }}">&larr; step {{ prev_step }}</a>
+      {% endif %}
+      {% if next_step is not none %}
+        <a class="pill" href="/sft/{{ archive_id }}/step/{{ next_step }}/{{ task }}">step {{ next_step }} &rarr;</a>
+      {% endif %}
+    </div>
+    <div>
+      <button id="toggle-reasoning">Hide analysis</button>
+      <button id="toggle-tools">Hide tool I/O</button>
+      <button id="toggle-raw">Show raw</button>
+      <button id="collapse-all">Collapse all</button>
+      <button id="expand-all">Expand all</button>
+    </div>
+  </div>
+</header>
+
+{% if extras %}
+<section class="sft-extras">
+  <div class="sft-extras-label">highlights</div>
+  <div class="samples samples-extras">
+    {% for smp in extras %}
+    <article class="sample sample-highlight sample-{{ smp.highlight }}" data-idx="{{ loop.index0 }}">
+      <header class="sample-header">
+        <div>
+          <span class="sample-idx">{{ smp.highlight }}</span>
+          <span class="reward r-{{ 'pos' if smp.reward > 0.5 else ('mid' if smp.reward > 0 else 'neg') }}">
+            reward = {{ "%.3f"|format(smp.reward) }}
+          </span>
+          {% if smp.score is not none %}
+            <span class="score">score = {{ "%.3f"|format(smp.score) }}</span>
+          {% endif %}
+          <span class="chars">{{ smp.n_chars }} chars</span>
+          <button class="toggle-extraction" type="button">view extraction</button>
+          <button class="toggle-intermediate" type="button"
+                  data-source="sft"
+                  data-archive="{{ archive_id }}"
+                  data-step="{{ step }}"
+                  data-task="{{ task }}"
+                  data-sample-ref="{{ smp.highlight }}">intermediate decisions</button>
+          {% if smp.extra.label %}<span class="label-chip">label {{ smp.extra.label }}</span>{% endif %}
+        </div>
+        <div>
+          <button class="toggle-prompt">prompt</button>
+          <button class="toggle-raw">raw</button>
+          <button class="toggle-collapse">&minus;</button>
+        </div>
+      </header>
+
+      <div class="sample-body">
+        {% if smp.extraction %}
+        <details class="extraction-block">
+          <summary>extraction</summary>
+          <pre class="extraction-summary">final_answer  = {{ smp.extraction.final_answer }}
+gold          = {{ smp.extraction.gold }}
+similarities  = {{ smp.extraction.similarities }}
+labels        = {{ smp.extraction.labels }}</pre>
+        </details>
+        {% endif %}
+
+        <details class="intermediate-block" data-hydrated="false">
+          <summary>intermediate decisions (gpt-5-nano)</summary>
+          <div class="intermediate-body">
+            <em class="muted">click the "intermediate decisions" button above to load.</em>
+          </div>
+        </details>
+
+        <details class="prompt-block">
+          <summary>prompt</summary>
+          <pre class="raw">{{ smp.prompt }}</pre>
+        </details>
+
+        {% for seg in smp.segments %}
+          {% include "_segment.html" %}
+        {% endfor %}
+
+        <details class="raw-block">
+          <summary>raw response</summary>
+          <pre class="raw">{{ smp.raw }}</pre>
+        </details>
+      </div>
+    </article>
+    {% endfor %}
+  </div>
+</section>
+{% endif %}
+
+<section class="samples">
+  {% for smp in samples %}
+  <article class="sample" data-idx="{{ smp.idx }}">
+    <header class="sample-header">
+      <div>
+        <span class="sample-idx">#{{ smp.idx }}</span>
+        <span class="reward r-{{ 'pos' if smp.reward > 0.5 else ('mid' if smp.reward > 0 else 'neg') }}">
+          reward = {{ "%.3f"|format(smp.reward) }}
+        </span>
+        {% if smp.score is not none %}
+          <span class="score">score = {{ "%.3f"|format(smp.score) }}</span>
+        {% endif %}
+        <span class="chars">{{ smp.n_chars }} chars</span>
+        <button class="toggle-extraction" type="button">view extraction</button>
+        <button class="toggle-intermediate" type="button"
+                data-source="sft"
+                data-archive="{{ archive_id }}"
+                data-step="{{ step }}"
+                data-task="{{ task }}"
+                data-sample-ref="{{ smp.idx }}">intermediate decisions</button>
+        {% if smp.extra.label %}<span class="label-chip">label {{ smp.extra.label }}</span>{% endif %}
+      </div>
+      <div>
+        <button class="toggle-prompt">prompt</button>
+        <button class="toggle-raw">raw</button>
+        <button class="toggle-collapse">&minus;</button>
+      </div>
+    </header>
+
+    <div class="sample-body">
+      {% if smp.extraction %}
+      <details class="extraction-block">
+        <summary>extraction</summary>
+        <pre class="extraction-summary">final_answer  = {{ smp.extraction.final_answer }}
+gold          = {{ smp.extraction.gold }}
+similarities  = {{ smp.extraction.similarities }}
+labels        = {{ smp.extraction.labels }}</pre>
+      </details>
+      {% endif %}
+
+      <details class="intermediate-block" data-hydrated="false">
+        <summary>intermediate decisions (gpt-5-nano)</summary>
+        <div class="intermediate-body">
+          <em class="muted">click the "intermediate decisions" button above to load.</em>
+        </div>
+      </details>
+
+      <details class="prompt-block">
+        <summary>prompt</summary>
+        <pre class="raw">{{ smp.prompt }}</pre>
+      </details>
+
+      {% for seg in smp.segments %}
+        {% include "_segment.html" %}
+      {% endfor %}
+
+      <details class="raw-block">
+        <summary>raw response</summary>
+        <pre class="raw">{{ smp.raw }}</pre>
+      </details>
+    </div>
+  </article>
+  {% endfor %}
+</section>
+
+<script>
+(function () {
+  function toggleClass(selector, cls, forceHide) {
+    document.querySelectorAll(selector).forEach(el => {
+      if (forceHide === undefined) el.classList.toggle(cls);
+      else el.classList.toggle(cls, forceHide);
+    });
+  }
+
+  let analysisHidden = false;
+  document.getElementById('toggle-reasoning').addEventListener('click', () => {
+    analysisHidden = !analysisHidden;
+    toggleClass('.seg-analysis', 'hidden', analysisHidden);
+    document.getElementById('toggle-reasoning').textContent = analysisHidden ? 'Show analysis' : 'Hide analysis';
+  });
+
+  let toolsHidden = false;
+  document.getElementById('toggle-tools').addEventListener('click', () => {
+    toolsHidden = !toolsHidden;
+    toggleClass('.seg-toolcall', 'hidden', toolsHidden);
+    toggleClass('.seg-toolresp', 'hidden', toolsHidden);
+    document.getElementById('toggle-tools').textContent = toolsHidden ? 'Show tool I/O' : 'Hide tool I/O';
+  });
+
+  let rawShown = false;
+  document.getElementById('toggle-raw').addEventListener('click', () => {
+    rawShown = !rawShown;
+    document.querySelectorAll('.raw-block').forEach(el => { el.open = rawShown; });
+    document.getElementById('toggle-raw').textContent = rawShown ? 'Hide raw' : 'Show raw';
+  });
+
+  document.getElementById('collapse-all').addEventListener('click', () => {
+    document.querySelectorAll('.sample').forEach(el => el.classList.add('collapsed'));
+  });
+  document.getElementById('expand-all').addEventListener('click', () => {
+    document.querySelectorAll('.sample').forEach(el => el.classList.remove('collapsed'));
+  });
+
+  document.querySelectorAll('.toggle-collapse').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      const smp = e.target.closest('.sample');
+      smp.classList.toggle('collapsed');
+      btn.textContent = smp.classList.contains('collapsed') ? '+' : '\u2212';
+    });
+  });
+  document.querySelectorAll('.toggle-raw').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      const smp = e.target.closest('.sample');
+      const blk = smp.querySelector('.raw-block');
+      if (blk) blk.open = !blk.open;
+    });
+  });
+  document.querySelectorAll('.toggle-prompt').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      const smp = e.target.closest('.sample');
+      const blk = smp.querySelector('.prompt-block');
+      if (blk) blk.open = !blk.open;
+    });
+  });
+  document.querySelectorAll('.toggle-extraction').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      const smp = e.target.closest('.sample');
+      const blk = smp.querySelector('.extraction-block');
+      if (!blk) return;
+      blk.open = !blk.open;
+      btn.textContent = blk.open ? 'hide extraction' : 'view extraction';
+    });
+  });
+
+  // ----- Intermediate decisions --------------------------------------------
+  function renderDecisions(payload) {
+    const n = (payload.decisions || []).length;
+    const finalAns = payload.final_answer == null ? '?' : payload.final_answer;
+    if (n === 0) {
+      return '<div class="muted">no tool calls in this sample &mdash; nothing to extract.</div>';
+    }
+    const rows = payload.decisions.map(d => {
+      const dec = d.decision == null ? '&mdash;' : d.decision;
+      const decCls = d.decision == null ? 'd-none' : ('d-' + d.decision);
+      const conf = d.confidence || 'none';
+      const confCls = 'c-' + conf;
+      const evQuote = (d.evidence || '').replace(/[<>&]/g, c =>
+        ({'<':'&lt;','>':'&gt;','&':'&amp;'}[c]));
+      const flipped = d.decision && finalAns !== '?' && d.decision !== finalAns;
+      const flipTag = flipped ? '<span class="flip-tag">flipped from final</span>' : '';
+      const lastTag = d.is_last_before_final
+        ? '<span class="last-tag">last before final</span>' : '';
+      return `
+        <div class="idec-row">
+          <div class="idec-head">
+            <span class="idec-step">after tool #${d.after_tool_idx}</span>
+            <code class="idec-tool">${d.tool || '?'}</code>
+            <span class="idec-decision ${decCls}">decision: ${dec}</span>
+            <span class="idec-conf ${confCls}">${conf}</span>
+            ${lastTag}
+            ${flipTag}
+          </div>
+          ${evQuote ? `<blockquote class="idec-evidence">${evQuote}</blockquote>` : ''}
+        </div>
+      `;
+    }).join('');
+    return `
+      <div class="idec-meta">final_answer = <strong>${finalAns}</strong> &middot; ${n} window(s)</div>
+      ${rows}
+    `;
+  }
+
+  async function loadIntermediateDecisions(btn) {
+    const smp = btn.closest('.sample');
+    const blk = smp.querySelector('.intermediate-block');
+    const body = blk.querySelector('.intermediate-body');
+    blk.open = true;
+    if (blk.dataset.hydrated === 'true') {
+      btn.textContent = 'intermediate decisions';
+      return;
+    }
+    const url = `/api/intermediate_decisions/sft/${btn.dataset.archive}/step/${btn.dataset.step}/${btn.dataset.task}/${btn.dataset.sampleRef}`;
+    body.innerHTML = '<em class="muted">loading &hellip;</em>';
+    btn.disabled = true;
+    try {
+      // GET only — read-only deploys don't have live extraction.
+      const resp = await fetch(url);
+      if (!resp.ok) throw new Error('HTTP ' + resp.status);
+      const payload = await resp.json();
+      if (payload.cached === false) {
+        body.innerHTML = '<div class="muted">no cached extraction for this sample.</div>';
+      } else {
+        body.innerHTML = renderDecisions(payload);
+      }
+      blk.dataset.hydrated = 'true';
+      btn.textContent = 'hide decisions';
+    } catch (err) {
+      body.innerHTML = `<div class="idec-err">error: ${err.message}</div>`;
+    } finally {
+      btn.disabled = false;
+    }
+  }
+
+  document.querySelectorAll('.toggle-intermediate').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const smp = btn.closest('.sample');
+      const blk = smp.querySelector('.intermediate-block');
+      if (blk.dataset.hydrated === 'true') {
+        blk.open = !blk.open;
+        btn.textContent = blk.open ? 'hide decisions' : 'intermediate decisions';
+        return;
+      }
+      loadIntermediateDecisions(btn);
+    });
+  });
+})();
+</script>
+
+</body>
+</html>

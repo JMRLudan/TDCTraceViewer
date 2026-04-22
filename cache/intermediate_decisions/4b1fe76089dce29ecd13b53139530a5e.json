@@ -1,0 +1,15 @@
+{
+  "decisions": [
+    {
+      "after_tool_idx": 0,
+      "tool": "compare_similar_mols",
+      "decision": "B",
+      "confidence": "committed",
+      "evidence": "Across all six neighbors, the same pattern repeats: the query consistently carries multiple chloroalkene motifs, and several other comparisons add mutagenic-leaning structural features. Some exposure-related descriptors, including higher logP/logD, higher sp3 fraction, and in a few cases lower heteroatom burden or lower TPSA, point in the opposite direction, but those effects are secondary here. The repeated presence of the chloroalkene toxicophore and the additional halogenated/reactive features outweigh the countervailing descriptors, so the overall prediction is option (B): is mutagenic.",
+      "is_last_before_final": true
+    }
+  ],
+  "final_answer": "B",
+  "n_windows": 1,
+  "version": 1
+}

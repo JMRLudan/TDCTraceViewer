@@ -1,0 +1,23 @@
+{
+  "decisions": [
+    {
+      "after_tool_idx": 0,
+      "tool": "get_mol_properties_and_fg",
+      "decision": "A",
+      "confidence": "committed",
+      "evidence": "Overall, the combination of sulfuric derivative, sulfonic derivative, guanidine, sulfonamide, TPSA 175.83, NH/OH group count 8, and QED 0.2866 supports the conclusion that oral bioavailability is less than 20%.",
+      "is_last_before_final": false
+    },
+    {
+      "after_tool_idx": 1,
+      "tool": "compare_similar_mols",
+      "decision": "A",
+      "confidence": "committed",
+      "evidence": "Since the query is repeatedly shifted toward stronger ionization and poorer permeability relative to both higher- and lower-bioavailability analogs, the combined evidence supports option (A): has oral bioavailability < 20%.",
+      "is_last_before_final": true
+    }
+  ],
+  "final_answer": "A",
+  "n_windows": 2,
+  "version": 1
+}

@@ -1,0 +1,23 @@
+{
+  "decisions": [
+    {
+      "after_tool_idx": 0,
+      "tool": "get_mol_properties_and_fg",
+      "decision": "A",
+      "confidence": "committed",
+      "evidence": "Overall, the combined picture is one of a polar, heteroatom-rich molecule with several unfavorable features, so it is more consistent with option (A): does not bind SARS-CoV-2 3CL protease.",
+      "is_last_before_final": false
+    },
+    {
+      "after_tool_idx": 1,
+      "tool": "compare_similar_mols",
+      "decision": "A",
+      "confidence": "committed",
+      "evidence": "Across the comparisons, the shared alkyl chloride, piperazine, higher heteroatom count, extra tertiary amide, and in several cases lower QED dominate any modest benefits from lower sp3 fraction or added aromaticity. The overall neighborhood therefore supports option (A): does not bind SARS-CoV-2 3CL protease.",
+      "is_last_before_final": true
+    }
+  ],
+  "final_answer": "A",
+  "n_windows": 2,
+  "version": 1
+}

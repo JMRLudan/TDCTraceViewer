@@ -1,0 +1,23 @@
+{
+  "decisions": [
+    {
+      "after_tool_idx": 0,
+      "tool": "get_mol_properties_and_fg",
+      "decision": "A",
+      "confidence": "committed",
+      "evidence": "Overall, the structural pattern lacks the usual mutagenicity toxicophores such as aromatic nitro, aromatic amine, epoxide, aziridine, nitrosamine, or fused polycyclic aromatic systems. Although there are a few mixed signals from the moderately lipophilic, partly unsaturated character, the low heteroatom content, single-ring scaffold, and absence of basic sites make the molecule more consistent with option (A): is not mutagenic.",
+      "is_last_before_final": false
+    },
+    {
+      "after_tool_idx": 1,
+      "tool": "compare_similar_mols",
+      "decision": "A",
+      "confidence": "committed",
+      "evidence": "The combined evidence therefore supports the final prediction: option (A), is not mutagenic.",
+      "is_last_before_final": true
+    }
+  ],
+  "final_answer": "A",
+  "n_windows": 2,
+  "version": 1
+}

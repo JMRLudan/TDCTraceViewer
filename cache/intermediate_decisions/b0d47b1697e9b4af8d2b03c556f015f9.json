@@ -1,0 +1,23 @@
+{
+  "decisions": [
+    {
+      "after_tool_idx": 0,
+      "tool": "get_mol_properties_and_fg",
+      "decision": "A",
+      "confidence": "committed",
+      "evidence": "Overall, the combination of high neutral fraction 0.959, moderate estimated logD 1.9798, low strongest basic pKa 4.2067, aromatic heterocycle count 2, benzimidazole 1, pyridine 1, and Labute surface area 106.5578 supports CYP3A4 substrate behavior more strongly than the weaker opposing signal from fraction of sp3 carbons 0.0769 and sulfanylidene 1, so the molecule is best classified as a substrate to CYP3A4.",
+      "is_last_before_final": false
+    },
+    {
+      "after_tool_idx": 1,
+      "tool": "compare_similar_mols",
+      "decision": "B",
+      "confidence": "committed",
+      "evidence": "Overall, the neighbor evidence is more consistent with option (B): is a substrate to the enzyme CYP3A4.",
+      "is_last_before_final": true
+    }
+  ],
+  "final_answer": "B",
+  "n_windows": 2,
+  "version": 1
+}

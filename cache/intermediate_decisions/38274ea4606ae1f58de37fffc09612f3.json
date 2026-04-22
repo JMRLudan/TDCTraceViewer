@@ -1,0 +1,23 @@
+{
+  "decisions": [
+    {
+      "after_tool_idx": 0,
+      "tool": "get_mol_properties_and_fg",
+      "decision": "A",
+      "confidence": "committed",
+      "evidence": "Overall, the combination of an alkyl aryl ether (1), tertiary aliphatic amine (1), a strongly protonatable basic pKa of 9.3081, and a moderate PSA of 49.77 provides a fairly strong substrate-like profile, and despite the opposing signal from the carboxylic acid (1), the balance of properties supports classification as a CYP2D6 substrate.",
+      "is_last_before_final": false
+    },
+    {
+      "after_tool_idx": 1,
+      "tool": "compare_similar_mols",
+      "decision": "B",
+      "confidence": "committed",
+      "evidence": "Across all six neighbors, the same pattern repeats: the query consistently carries the alkyl aryl ether feature, and several of the local comparisons reward higher basic pKa or higher partial-charge extrema as substrate-like, while the higher topological polar surface area and the single carboxylic acid are the main recurring liabilities. Because the query repeatedly matches or exceeds substrate-like signals on multiple positive neighbors and even on the nominally negative neighbors, the overall local evidence favors option (B): is a substrate to the enzyme CYP2D6.",
+      "is_last_before_final": true
+    }
+  ],
+  "final_answer": "B",
+  "n_windows": 2,
+  "version": 1
+}

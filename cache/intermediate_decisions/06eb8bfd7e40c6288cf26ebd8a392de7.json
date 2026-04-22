@@ -1,0 +1,15 @@
+{
+  "decisions": [
+    {
+      "after_tool_idx": 0,
+      "tool": "compare_similar_mols",
+      "decision": "A",
+      "confidence": "committed",
+      "evidence": "Across all six neighbors, the most consistent theme is that the query does share several features with not-toxic analogues, especially the absence of ammonium in multiple comparisons and the strong lower-lipophilicity profile relative to the toxic neighbors. The toxic neighbors do contain some cautionary signals, such as thiophene and higher maximum absolute partial charge, but those are repeatedly offset by lower neutral fraction, lower or more negative minimum partial charge, and in several cases more favorable aromatic or scaffold context. The three not-toxic neighbors, especially the clear structural matches in Neighbor 4 and the broad balance in Neighbor 6, make the overall evidence point to option (A): is not toxic.",
+      "is_last_before_final": true
+    }
+  ],
+  "final_answer": "A",
+  "n_windows": 1,
+  "version": 1
+}

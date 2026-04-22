@@ -1,0 +1,23 @@
+{
+  "decisions": [
+    {
+      "after_tool_idx": 0,
+      "tool": "get_mol_properties_and_fg",
+      "decision": "B",
+      "confidence": "committed",
+      "evidence": "Overall, the combination of a thiazolidinedione alert, high lipophilicity at 3.9437, moderate polar surface area at 70.36, and a strongly charge-defined heteroatom environment makes the compound look more like a toxic-leaning profile than a benign one. Even though some individual descriptors, such as the PSA of 70.36, can be compatible with drug-like behavior, the stronger structural and physicochemical signals support option (B): is toxic.",
+      "is_last_before_final": false
+    },
+    {
+      "after_tool_idx": 1,
+      "tool": "compare_similar_mols",
+      "decision": "B",
+      "confidence": "committed",
+      "evidence": "Overall, the neighborhood pattern is more consistent with option (B): is toxic.",
+      "is_last_before_final": true
+    }
+  ],
+  "final_answer": "B",
+  "n_windows": 2,
+  "version": 1
+}

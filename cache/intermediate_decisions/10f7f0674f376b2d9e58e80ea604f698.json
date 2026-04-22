@@ -1,0 +1,15 @@
+{
+  "decisions": [
+    {
+      "after_tool_idx": 0,
+      "tool": "compare_similar_mols",
+      "decision": "B",
+      "confidence": "committed",
+      "evidence": "Across all six neighbors, the same pattern repeats. The three positive neighbors and the three negative neighbors all show the query gaining 1H-indazole relative to the neighbor, and that motif is consistently the most specific structural feature favoring mutagenicity. Several comparisons also include accompanying changes in ionization, polarity, and size, such as very low neutral fraction, altered pKa values, and modest differences in logP/logD or surface area, but those are largely exposure-related modifiers rather than direct anti-mutagenic features. Because the indazole-containing query is repeatedly distinguished from both mutagenic and nonmutagenic neighbors by the same alerting motif, the combined evidence supports option (B): is mutagenic.",
+      "is_last_before_final": true
+    }
+  ],
+  "final_answer": "B",
+  "n_windows": 1,
+  "version": 1
+}

@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>GRPO / SFT viewer</title>
+<link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<header class="app-header">
+  <div>
+    <h1>GRPO / SFT viewer</h1>
+    <div class="meta">
+      {{ runs|length }} GRPO run{% if runs|length != 1 %}s{% endif %},
+      {{ sft_archives|length }} SFT archive{% if sft_archives|length != 1 %}s{% endif %},
+      {{ n_annotations }} annotation{% if n_annotations != 1 %}s{% endif %}
+    </div>
+  </div>
+  <div class="run-switch">
+    {% for r in runs %}
+      <a class="pill" href="/runs/{{ r.run_id }}/">grpo · {{ r.run_id }}
+         <span class="pill-count">{{ r.n_groups }}</span></a>
+    {% endfor %}
+    {% for a in sft_archives %}
+      <a class="pill pill-sft" href="/sft/{{ a.archive_id }}/">sft · {{ a.archive_id }}
+         <span class="pill-count">{{ a.n_steps }}×{{ a.n_tasks }}</span></a>
+    {% endfor %}
+    <a class="pill pill-ann" href="/annotations/">claude annotations
+       <span class="pill-count">{{ n_annotations }}</span></a>
+    {% if has_analysis %}
+    <a class="pill pill-analysis" href="/analysis/">analysis</a>
+    {% endif %}
+  </div>
+</header>
+
+<main class="landing">
+
+  <section class="landing-section">
+    <h2>GRPO rollout runs</h2>
+    {% if runs %}
+    <ul class="landing-list">
+      {% for r in runs %}
+        <li>
+          <a class="landing-card" href="/runs/{{ r.run_id }}/">
+            <div class="landing-card-title">{{ r.run_id }} {% if r.run_id == default_run_id %}<span class="default-flag">default</span>{% endif %}</div>
+            <div class="landing-card-meta">{{ r.n_groups }} groups</div>
+            <div class="landing-card-path"><code>{{ r.run_dir }}</code></div>
+          </a>
+        </li>
+      {% endfor %}
+    </ul>
+    {% else %}
+      <div class="landing-empty">No GRPO runs discovered. Set <code>GRPO_RUN_DIRS</code> or place a <code>grpo-*/traces/</code> folder as a sibling.</div>
+    {% endif %}
+  </section>
+
+  <section class="landing-section">
+    <h2>Claude annotations</h2>
+    <ul class="landing-list">
+      <li>
+        <a class="landing-card landing-card-ann" href="/annotations/">
+          <div class="landing-card-title">Browse annotations <span class="default-flag">{{ n_annotations }}</span></div>
+          <div class="landing-card-meta">Per-sample explanations of what the model is doing at each step</div>
+          <div class="landing-card-path">Authored by Claude when Josh points at specific traces</div>
+        </a>
+      </li>
+    </ul>
+  </section>
+
+  {% if has_analysis %}
+  <section class="landing-section">
+    <h2>Failure analysis</h2>
+    <ul class="landing-list">
+      <li>
+        <a class="landing-card landing-card-analysis" href="/analysis/">
+          <div class="landing-card-title">KNN obedience &amp; tool-use over training <span class="default-flag">charts</span></div>
+          <div class="landing-card-meta">Per-step aggregates across all GRPO runs: accuracy, KNN retrieval quality, obey vs overrule rate, tool-call rate, mean #tool-calls per sample, and an outcome-bucket breakdown.</div>
+          <div class="landing-card-path">Derived from parsed response_text; rescanned with /api/reindex</div>
+        </a>
+      </li>
+    </ul>
+  </section>
+  {% endif %}
+
+  <section class="landing-section">
+    <h2>SFT compare archives</h2>
+    {% if sft_archives %}
+    <ul class="landing-list">
+      {% for a in sft_archives %}
+        <li>
+          <a class="landing-card landing-card-sft" href="/sft/{{ a.archive_id }}/">
+            <div class="landing-card-title">{{ a.archive_id }}</div>
+            <div class="landing-card-meta">{{ a.n_steps }} steps &middot; {{ a.n_tasks }} tasks</div>
+            <div class="landing-card-path"><code>{{ a.root }}</code></div>
+          </a>
+        </li>
+      {% endfor %}
+    </ul>
+    {% else %}
+      <div class="landing-empty">No SFT compare archives discovered. Set <code>SFT_COMPARE_DIRS</code> or place a folder containing <code>step_N/summary.json</code> as a sibling.</div>
+    {% endif %}
+  </section>
+
+</main>
+</body>
+</html>

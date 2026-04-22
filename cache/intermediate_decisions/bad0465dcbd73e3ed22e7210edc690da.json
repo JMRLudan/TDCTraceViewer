@@ -1,0 +1,23 @@
+{
+  "decisions": [
+    {
+      "after_tool_idx": 0,
+      "tool": "get_mol_properties_and_fg",
+      "decision": "A",
+      "confidence": "tentative",
+      "evidence": "Overall, despite the aryl chloride count of 3 and the low sp3 fraction of 0.125 giving some mutagenicity-like structural flavor, the absence of a nitro group, the single ring, the low hydrogen-bond acceptor count of 1, the low topological polar surface area of 17.07, and the lack of a basic site make the compound look more consistent with option (A): is not mutagenic.",
+      "is_last_before_final": false
+    },
+    {
+      "after_tool_idx": 1,
+      "tool": "compare_similar_mols",
+      "decision": "A",
+      "confidence": "committed",
+      "evidence": "The combined neighbor evidence therefore supports the final prediction: option (A), is not mutagenic.",
+      "is_last_before_final": true
+    }
+  ],
+  "final_answer": "A",
+  "n_windows": 2,
+  "version": 1
+}

@@ -1,0 +1,23 @@
+{
+  "decisions": [
+    {
+      "after_tool_idx": 0,
+      "tool": "get_mol_properties_and_fg",
+      "decision": "B",
+      "confidence": "committed",
+      "evidence": "The final prediction is that it is not a substrate to the enzyme CYP2D6.",
+      "is_last_before_final": false
+    },
+    {
+      "after_tool_idx": 1,
+      "tool": "compare_similar_mols",
+      "decision": "A",
+      "confidence": "committed",
+      "evidence": "Putting the six neighbors together, the three positive analogs are not strongly convincing because each of them contains multiple countervailing features, especially charge-related descriptors and the presence of a dialkyl ether in the query. The three negative analogs also do not become clean positives when compared against the query: although the query often shows higher basic pKa, lower polarity, and sometimes higher sp3 fraction or QED, those favorable shifts are repeatedly offset by charge extrema or other local effects. The overall neighbor pattern therefore remains mixed and ultimately aligns with option (A): the query is not a substrate to CYP2D6.",
+      "is_last_before_final": true
+    }
+  ],
+  "final_answer": "A",
+  "n_windows": 2,
+  "version": 1
+}

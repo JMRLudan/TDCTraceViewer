@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Claude Annotations</title>
+<link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<header class="app-header">
+  <div>
+    <h1>
+      <a href="/" title="home">viewer</a>
+      &nbsp;·&nbsp; Claude annotations
+    </h1>
+    <div class="meta">
+      {{ rows|length }} annotation{% if rows|length != 1 %}s{% endif %} &middot;
+      <code>{{ annotations_dir }}</code>
+    </div>
+  </div>
+  <div class="run-switch">
+    {% for r in runs %}
+      <a class="pill" href="/runs/{{ r.run_id }}/">grpo · {{ r.run_id }}
+         <span class="pill-count">{{ r.n_groups }}</span></a>
+    {% endfor %}
+    {% for a in sft_archives %}
+      <a class="pill pill-sft" href="/sft/{{ a.archive_id }}/">sft · {{ a.archive_id }}
+         <span class="pill-count">{{ a.n_steps }}×{{ a.n_tasks }}</span></a>
+    {% endfor %}
+    <a class="pill pill-ann active" href="/annotations/">claude annotations
+       <span class="pill-count">{{ n_annotations }}</span></a>
+    {% if has_analysis %}
+    <a class="pill pill-analysis" href="/analysis/">analysis</a>
+    {% endif %}
+  </div>
+</header>
+
+<main class="ann-main">
+
+  {% if empty %}
+  <section class="ann-empty">
+    <h2>No annotations yet</h2>
+    <p>
+      Claude writes annotations into <code>{{ annotations_dir }}</code>,
+      one JSON file per annotated sample. When Josh points Claude at a
+      specific trace to analyze, the resulting walkthrough lands here.
+    </p>
+    <details class="ann-schema">
+      <summary>Annotation file schema</summary>
+<pre class="raw">{
+  "id": "grpo_0420_1223_mixed_step0_s0",      // unique, also used as filename stem
+  "title": "Initial AMES prediction — correct via neighbor similarity",
+  "verdict": "correct",                         // "correct" | "wrong" | "interesting" | ""
+  "tags": ["tool-use", "neighbor-evidence"],
+  "created_at": "2026-04-21T18:00:00Z",
+  "source": {
+    "kind": "grpo",
+    "run_id": "0420_1223",
+    "group_id": "mixed_step0",
+    "sample_idx": 0
+  },
+  // -- or for SFT --
+  "source": {
+    "kind": "sft",
+    "archive_id": "gpt_5_4_mini_compare_only_sft",
+    "step": 0,
+    "task": "AMES",
+    "sample_idx": 0                             // or "best_correct" / "worst_wrong"
+  },
+  "summary": "Top-level paragraph describing what the model did overall.",
+  "segment_notes": [
+    { "segment_idx": 0, "heading": "Framing", "note": "Model reframes the task as..." },
+    { "segment_idx": 1, "heading": "Tool choice", "note": "Calls compare_similar_mols because..." }
+  ],
+  "conclusion": "Closing paragraph: why the sample is correct/interesting/wrong."
+}</pre>
+    </details>
+  </section>
+  {% else %}
+  <ul class="ann-list">
+    {% for r in rows %}
+      <li class="ann-row">
+        <a class="ann-row-link" href="/annotations/{{ r.id }}">
+          <div class="ann-row-title">
+            {% if r.verdict %}<span class="verdict verdict-{{ r.verdict }}">{{ r.verdict }}</span>{% endif %}
+            <span>{{ r.title }}</span>
+          </div>
+          <div class="ann-row-meta">
+            <code>{{ r.source_label }}</code> &middot;
+            {{ r.n_notes }} note{% if r.n_notes != 1 %}s{% endif %}
+            {% if r.created_at %} &middot; <span class="dim">{{ r.created_at }}</span>{% endif %}
+          </div>
+          {% if r.summary %}<div class="ann-row-summary">{{ r.summary }}</div>{% endif %}
+          {% if r.tags %}
+          <div class="ann-row-tags">
+            {% for t in r.tags %}<span class="tag-chip">#{{ t }}</span>{% endfor %}
+          </div>
+          {% endif %}
+        </a>
+        {% if r.source_url %}
+          <a class="ann-row-source" href="{{ r.source_url }}">source &rarr;</a>
+        {% endif %}
+      </li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+
+</main>
+</body>
+</html>

@@ -1,0 +1,23 @@
+{
+  "decisions": [
+    {
+      "after_tool_idx": 0,
+      "tool": "get_mol_properties_and_fg",
+      "decision": "A",
+      "confidence": "committed",
+      "evidence": "Overall, although the TPSA of 104.81 \u00c5\u00b2 and benzene count of 3 introduce some mitigating polarity, the combination of 4 alkyl aryl ethers, 14 rotatable bonds, 3 aromatic carbocycles, 3 benzene rings, and a strongly basic center with no acidic site makes hERG blockade the more likely outcome.",
+      "is_last_before_final": false
+    },
+    {
+      "after_tool_idx": 1,
+      "tool": "compare_similar_mols",
+      "decision": "B",
+      "confidence": "committed",
+      "evidence": "The overall nearest-neighbor pattern therefore supports option (B): blocks hERG.",
+      "is_last_before_final": true
+    }
+  ],
+  "final_answer": "B",
+  "n_windows": 2,
+  "version": 1
+}

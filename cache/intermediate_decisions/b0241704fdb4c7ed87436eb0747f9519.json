@@ -1,0 +1,23 @@
+{
+  "decisions": [
+    {
+      "after_tool_idx": 0,
+      "tool": "get_mol_properties_and_fg",
+      "decision": "B",
+      "confidence": "committed",
+      "evidence": "Balancing these factors, the low polar surface area, strong basicity, and lipophilic scaffold are important substrate-like features, but the charge-related descriptors and the aryl chloride introduce enough counterevidence that the overall prediction is that it is not a substrate to CYP2D6.",
+      "is_last_before_final": false
+    },
+    {
+      "after_tool_idx": 1,
+      "tool": "compare_similar_mols",
+      "decision": "B",
+      "confidence": "committed",
+      "evidence": "Overall, the neighbor set is mixed but leans toward the provided label: the query is best classified as not a substrate to CYP2D6.",
+      "is_last_before_final": true
+    }
+  ],
+  "final_answer": "A",
+  "n_windows": 2,
+  "version": 1
+}

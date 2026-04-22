@@ -1,0 +1,511 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Failure analysis</title>
+<link rel="stylesheet" href="/static/style.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+</head>
+<body>
+
+<header class="app-header">
+  <div>
+    <h1>
+      <a href="/" title="home">viewer</a>
+      &nbsp;·&nbsp; failure analysis
+    </h1>
+    <div class="meta">
+      {% if empty %}
+        no GRPO runs indexed
+      {% else %}
+        {% if selected_run %}
+          run <code>{{ selected_run }}</code>
+        {% else %}
+          {{ analyses|length }} run{% if analyses|length != 1 %}s{% endif %}
+        {% endif %}
+        &middot; KNN obedience, retrieval quality, tool usage vs training step
+      {% endif %}
+    </div>
+  </div>
+  <div class="run-switch">
+    {% for r in runs %}
+      <a class="pill" href="/runs/{{ r.run_id }}/">grpo · {{ r.run_id }}
+         <span class="pill-count">{{ r.n_groups }}</span></a>
+    {% endfor %}
+    {% for a in sft_archives %}
+      <a class="pill pill-sft" href="/sft/{{ a.archive_id }}/">sft · {{ a.archive_id }}
+         <span class="pill-count">{{ a.n_steps }}×{{ a.n_tasks }}</span></a>
+    {% endfor %}
+    <a class="pill pill-ann" href="/annotations/">claude annotations
+       <span class="pill-count">{{ n_annotations }}</span></a>
+    <a class="pill pill-analysis active" href="/analysis/">analysis</a>
+  </div>
+</header>
+
+{% if empty %}
+<main class="ann-main">
+  <section class="ann-empty">
+    <h2>No runs to analyze</h2>
+    <p>Failure analysis runs over GRPO rollout samples. Index a run first.</p>
+  </section>
+</main>
+{% else %}
+
+<main class="analysis-main">
+
+  {% if analyses|length > 1 %}
+  <section class="analysis-runpicker">
+    <div class="meta">viewing {{ analyses|length }} runs overlaid. focus on one:</div>
+    <div class="run-switch">
+      <a class="pill {% if not selected_run %}active{% endif %}" href="/analysis/">all</a>
+      {% for a in analyses %}
+        <a class="pill {% if selected_run == a.run_id %}active{% endif %}" href="/analysis/?run={{ a.run_id }}">{{ a.run_id }}
+           <span class="pill-count">{{ a.n_total }}</span></a>
+      {% endfor %}
+    </div>
+  </section>
+  {% endif %}
+
+  <section class="analysis-notes">
+    <p>
+      Each <code>compare_similar_mols</code> call returns 6 neighbors (3 labeled
+      positive = class <code>(B)</code>, 3 labeled negative = class <code>(A)</code>),
+      each with its own similarity. The primary <b>KNN vote</b> below is
+      <b>similarity-weighted</b> over all 6 neighbors:
+      <code>vote = B iff Σ sim(positive) &gt; Σ sim(negative)</code>.
+      Alternative vote definitions — top-1 (single highest-sim neighbor) and
+      top-3 majority — are plotted alongside so you can see how obey /
+      retrieval-correctness rates change depending on how you define the vote.
+      <b>Obey</b> = final answer letter matched the KNN vote. TDC convention:
+      <code>(B)</code> = has-property (positive).
+    </p>
+  </section>
+
+  <section class="chart-grid">
+
+    <div class="chart-card">
+      <div class="chart-title">Model accuracy vs step</div>
+      <div class="chart-sub dim">fraction of samples where final answer == gold</div>
+      <div class="chart-box"><canvas id="chart-accuracy"></canvas></div>
+    </div>
+
+    <div class="chart-card">
+      <div class="chart-title">KNN obedience rate vs step (primary: weighted)</div>
+      <div class="chart-sub dim">of samples with both KNN + final answer, fraction where final == similarity-weighted KNN vote</div>
+      <div class="chart-box"><canvas id="chart-obey"></canvas></div>
+    </div>
+
+    <div class="chart-card">
+      <div class="chart-title">KNN retrieval correctness vs step (primary: weighted)</div>
+      <div class="chart-sub dim">of samples with a KNN vote, fraction where KNN vote == gold</div>
+      <div class="chart-box"><canvas id="chart-knn-correct"></canvas></div>
+    </div>
+
+    <div class="chart-card chart-wide">
+      <div class="chart-title">Obey rate vs step — by vote definition</div>
+      <div class="chart-sub dim">how much obedience depends on how you define the vote: weighted (sum of similarities), top-3 majority, top-1 single nearest neighbor</div>
+      <div class="chart-box"><canvas id="chart-obey-by-vote"></canvas></div>
+    </div>
+
+    <div class="chart-card chart-wide">
+      <div class="chart-title">KNN retrieval correctness vs step — by vote definition</div>
+      <div class="chart-sub dim">weighted / top-3 / top-1 vote each vs gold</div>
+      <div class="chart-box"><canvas id="chart-knncorr-by-vote"></canvas></div>
+    </div>
+
+    <div class="chart-card">
+      <div class="chart-title">Mean KNN margin vs step</div>
+      <div class="chart-sub dim">mean of (Σ positive-neighbor sims − Σ negative-neighbor sims) per sample. Positive margin → retrieval leans positive class.</div>
+      <div class="chart-box"><canvas id="chart-margin"></canvas></div>
+    </div>
+
+    <div class="chart-card">
+      <div class="chart-title">Mean #positive neighbors in top-3</div>
+      <div class="chart-sub dim">how often the nearest 3 neighbors are drawn from the positive section (max 3 of 3)</div>
+      <div class="chart-box"><canvas id="chart-top3-posn"></canvas></div>
+    </div>
+
+    <div class="chart-card">
+      <div class="chart-title">KNN call rate vs step</div>
+      <div class="chart-sub dim">fraction of samples that called compare_similar_mols</div>
+      <div class="chart-box"><canvas id="chart-knn-call"></canvas></div>
+    </div>
+
+    <div class="chart-card">
+      <div class="chart-title">Mean #tool calls per sample</div>
+      <div class="chart-sub dim">sum(tool_calls) / n_samples, by step</div>
+      <div class="chart-box"><canvas id="chart-tool-mean"></canvas></div>
+    </div>
+
+    <div class="chart-card">
+      <div class="chart-title">Per-tool call rate vs step</div>
+      <div class="chart-sub dim">fraction of samples that invoked each tool at least once</div>
+      <div class="chart-box"><canvas id="chart-tool-rates"></canvas></div>
+    </div>
+
+    <div class="chart-card chart-wide">
+      <div class="chart-title">Outcome breakdown vs step (stacked)</div>
+      <div class="chart-sub dim">
+        obey_right / disobey_right = correct &middot;
+        obey_wrong / disobey_wrong = wrong &middot;
+        no_knn = retrieval skipped &middot;
+        no_answer = couldn't parse final letter
+      </div>
+      <div class="chart-box chart-box-tall"><canvas id="chart-buckets"></canvas></div>
+    </div>
+
+    <div class="chart-card chart-wide">
+      <div class="chart-title">Top-1 neighbor similarity vs step</div>
+      <div class="chart-sub dim">mean of the highest-similarity positive / negative neighbor per sample</div>
+      <div class="chart-box"><canvas id="chart-sims"></canvas></div>
+    </div>
+
+  </section>
+
+  <section class="analysis-table">
+    <h2>Raw per-step table</h2>
+    {% for a in analyses %}
+    <h3>run <code>{{ a.run_id }}</code> — {{ a.n_total }} samples</h3>
+    <table class="groups">
+      <thead>
+        <tr>
+          <th>step</th>
+          <th>n</th>
+          <th>acc</th>
+          <th>knn call</th>
+          <th>knn right</th>
+          <th>obey</th>
+          <th>mean #tc</th>
+          <th>obey_right</th>
+          <th>disobey_right</th>
+          <th>obey_wrong</th>
+          <th>disobey_wrong</th>
+          <th>no_knn</th>
+          <th>no_answer</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for s in a.steps %}
+          {% set row = a.by_step[s] %}
+          <tr>
+            <td>{{ s }}</td>
+            <td>{{ row.n_samples }}</td>
+            <td>{% if row.accuracy is not none %}{{ "%.3f"|format(row.accuracy) }}{% else %}—{% endif %}</td>
+            <td>{% if row.knn_call_rate is not none %}{{ "%.3f"|format(row.knn_call_rate) }}{% else %}—{% endif %}</td>
+            <td>{% if row.knn_correct_rate is not none %}{{ "%.3f"|format(row.knn_correct_rate) }}{% else %}—{% endif %}</td>
+            <td>{% if row.obey_rate is not none %}{{ "%.3f"|format(row.obey_rate) }}{% else %}—{% endif %}</td>
+            <td>{% if row.mean_tool_calls is not none %}{{ "%.2f"|format(row.mean_tool_calls) }}{% else %}—{% endif %}</td>
+            <td>{{ row.buckets.obey_right }}</td>
+            <td>{{ row.buckets.disobey_right }}</td>
+            <td>{{ row.buckets.obey_wrong }}</td>
+            <td>{{ row.buckets.disobey_wrong }}</td>
+            <td>{{ row.buckets.no_knn }}</td>
+            <td>{{ row.buckets.no_answer }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% endfor %}
+  </section>
+
+</main>
+
+<script id="analyses-data" type="application/json">{{ analyses|tojson }}</script>
+<script>
+(function () {
+  const raw = document.getElementById("analyses-data").textContent;
+  const analyses = JSON.parse(raw);
+
+  // Per-run stable color. Small palette — we don't expect >6 runs.
+  const RUN_COLORS = [
+    "#5c9eff", "#e4734e", "#55b86b", "#c36ccc", "#e1b93a", "#6fcad1"
+  ];
+  function runColor(i) { return RUN_COLORS[i % RUN_COLORS.length]; }
+
+  // Tool colors (separate palette so they don't collide with run colors in charts
+  // that split by tool).
+  const TOOL_COLORS = ["#8fbfe0", "#d99c74", "#85c497", "#c58fc9", "#dcc36a"];
+
+  function lineChart(id, datasets, yOpts) {
+    const ctx = document.getElementById(id);
+    return new Chart(ctx, {
+      type: "line",
+      data: { datasets: datasets },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        interaction: { mode: "nearest", axis: "x", intersect: false },
+        scales: {
+          x: {
+            type: "linear",
+            title: { display: true, text: "training step" },
+            ticks: { color: "#6a6a7a" },
+            grid: { color: "#ececf3" },
+          },
+          y: Object.assign({
+            title: { display: true, text: "rate" },
+            ticks: { color: "#6a6a7a" },
+            grid: { color: "#ececf3" },
+          }, yOpts || {}),
+        },
+        plugins: {
+          legend: { labels: { color: "#1b1b1f" } },
+          tooltip: { callbacks: {
+            title: (items) => items.length ? `step ${items[0].parsed.x}` : "",
+          }},
+        },
+      },
+    });
+  }
+
+  function points(steps, fn) {
+    return steps.map(s => ({ x: s, y: fn(s) })).filter(p => p.y !== null && p.y !== undefined && !Number.isNaN(p.y));
+  }
+
+  // --- Accuracy
+  lineChart("chart-accuracy",
+    analyses.map((a, i) => ({
+      label: a.run_id,
+      data: points(a.steps, s => a.by_step[s].accuracy),
+      borderColor: runColor(i),
+      backgroundColor: runColor(i),
+      tension: 0.15,
+      pointRadius: 3,
+    })),
+    { min: 0, max: 1 },
+  );
+
+  // --- Obey rate
+  lineChart("chart-obey",
+    analyses.map((a, i) => ({
+      label: a.run_id,
+      data: points(a.steps, s => a.by_step[s].obey_rate),
+      borderColor: runColor(i),
+      backgroundColor: runColor(i),
+      tension: 0.15,
+      pointRadius: 3,
+    })),
+    { min: 0, max: 1 },
+  );
+
+  // --- KNN correctness
+  lineChart("chart-knn-correct",
+    analyses.map((a, i) => ({
+      label: a.run_id,
+      data: points(a.steps, s => a.by_step[s].knn_correct_rate),
+      borderColor: runColor(i),
+      backgroundColor: runColor(i),
+      tension: 0.15,
+      pointRadius: 3,
+    })),
+    { min: 0, max: 1 },
+  );
+
+  // --- KNN call rate
+  lineChart("chart-knn-call",
+    analyses.map((a, i) => ({
+      label: a.run_id,
+      data: points(a.steps, s => a.by_step[s].knn_call_rate),
+      borderColor: runColor(i),
+      backgroundColor: runColor(i),
+      tension: 0.15,
+      pointRadius: 3,
+    })),
+    { min: 0, max: 1 },
+  );
+
+  // --- Mean #tool calls
+  lineChart("chart-tool-mean",
+    analyses.map((a, i) => ({
+      label: a.run_id,
+      data: points(a.steps, s => a.by_step[s].mean_tool_calls),
+      borderColor: runColor(i),
+      backgroundColor: runColor(i),
+      tension: 0.15,
+      pointRadius: 3,
+    })),
+    { beginAtZero: true },
+  );
+
+  // --- Per-tool call rates (one line per tool, stacked runs if multi)
+  {
+    const datasets = [];
+    analyses.forEach((a, ri) => {
+      a.tools.forEach((t, ti) => {
+        datasets.push({
+          label: analyses.length > 1 ? `${a.run_id} · ${t}` : t,
+          data: points(a.steps, s => {
+            const r = a.by_step[s].tool_rates || {};
+            return (t in r) ? r[t] : null;
+          }),
+          borderColor: analyses.length > 1 ? runColor(ri) : TOOL_COLORS[ti % TOOL_COLORS.length],
+          backgroundColor: analyses.length > 1 ? runColor(ri) : TOOL_COLORS[ti % TOOL_COLORS.length],
+          borderDash: analyses.length > 1 && ti > 0 ? [6, 4] : [],
+          tension: 0.15,
+          pointRadius: 3,
+        });
+      });
+    });
+    lineChart("chart-tool-rates", datasets, { min: 0, max: 1 });
+  }
+
+  // --- Stacked outcome buckets (first run only to keep it readable;
+  // multi-run uses small multiples via the table above + picker)
+  {
+    const a = analyses[0];
+    const bucketColors = {
+      obey_right:     "#4caf50",   // correct (followed right KNN)
+      disobey_right:  "#81c784",   // correct (overruled wrong KNN)
+      obey_wrong:     "#e57373",   // wrong (followed wrong KNN)
+      disobey_wrong:  "#d32f2f",   // wrong (overruled right KNN) — WORST
+      no_knn:         "#9e9e9e",
+      no_answer:      "#616161",
+      na:             "#444",
+    };
+    const bucketLabels = {
+      obey_right:     "obey · KNN right (correct)",
+      disobey_right:  "overrule · KNN wrong (correct)",
+      obey_wrong:     "obey · KNN wrong (wrong)",
+      disobey_wrong:  "overrule · KNN right (wrong)",
+      no_knn:         "no KNN retrieved",
+      no_answer:      "no final letter parsed",
+      na:             "n/a",
+    };
+    const datasets = a.buckets.map(b => ({
+      label: bucketLabels[b] || b,
+      data: a.steps.map(s => a.by_step[s].buckets[b] || 0),
+      backgroundColor: bucketColors[b] || "#777",
+      borderColor: bucketColors[b] || "#777",
+      stack: "outcomes",
+    }));
+    const ctx = document.getElementById("chart-buckets");
+    new Chart(ctx, {
+      type: "bar",
+      data: { labels: a.steps.map(s => `step ${s}`), datasets },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+          x: { stacked: true, ticks: { color: "#6a6a7a" }, grid: { color: "#ececf3" } },
+          y: { stacked: true, title: { display: true, text: "n samples" }, ticks: { color: "#6a6a7a" }, grid: { color: "#ececf3" } },
+        },
+        plugins: {
+          legend: { labels: { color: "#1b1b1f" } },
+          title: { display: true, text: `run ${a.run_id}`, color: "#1b1b1f" },
+        },
+      },
+    });
+  }
+
+  // --- Obey rate by vote definition
+  {
+    const datasets = [];
+    const voteStyle = {
+      weighted: { dash: [],      label: "weighted (Σ sim)" },
+      top3:     { dash: [6, 4],  label: "top-3 majority"   },
+      top1:     { dash: [2, 3],  label: "top-1 neighbor"   },
+    };
+    analyses.forEach((a, ri) => {
+      (a.vote_defs || ["weighted", "top3", "top1"]).forEach(v => {
+        const s = voteStyle[v] || { dash: [], label: v };
+        datasets.push({
+          label: analyses.length > 1 ? `${a.run_id} · ${s.label}` : s.label,
+          data: points(a.steps, step => {
+            const r = (a.by_step[step].per_vote || {})[v];
+            return r ? r.obey_rate : null;
+          }),
+          borderColor: runColor(ri),
+          backgroundColor: runColor(ri),
+          borderDash: s.dash,
+          tension: 0.15,
+          pointRadius: 3,
+        });
+      });
+    });
+    lineChart("chart-obey-by-vote", datasets, { min: 0, max: 1 });
+  }
+
+  // --- KNN retrieval correctness by vote definition
+  {
+    const datasets = [];
+    const voteStyle = {
+      weighted: { dash: [],      label: "weighted (Σ sim)" },
+      top3:     { dash: [6, 4],  label: "top-3 majority"   },
+      top1:     { dash: [2, 3],  label: "top-1 neighbor"   },
+    };
+    analyses.forEach((a, ri) => {
+      (a.vote_defs || ["weighted", "top3", "top1"]).forEach(v => {
+        const s = voteStyle[v] || { dash: [], label: v };
+        datasets.push({
+          label: analyses.length > 1 ? `${a.run_id} · ${s.label}` : s.label,
+          data: points(a.steps, step => {
+            const r = (a.by_step[step].per_vote || {})[v];
+            return r ? r.knn_correct_rate : null;
+          }),
+          borderColor: runColor(ri),
+          backgroundColor: runColor(ri),
+          borderDash: s.dash,
+          tension: 0.15,
+          pointRadius: 3,
+        });
+      });
+    });
+    lineChart("chart-knncorr-by-vote", datasets, { min: 0, max: 1 });
+  }
+
+  // --- Mean KNN margin
+  lineChart("chart-margin",
+    analyses.map((a, i) => ({
+      label: a.run_id,
+      data: points(a.steps, s => a.by_step[s].mean_knn_margin),
+      borderColor: runColor(i),
+      backgroundColor: runColor(i),
+      tension: 0.15,
+      pointRadius: 3,
+    })),
+    {},
+  );
+
+  // --- Mean #positive in top-3
+  lineChart("chart-top3-posn",
+    analyses.map((a, i) => ({
+      label: a.run_id,
+      data: points(a.steps, s => a.by_step[s].mean_top3_pos_count),
+      borderColor: runColor(i),
+      backgroundColor: runColor(i),
+      tension: 0.15,
+      pointRadius: 3,
+    })),
+    { min: 0, max: 3 },
+  );
+
+  // --- Mean top-1 similarity (pos vs neg), per run
+  {
+    const datasets = [];
+    analyses.forEach((a, ri) => {
+      datasets.push({
+        label: `${a.run_id} · top pos sim`,
+        data: points(a.steps, s => a.by_step[s].mean_top_pos_sim),
+        borderColor: runColor(ri),
+        backgroundColor: runColor(ri),
+        tension: 0.15,
+        pointRadius: 3,
+      });
+      datasets.push({
+        label: `${a.run_id} · top neg sim`,
+        data: points(a.steps, s => a.by_step[s].mean_top_neg_sim),
+        borderColor: runColor(ri),
+        backgroundColor: runColor(ri),
+        borderDash: [6, 4],
+        tension: 0.15,
+        pointRadius: 3,
+      });
+    });
+    lineChart("chart-sims", datasets, { beginAtZero: true });
+  }
+})();
+</script>
+{% endif %}
+
+</body>
+</html>

@@ -1,0 +1,29 @@
+# Render blueprint — https://render.com/docs/blueprint-spec
+# Deploys the TDC trace viewer as a web service with a persistent disk for traces.
+services:
+  - type: web
+    name: tdc-trace-viewer
+    runtime: python
+    plan: starter
+    rootDir: .
+    buildCommand: pip install --upgrade pip && pip install -r requirements.txt
+    startCommand: uvicorn app:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /healthz
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.9
+      - key: TDC_DATA_ROOT
+        value: /data
+      - key: GRPO_RUN_DIRS
+        value: /data/grpo
+      - key: SFT_COMPARE_DIRS
+        value: /data/sft
+      # Intentionally NO OPENAI_API_KEY — public deploy is read-only
+      # over the pre-computed intermediate-decisions cache. Live
+      # extraction would require VIEWER_ENABLE_LIVE_EXTRACTION=1 and a
+      # key, which we deliberately don't set here.
+    disk:
+      name: viewer-data
+      mountPath: /data
+      sizeGB: 1
+    autoDeploy: true

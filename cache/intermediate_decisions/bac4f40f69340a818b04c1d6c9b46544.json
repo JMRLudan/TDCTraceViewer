@@ -1,0 +1,31 @@
+{
+  "decisions": [
+    {
+      "after_tool_idx": 0,
+      "tool": "get_mol_properties_and_fg",
+      "decision": "A",
+      "confidence": "committed",
+      "evidence": "Taken together, the molecule is more consistent with being not mutagenic, with a final prediction of option (A).",
+      "is_last_before_final": false
+    },
+    {
+      "after_tool_idx": 1,
+      "tool": "compare_similar_mols",
+      "decision": "A",
+      "confidence": "committed",
+      "evidence": "Overall, the balance of evidence points to the molecule being not mutagenic, so the final prediction is option (A).",
+      "is_last_before_final": false
+    },
+    {
+      "after_tool_idx": 2,
+      "tool": "predict_most_likely_outcome",
+      "decision": "A",
+      "confidence": "committed",
+      "evidence": "Taken together, the balance of evidence supports a non-mutagenic interpretation, so the molecule is best classified as option (A): is not mutagenic.",
+      "is_last_before_final": true
+    }
+  ],
+  "final_answer": "A",
+  "n_windows": 3,
+  "version": 1
+}

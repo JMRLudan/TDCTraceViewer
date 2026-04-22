@@ -1,0 +1,15 @@
+{
+  "decisions": [
+    {
+      "after_tool_idx": 0,
+      "tool": "compare_similar_mols",
+      "decision": "B",
+      "confidence": "committed",
+      "evidence": "Across all six neighbors, the same pattern repeats: the query consistently contains 1H-indazole, sits in a flat, low-sp3 heteroaromatic regime, and shows physicochemical shifts in logD, neutral fraction, and partial charge that resemble the mutagenic neighbors more than the non-mutagenic ones. Although a few individual descriptors such as neutral fraction, Labute surface area, or acidic/basic pKa vary in direction, the neighbor-by-neighbor evidence is internally consistent and collectively points to option (B): is mutagenic.",
+      "is_last_before_final": true
+    }
+  ],
+  "final_answer": "B",
+  "n_windows": 1,
+  "version": 1
+}

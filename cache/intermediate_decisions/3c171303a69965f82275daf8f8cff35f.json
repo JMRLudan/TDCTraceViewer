@@ -1,0 +1,23 @@
+{
+  "decisions": [
+    {
+      "after_tool_idx": 0,
+      "tool": "get_mol_properties_and_fg",
+      "decision": "A",
+      "confidence": "committed",
+      "evidence": "Overall, the favorable effects of the compact heteroaromatic scaffold, moderate basicity, limited ionization burden, lipophilic halogens, and strong drug-likeness outweigh the mild concern from the low fraction of sp3 carbons, so the molecule is more likely to cross the BBB, with a final score of 0.8957.",
+      "is_last_before_final": false
+    },
+    {
+      "after_tool_idx": 1,
+      "tool": "compare_similar_mols",
+      "decision": "B",
+      "confidence": "committed",
+      "evidence": "the final prediction is option (B).",
+      "is_last_before_final": true
+    }
+  ],
+  "final_answer": "B",
+  "n_windows": 2,
+  "version": 1
+}

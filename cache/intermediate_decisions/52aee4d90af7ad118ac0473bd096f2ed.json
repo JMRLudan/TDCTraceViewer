@@ -1,0 +1,23 @@
+{
+  "decisions": [
+    {
+      "after_tool_idx": 0,
+      "tool": "get_mol_properties_and_fg",
+      "decision": "B",
+      "confidence": "committed",
+      "evidence": "Overall, the very low neutral fraction of 0.0044, the secondary amide (1), the high number of ionizable sites (7), the acidic pKa of 5.049, and the elevated polar surface area of 118.87 dominate the mixed picture and make the compound more likely to be not permeable in PAMPA, despite the presence of a pyrazole (1) and 5 basic sites that provide some permeability-supporting character.",
+      "is_last_before_final": false
+    },
+    {
+      "after_tool_idx": 1,
+      "tool": "compare_similar_mols",
+      "decision": "A",
+      "confidence": "committed",
+      "evidence": "Taken together, the nearest analogs more strongly support option (A): the molecule is not permeable to cell membranes in a PAMPA assay.",
+      "is_last_before_final": true
+    }
+  ],
+  "final_answer": "A",
+  "n_windows": 2,
+  "version": 1
+}

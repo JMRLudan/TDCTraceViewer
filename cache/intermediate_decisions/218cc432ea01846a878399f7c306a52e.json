@@ -1,0 +1,23 @@
+{
+  "decisions": [
+    {
+      "after_tool_idx": 0,
+      "tool": "get_mol_properties_and_fg",
+      "decision": "A",
+      "confidence": "committed",
+      "evidence": "Overall, the mixed picture contains one concerning urethane-related liability, but several other descriptors are comparatively benign or non-risky, so the balance of evidence supports option (A): cannot cause DILI.",
+      "is_last_before_final": false
+    },
+    {
+      "after_tool_idx": 1,
+      "tool": "compare_similar_mols",
+      "decision": "A",
+      "confidence": "committed",
+      "evidence": "Across all six neighbors, the positive analogs consistently show the query differing from DILI-associated neighbors mainly by having ammonium, urethane, higher sp3 character, and lower logP, with only limited opposing evidence such as higher minimum absolute partial charge or, in one case, higher neutral fraction. The negative analogs likewise do not overcome that pattern: despite one feature pointing toward DILI in Neighbor 4 and one in Neighbor 6, the overall structural and physicochemical profile of the query does not match a convincing DILI-causing neighbor. Combining the three positive-neighbor and three negative-neighbor comparisons, the balance of evidence supports option (A): cannot cause DILI.",
+      "is_last_before_final": true
+    }
+  ],
+  "final_answer": "A",
+  "n_windows": 2,
+  "version": 1
+}

@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Annotation · {{ ann.title }}</title>
+<link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+<header class="app-header">
+  <div>
+    <h1>
+      <a href="/annotations/">&larr;</a>
+      <span class="run-chip">annotation</span>
+      {{ ann.title }}
+    </h1>
+    <div class="meta">
+      {% if ann.verdict %}<span class="verdict verdict-{{ ann.verdict }}">{{ ann.verdict }}</span>{% endif %}
+      <code>{{ ann.source_label }}</code>
+      {% if ann.source_url %} &middot; <a href="{{ ann.source_url }}">open source sample &rarr;</a>{% endif %}
+      {% if ann.created_at %} &middot; {{ ann.created_at }}{% endif %}
+      {% if ann.tags %}
+        {% for t in ann.tags %} <span class="tag-chip">#{{ t }}</span>{% endfor %}
+      {% endif %}
+    </div>
+  </div>
+  <div class="run-switch">
+    {% for r in runs %}
+      <a class="pill" href="/runs/{{ r.run_id }}/">grpo · {{ r.run_id }}
+         <span class="pill-count">{{ r.n_groups }}</span></a>
+    {% endfor %}
+    {% for a in sft_archives %}
+      <a class="pill pill-sft" href="/sft/{{ a.archive_id }}/">sft · {{ a.archive_id }}
+         <span class="pill-count">{{ a.n_steps }}×{{ a.n_tasks }}</span></a>
+    {% endfor %}
+    <a class="pill pill-ann active" href="/annotations/">claude annotations
+       <span class="pill-count">{{ n_annotations }}</span></a>
+    {% if has_analysis %}
+    <a class="pill pill-analysis" href="/analysis/">analysis</a>
+    {% endif %}
+  </div>
+</header>
+
+{% if not found %}
+<section class="ann-missing">
+  <h2>Source sample not found</h2>
+  <p>The trace this annotation points at isn't currently indexed:</p>
+  <pre class="raw">{{ ann.source_label }}</pre>
+</section>
+{% else %}
+
+<section class="ann-body">
+
+  {% if ann.summary %}
+  <div class="ann-block ann-summary">
+    <div class="ann-block-label">summary</div>
+    <div class="ann-block-body">{{ ann.summary }}</div>
+  </div>
+  {% endif %}
+
+  <div class="ann-target-meta">
+    reward = {{ "%.3f"|format(target.reward or 0) }}
+    {% if target.score is not none %} &middot; score = {{ "%.3f"|format(target.score) }}{% endif %}
+    {% if target.label %} &middot; label = <code>{{ target.label }}</code>{% endif %}
+    {% if target.datasource %} &middot; {{ target.datasource }}{% endif %}
+    {% if target.step is not none %} &middot; step {{ target.step }}{% endif %}
+    {% if target.group_type %} &middot; {{ target.group_type }}{% endif %}
+  </div>
+
+  <details class="prompt-block ann-prompt">
+    <summary>prompt</summary>
+    <pre class="raw">{{ target.prompt }}</pre>
+  </details>
+
+  <div class="ann-segments">
+    {% for seg in segments %}
+      {% if seg.note %}
+      <div class="ann-note">
+        {% if seg.note.heading %}<div class="ann-note-heading">{{ seg.note.heading }}</div>{% endif %}
+        <div class="ann-note-body">{{ seg.note.note }}</div>
+      </div>
+      {% endif %}
+
+      {% if seg.kind == 'analysis' %}
+        <div class="seg seg-analysis">
+          <div class="seg-label">segment #{{ loop.index0 }} · analysis</div>
+          <div class="seg-body">{{ seg.text }}</div>
+        </div>
+      {% elif seg.kind == 'commentary' %}
+        <div class="seg seg-commentary">
+          <div class="seg-label">segment #{{ loop.index0 }} · commentary</div>
+          <div class="seg-body">{{ seg.text }}</div>
+        </div>
+      {% elif seg.kind == 'final' %}
+        <div class="seg seg-final">
+          <div class="seg-label">segment #{{ loop.index0 }} · final</div>
+          <div class="seg-body">{{ seg.text }}</div>
+        </div>
+      {% elif seg.kind == 'tool_call' %}
+        <div class="seg seg-toolcall">
+          <div class="seg-label">segment #{{ loop.index0 }} · tool call &rarr; <code>{{ seg.tool }}</code></div>
+          <div class="seg-body">
+            {% if seg.parsed_pretty %}
+              <pre>{{ seg.parsed_pretty }}</pre>
+            {% else %}
+              <pre>{{ seg.text }}</pre>
+            {% endif %}
+          </div>
+        </div>
+      {% elif seg.kind == 'tool_response' %}
+        <div class="seg seg-toolresp">
+          <div class="seg-label">segment #{{ loop.index0 }} · tool response &larr; <code>{{ seg.tool }}</code></div>
+          <div class="seg-body">
+            {% if seg.parsed_pretty %}
+              <pre>{{ seg.parsed_pretty }}</pre>
+            {% else %}
+              <pre>{{ seg.text }}</pre>
+            {% endif %}
+          </div>
+        </div>
+      {% else %}
+        <div class="seg seg-raw">
+          <div class="seg-label">segment #{{ loop.index0 }} · {{ seg.kind }}</div>
+          <div class="seg-body"><pre>{{ seg.text }}</pre></div>
+        </div>
+      {% endif %}
+    {% endfor %}
+  </div>
+
+  {% if orphan_notes %}
+  <div class="ann-orphans">
+    <div class="ann-block-label">other notes</div>
+    {% for n in orphan_notes %}
+      <div class="ann-note">
+        {% if n.heading %}<div class="ann-note-heading">{{ n.heading }}{% if n.segment_idx is not none %} <span class="dim">(idx {{ n.segment_idx }})</span>{% endif %}</div>{% endif %}
+        <div class="ann-note-body">{{ n.note }}</div>
+      </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  {% if ann.conclusion %}
+  <div class="ann-block ann-conclusion">
+    <div class="ann-block-label">conclusion</div>
+    <div class="ann-block-body">{{ ann.conclusion }}</div>
+  </div>
+  {% endif %}
+
+  <div class="ann-footer dim">
+    <code>{{ ann.path }}</code>
+  </div>
+
+</section>
+
+{% endif %}
+
+</body>
+</html>

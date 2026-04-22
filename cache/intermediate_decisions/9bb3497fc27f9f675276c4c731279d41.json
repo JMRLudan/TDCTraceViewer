@@ -1,0 +1,23 @@
+{
+  "decisions": [
+    {
+      "after_tool_idx": 0,
+      "tool": "get_mol_properties_and_fg",
+      "decision": "B",
+      "confidence": "committed",
+      "evidence": "Overall, the molecule is predicted to be mutagenic, option B, with score 0.9107.",
+      "is_last_before_final": false
+    },
+    {
+      "after_tool_idx": 1,
+      "tool": "compare_similar_mols",
+      "decision": "B",
+      "confidence": "committed",
+      "evidence": "Putting the six neighbors together, all three mutagenic neighbors are clearly supportive of option (B), and even the three non-mutagenic neighbors contain several mutagenicity-leaning differences. The opposing signals from Labute surface area, ring count, and some partial-charge measures are real, but they do not dominate the local analog comparisons. Overall, the neighborhood evidence is stronger for mutagenicity, so the final prediction is option (B): is mutagenic.",
+      "is_last_before_final": true
+    }
+  ],
+  "final_answer": "B",
+  "n_windows": 2,
+  "version": 1
+}

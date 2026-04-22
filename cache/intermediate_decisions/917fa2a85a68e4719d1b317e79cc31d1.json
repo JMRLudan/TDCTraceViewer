@@ -1,0 +1,15 @@
+{
+  "decisions": [
+    {
+      "after_tool_idx": 0,
+      "tool": "compare_similar_mols",
+      "decision": "B",
+      "confidence": "committed",
+      "evidence": "Across all six neighbors, the mutagenic label is strongly supported. The most recurring and strongest structural motif is nitro, which appears in every neighbor and is matched by the query in each case. The query also repeatedly aligns with mutagenic chemistry through carboxylic ester, and several neighbors add other concerning features such as 2,1-benzisothiazole, thiophene, nitrile, ester multiplicity, or enamine groups. The size, polarity, and surface-area descriptors vary, but those differences mainly modulate exposure rather than overturning the repeated mutagenic alerts. Taken together, the nearest analogs are more consistent with option (B): is mutagenic.",
+      "is_last_before_final": true
+    }
+  ],
+  "final_answer": "B",
+  "n_windows": 1,
+  "version": 1
+}

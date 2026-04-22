@@ -1,0 +1,23 @@
+{
+  "decisions": [
+    {
+      "after_tool_idx": 0,
+      "tool": "get_mol_properties_and_fg",
+      "decision": "B",
+      "confidence": "committed",
+      "evidence": "Overall, these features are more consistent with a non-substrate than a CYP2C9 substrate, so the molecule is predicted to be not a substrate to CYP2C9.",
+      "is_last_before_final": false
+    },
+    {
+      "after_tool_idx": 1,
+      "tool": "compare_similar_mols",
+      "decision": "A",
+      "confidence": "committed",
+      "evidence": "With the negative analogs and the suboptimal positive analogs both pointing in the same direction, the combined evidence supports option (A): the molecule is not a substrate to CYP2C9.",
+      "is_last_before_final": true
+    }
+  ],
+  "final_answer": "A",
+  "n_windows": 2,
+  "version": 1
+}

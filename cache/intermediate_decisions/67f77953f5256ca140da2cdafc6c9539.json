@@ -1,0 +1,23 @@
+{
+  "decisions": [
+    {
+      "after_tool_idx": 0,
+      "tool": "get_mol_properties_and_fg",
+      "decision": "B",
+      "confidence": "committed",
+      "evidence": "Balancing these factors, the molecule looks borderline but ultimately more consistent with BBB penetration than not, mainly because its molecular weight is low, it has good drug-likeness, and it retains a lipophilic aromatic scaffold. The main drawback is the low neutral fraction together with the amine, but the overall profile still supports option (B): crosses the BBB.",
+      "is_last_before_final": false
+    },
+    {
+      "after_tool_idx": 1,
+      "tool": "compare_similar_mols",
+      "decision": "B",
+      "confidence": "committed",
+      "evidence": "the overall comparison supports option (B): crosses the BBB.",
+      "is_last_before_final": true
+    }
+  ],
+  "final_answer": "B",
+  "n_windows": 2,
+  "version": 1
+}

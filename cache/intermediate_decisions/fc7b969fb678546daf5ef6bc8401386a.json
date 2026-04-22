@@ -1,0 +1,15 @@
+{
+  "decisions": [
+    {
+      "after_tool_idx": 0,
+      "tool": "compare_similar_mols",
+      "decision": "A",
+      "confidence": "committed",
+      "evidence": "Across all six neighbors, the same theme repeats: the query does have a strong basic pKa, which is one of the more substrate-like signals for CYP2D6, but it is consistently smaller in size, lower in polar surface area or heteroatom burden, and often lower in charge-related descriptors than the substrate-like references. Those non-substrate analogs still show the same overall pattern, so the local evidence favors option (A): is not a substrate to the enzyme CYP2D6.",
+      "is_last_before_final": true
+    }
+  ],
+  "final_answer": "A",
+  "n_windows": 1,
+  "version": 1
+}

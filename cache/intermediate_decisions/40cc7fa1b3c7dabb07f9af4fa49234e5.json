@@ -1,0 +1,23 @@
+{
+  "decisions": [
+    {
+      "after_tool_idx": 0,
+      "tool": "get_mol_properties_and_fg",
+      "decision": "A",
+      "confidence": "committed",
+      "evidence": "the molecule is predicted to be mutagenic.",
+      "is_last_before_final": false
+    },
+    {
+      "after_tool_idx": 1,
+      "tool": "compare_similar_mols",
+      "decision": "B",
+      "confidence": "committed",
+      "evidence": "Taken together, the six neighbors are not uniform, but they are not uniform in the direction of reducing concern either. The three positive neighbors already lean mutagenic, with Neighbor 2 and Neighbor 3 especially informative, and the three negative neighbors also end up being judged mutagenic in their comparisons. Across all six comparisons, the repeated presence of extra alkyl bromide in the query, along with lower QED and several other differences, gives a consistent enough signal that the final prediction is option (B): is mutagenic.",
+      "is_last_before_final": true
+    }
+  ],
+  "final_answer": "B",
+  "n_windows": 2,
+  "version": 1
+}

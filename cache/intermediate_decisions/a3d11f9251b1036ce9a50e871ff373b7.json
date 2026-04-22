@@ -1,0 +1,23 @@
+{
+  "decisions": [
+    {
+      "after_tool_idx": 0,
+      "tool": "get_mol_properties_and_fg",
+      "decision": "A",
+      "confidence": "committed",
+      "evidence": "Overall, the dominant signal is the strongly aromatic, low-sp3, high-logD, zero-TPSA, zero-HBA profile, which is more compatible with a mutagenic aromatic scaffold than with a clearly benign one. Despite a few descriptors that suggest reduced effective exposure, the aromatic ring burden and flatness are the more decisive features here, so the molecule is predicted to be mutagenic.",
+      "is_last_before_final": false
+    },
+    {
+      "after_tool_idx": 1,
+      "tool": "compare_similar_mols",
+      "decision": "B",
+      "confidence": "committed",
+      "evidence": "Overall, the balance of structural evidence supports a mutagenic classification.",
+      "is_last_before_final": true
+    }
+  ],
+  "final_answer": "B",
+  "n_windows": 2,
+  "version": 1
+}
