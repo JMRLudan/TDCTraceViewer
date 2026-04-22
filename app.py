@@ -251,21 +251,56 @@ def parse_response(text: str) -> list[Segment]:
 # ---------------------------------------------------------------------------
 
 
-@dataclass
 class Group:
-    """Unified representation of one prompt + N samples (typically 24)."""
+    """Unified representation of one prompt + N samples (typically 24).
 
-    run_id: str
-    group_id: str                 # local id, unique within a run
-    step: int
-    group_type: str               # mixed | needle | step_groups | first_ever
-    datasource: str | None
-    source_file: str
-    prompt: str
-    label: str
-    samples: list[dict]
-    group_rewards: list[float] | None = None
-    dataset_idx: int | None = None
+    Samples are loaded lazily from ``_source_path`` on first access to keep
+    the base registry footprint small. On a run with ~10k samples and ~5-10KB
+    of response text per sample, eager loading was costing ~240MB RAM just
+    to hold response text; lazy loading defers that cost until a group is
+    actually viewed and lets the flip-index builder drop each group's
+    samples after processing.
+    """
+
+    def __init__(
+        self,
+        run_id: str,
+        group_id: str,
+        step: int,
+        group_type: str,
+        datasource: str | None,
+        source_file: str,
+        prompt: str,
+        label: str,
+        samples: list[dict] | None = None,
+        group_rewards: list[float] | None = None,
+        dataset_idx: int | None = None,
+        source_path: str | None = None,
+        bundle_index: int | None = None,
+        sample_count: int | None = None,
+        sample_rewards: list[float] | None = None,
+    ) -> None:
+        self.run_id = run_id
+        self.group_id = group_id
+        self.step = step
+        self.group_type = group_type
+        self.datasource = datasource
+        self.source_file = source_file
+        self.prompt = prompt
+        self.label = label
+        self.group_rewards = group_rewards
+        self.dataset_idx = dataset_idx
+        self._source_path = source_path
+        self._bundle_index = bundle_index
+        if samples is not None:
+            # eager path (small groups like first_ever); also derive count/rewards
+            self._samples_cache: list[dict] | None = samples
+            self._sample_count = len(samples)
+            self._sample_rewards = [s.get("reward", 0.0) for s in samples]
+        else:
+            self._samples_cache = None
+            self._sample_count = int(sample_count or 0)
+            self._sample_rewards = list(sample_rewards or [])
 
     @property
     def uid(self) -> str:
@@ -273,13 +308,71 @@ class Group:
         return f"{self.run_id}::{self.group_id}"
 
     @property
+    def samples(self) -> list[dict]:
+        if self._samples_cache is None:
+            self._samples_cache = self._load_samples()
+        return self._samples_cache
+
+    @samples.setter
+    def samples(self, value: list[dict]) -> None:
+        self._samples_cache = value
+        if value is not None:
+            self._sample_count = len(value)
+            self._sample_rewards = [s.get("reward", 0.0) for s in value]
+
+    def unload_samples(self) -> None:
+        """Drop the in-memory copy; next access will reload from disk."""
+        self._samples_cache = None
+
+    @property
     def mean_reward(self) -> float:
-        rewards = self.group_rewards or [s.get("reward", 0.0) for s in self.samples]
-        return statistics.fmean(rewards) if rewards else 0.0
+        if self.group_rewards:
+            return statistics.fmean(self.group_rewards)
+        if self._sample_rewards:
+            return statistics.fmean(self._sample_rewards)
+        if self._samples_cache:
+            rewards = [s.get("reward", 0.0) for s in self._samples_cache]
+            return statistics.fmean(rewards) if rewards else 0.0
+        return 0.0
 
     @property
     def n_samples(self) -> int:
-        return len(self.samples)
+        if self._samples_cache is not None:
+            return len(self._samples_cache)
+        return self._sample_count
+
+    def _load_samples(self) -> list[dict]:
+        """Re-read the source file to pull the per-sample list.
+
+        Mirrors the parsing in ``_load_group_from_flat`` /
+        ``_load_groups_from_bundle`` so lazy loads match what eager loads
+        would have produced.
+        """
+        if not self._source_path:
+            return []
+        try:
+            with open(self._source_path) as f:
+                d = json.load(f)
+        except Exception:
+            return []
+        name = Path(self._source_path).name
+        if name == "first_ever_trace.json":
+            tr = d.get("trace", d)
+            decoded = d.get("decoded", {}) or {}
+            resp = (
+                decoded.get("response_text")
+                or tr.get("response_text")
+                or tr.get("response")
+                or ""
+            )
+            return [{"reward": tr.get("reward", 0.0), "response_text": resp}]
+        if isinstance(d.get("groups"), list):
+            gi = self._bundle_index or 0
+            try:
+                return d["groups"][gi].get("samples") or []
+            except Exception:
+                return []
+        return d.get("samples") or []
 
 
 # Context -> task name (rough inference from opening phrase of the Context line).
@@ -343,6 +436,8 @@ def _load_group_from_flat(run_id: str, path: Path) -> Group:
             label=label,
             samples=samples,
         )
+    samples_list = d["samples"]
+    rewards = [s.get("reward", 0.0) for s in samples_list]
     return Group(
         run_id=run_id,
         group_id=f"{gtype}_step{step}",
@@ -352,8 +447,11 @@ def _load_group_from_flat(run_id: str, path: Path) -> Group:
         source_file=path.name,
         prompt=d["prompt"],
         label=d.get("label", ""),
-        samples=d["samples"],
+        samples=None,  # lazy: drop response_text bodies from RAM
         group_rewards=d.get("group_rewards"),
+        source_path=str(path),
+        sample_count=len(samples_list),
+        sample_rewards=rewards,
     )
 
 
@@ -364,6 +462,8 @@ def _load_groups_from_bundle(run_id: str, path: Path) -> list[Group]:
     for i, g in enumerate(d.get("groups", [])):
         prompt = g["prompt"]
         ds = g.get("datasource") or infer_datasource(prompt)
+        samples_list = g["samples"]
+        rewards = [s.get("reward", 0.0) for s in samples_list]
         out.append(
             Group(
                 run_id=run_id,
@@ -374,9 +474,13 @@ def _load_groups_from_bundle(run_id: str, path: Path) -> list[Group]:
                 source_file=path.name,
                 prompt=prompt,
                 label=g.get("label", ""),
-                samples=g["samples"],
+                samples=None,  # lazy: drop response_text bodies from RAM
                 dataset_idx=g.get("dataset_idx"),
-                group_rewards=[s.get("reward", 0.0) for s in g["samples"]],
+                group_rewards=rewards,
+                source_path=str(path),
+                bundle_index=i,
+                sample_count=len(samples_list),
+                sample_rewards=rewards,
             )
         )
     return out
@@ -2236,36 +2340,53 @@ def _sft_sample_lookup(doc: dict, sample_ref: str) -> tuple[str | None, dict | N
 _FLIP_INDEX: list[dict] | None = None
 
 
-def _flip_pattern_from_decisions(decisions: list[dict]) -> tuple[str | None, int, int]:
-    """Return (compressed pattern, n_decisions, n_flips) for one sample.
+def _flip_pattern_from_decisions(
+    decisions: list[dict],
+) -> tuple[str | None, int, int, dict[str, int]]:
+    """Return (compressed pattern, n_decisions, n_flips, transitions) for one sample.
+
+    ``transitions`` counts adjacent-decision pairs in the raw (uncompressed)
+    sequence: {"AA": int, "AB": int, "BA": int, "BB": int}. AA/BB are stays
+    (non-reversals), AB/BA are flips. Summing transitions over the sample
+    always gives n_decisions - 1 (or 0 if only one decision).
 
     Pattern is run-length-compressed (consecutive duplicate decisions
     merged) so the table reads as a flip trajectory. Decisions with
     decision == None are skipped (the extractor couldn't pin down a
     letter for that window).
     """
+    empty_trans = {"AA": 0, "AB": 0, "BA": 0, "BB": 0}
     if not decisions:
-        return None, 0, 0
+        return None, 0, 0, empty_trans
     # defensive sort by after_tool_idx in case the cache ever reorders
     ds = sorted(decisions, key=lambda d: d.get("after_tool_idx") or 0)
     letters = [d.get("decision") for d in ds if d.get("decision") in ("A", "B")]
     if not letters:
-        return None, 0, 0
+        return None, 0, 0, empty_trans
     compressed: list[str] = []
     for letter in letters:
         if not compressed or compressed[-1] != letter:
             compressed.append(letter)
     pattern = "→".join(compressed)
     n_flips = max(0, len(compressed) - 1)
-    return pattern, len(letters), n_flips
+    transitions = {"AA": 0, "AB": 0, "BA": 0, "BB": 0}
+    for a, b in zip(letters, letters[1:]):
+        transitions[a + b] += 1
+    return pattern, len(letters), n_flips, transitions
 
 
 def _build_flip_index() -> list[dict]:
     """Walk every indexed sample, look up its cached decisions, build
     a flat record list. Records carry the filter-able fields and the
     derived pattern so /api/analysis/flip_patterns can aggregate cheaply.
+
+    Memory discipline: after reading a GRPO group's samples we call
+    ``g.unload_samples()`` so the builder never holds more than one
+    group's response_text at a time. Essential on the 512Mi Render
+    instance where eager-loading all samples once cost ~240MB.
     """
     out: list[dict] = []
+    empty_trans = {"AA": 0, "AB": 0, "BA": 0, "BB": 0}
 
     # GRPO samples
     for run_id in REG.run_order:
@@ -2273,12 +2394,32 @@ def _build_flip_index() -> list[dict]:
         if ti is None:
             continue
         for g in ti.groups:
-            for idx, smp in enumerate(g.samples):
-                response_text = smp.get("response_text", "")
-                if not response_text:
-                    continue
-                cached = _id_cache_get(response_text)
-                if cached is None:
+            try:
+                for idx, smp in enumerate(g.samples):
+                    response_text = smp.get("response_text", "")
+                    if not response_text:
+                        continue
+                    cached = _id_cache_get(response_text)
+                    if cached is None:
+                        out.append({
+                            "source": "grpo",
+                            "run_id": run_id,
+                            "archive_id": None,
+                            "step": g.step,
+                            "task": g.datasource,
+                            "group_id": g.group_id,
+                            "group_type": g.group_type,
+                            "sample_idx": idx,
+                            "pattern": None,
+                            "n_decisions": 0,
+                            "n_flips": 0,
+                            "transitions": dict(empty_trans),
+                            "final_answer": None,
+                            "cached": False,
+                        })
+                        continue
+                    decisions = cached.get("decisions") or []
+                    pattern, n_dec, n_flips, trans = _flip_pattern_from_decisions(decisions)
                     out.append({
                         "source": "grpo",
                         "run_id": run_id,
@@ -2288,30 +2429,16 @@ def _build_flip_index() -> list[dict]:
                         "group_id": g.group_id,
                         "group_type": g.group_type,
                         "sample_idx": idx,
-                        "pattern": None,
-                        "n_decisions": 0,
-                        "n_flips": 0,
-                        "final_answer": None,
-                        "cached": False,
+                        "pattern": pattern,
+                        "n_decisions": n_dec,
+                        "n_flips": n_flips,
+                        "transitions": trans,
+                        "final_answer": cached.get("final_answer"),
+                        "cached": True,
                     })
-                    continue
-                decisions = cached.get("decisions") or []
-                pattern, n_dec, n_flips = _flip_pattern_from_decisions(decisions)
-                out.append({
-                    "source": "grpo",
-                    "run_id": run_id,
-                    "archive_id": None,
-                    "step": g.step,
-                    "task": g.datasource,
-                    "group_id": g.group_id,
-                    "group_type": g.group_type,
-                    "sample_idx": idx,
-                    "pattern": pattern,
-                    "n_decisions": n_dec,
-                    "n_flips": n_flips,
-                    "final_answer": cached.get("final_answer"),
-                    "cached": True,
-                })
+            finally:
+                # drop the loaded response_text payload before moving on
+                g.unload_samples()
 
     # SFT samples — load each step/task doc lazily; samples include
     # named items (best_correct, worst_wrong) and the per-sample pool.
@@ -2351,12 +2478,13 @@ def _build_flip_index() -> list[dict]:
                             "pattern": None,
                             "n_decisions": 0,
                             "n_flips": 0,
+                            "transitions": dict(empty_trans),
                             "final_answer": None,
                             "cached": False,
                         })
                         continue
                     decisions = cached.get("decisions") or []
-                    pattern, n_dec, n_flips = _flip_pattern_from_decisions(decisions)
+                    pattern, n_dec, n_flips, trans = _flip_pattern_from_decisions(decisions)
                     out.append({
                         "source": "sft",
                         "run_id": None,
@@ -2369,16 +2497,47 @@ def _build_flip_index() -> list[dict]:
                         "pattern": pattern,
                         "n_decisions": n_dec,
                         "n_flips": n_flips,
+                        "transitions": trans,
                         "final_answer": cached.get("final_answer"),
                         "cached": True,
                     })
     return out
 
 
+# On-disk cache location for precomputed flip index. Populated offline
+# and shipped with the data bundle; otherwise the in-process builder
+# will compute it on first request (slow + memory heavy).
+_FLIP_INDEX_FILE = Path(os.environ.get("FLIP_INDEX_FILE", "/data/flip_index.json"))
+
+
+def _load_flip_index_from_disk() -> list[dict] | None:
+    """Return the precomputed flip index if present on disk, else None."""
+    try:
+        if _FLIP_INDEX_FILE.exists():
+            with open(_FLIP_INDEX_FILE) as f:
+                data = json.load(f)
+            if isinstance(data, list):
+                # upgrade older records (pre-transitions) transparently
+                empty = {"AA": 0, "AB": 0, "BA": 0, "BB": 0}
+                for r in data:
+                    if "transitions" not in r or not isinstance(r.get("transitions"), dict):
+                        r["transitions"] = dict(empty)
+                return data
+    except Exception as exc:
+        print(f"[flip_index] failed to load {_FLIP_INDEX_FILE}: {exc}")
+    return None
+
+
 def _get_flip_index() -> list[dict]:
     global _FLIP_INDEX
     if _FLIP_INDEX is None:
-        _FLIP_INDEX = _build_flip_index()
+        disk = _load_flip_index_from_disk()
+        if disk is not None:
+            print(f"[flip_index] loaded {len(disk)} records from {_FLIP_INDEX_FILE}")
+            _FLIP_INDEX = disk
+        else:
+            print(f"[flip_index] building in-process (no cache at {_FLIP_INDEX_FILE})")
+            _FLIP_INDEX = _build_flip_index()
     return _FLIP_INDEX
 
 
@@ -2436,10 +2595,29 @@ def api_flip_patterns(
 
     pattern_counts: dict[str, int] = {}
     flip_dist: dict[int, int] = {}
+    transition_counts = {"AA": 0, "AB": 0, "BA": 0, "BB": 0}
     for r in filtered:
         if r["pattern"]:
             pattern_counts[r["pattern"]] = pattern_counts.get(r["pattern"], 0) + 1
             flip_dist[r["n_flips"]] = flip_dist.get(r["n_flips"], 0) + 1
+        tr = r.get("transitions") or {}
+        for k in transition_counts:
+            v = tr.get(k)
+            if isinstance(v, int):
+                transition_counts[k] += v
+
+    # Transition summary: adjacent-decision pairs across the filter.
+    # stays = AA + BB (model sticks), flips = AB + BA (model reverses).
+    trans_total = sum(transition_counts.values())
+    stays = transition_counts["AA"] + transition_counts["BB"]
+    flips = transition_counts["AB"] + transition_counts["BA"]
+    transition_summary = {
+        "total_pairs": trans_total,
+        "stays": stays,
+        "flips": flips,
+        "stay_share": (stays / trans_total) if trans_total else 0.0,
+        "flip_share": (flips / trans_total) if trans_total else 0.0,
+    }
 
     pattern_rows = sorted(
         (
@@ -2476,6 +2654,8 @@ def api_flip_patterns(
         "n_without_decisions": n_without,
         "pattern_counts": pattern_rows,
         "flip_count_distribution": {str(k): flip_dist[k] for k in sorted(flip_dist)},
+        "transition_counts": transition_counts,
+        "transition_summary": transition_summary,
         "available_filters": {
             "sources": sources,
             "runs": runs,

@@ -264,6 +264,15 @@
         <tbody></tbody>
       </table>
     </details>
+
+    <details style="margin-top:0.8rem;" open>
+      <summary class="dim">adjacent-decision transitions (stays vs. flips)</summary>
+      <div id="flip-trans-summary" class="flip-summary" style="margin-top:0.4rem;"></div>
+      <table class="groups" id="flip-trans-table" style="margin-top:0.4rem;">
+        <thead><tr><th>transition</th><th>count</th><th>share</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </details>
   </section>
 
   <style>
@@ -284,6 +293,8 @@
   const summary = document.getElementById("flip-summary");
   const tbody = document.querySelector("#flip-table tbody");
   const distBody = document.querySelector("#flip-dist-table tbody");
+  const transBody = document.querySelector("#flip-trans-table tbody");
+  const transSummary = document.getElementById("flip-trans-summary");
   const resetBtn = document.getElementById("flip-reset");
 
   function setOptions(select, values, current) {
@@ -315,6 +326,8 @@
     summary.textContent = "loading…";
     tbody.innerHTML = "";
     distBody.innerHTML = "";
+    transBody.innerHTML = "";
+    transSummary.innerHTML = "";
     const qs = buildQuery();
     const url = "/api/analysis/flip_patterns" + (qs ? ("?" + qs) : "");
     let data;
@@ -376,6 +389,40 @@
         tr.innerHTML = "<td>" + k + "</td><td>" + dist[k] + "</td>";
         distBody.appendChild(tr);
       });
+    }
+
+    // transition counts (AA/AB/BA/BB — adjacent-decision pairs)
+    const tc = data.transition_counts || {AA:0, AB:0, BA:0, BB:0};
+    const ts = data.transition_summary || {total_pairs:0, stays:0, flips:0, stay_share:0, flip_share:0};
+    const order = ["AA", "AB", "BA", "BB"];
+    const labels = {
+      "AA": "A → A (stay)",
+      "AB": "A → B (flip)",
+      "BA": "B → A (flip)",
+      "BB": "B → B (stay)",
+    };
+    if (ts.total_pairs === 0) {
+      const tr = document.createElement("tr");
+      tr.innerHTML = "<td colspan='3' class='dim'>no adjacent-decision pairs in this slice</td>";
+      transBody.appendChild(tr);
+      transSummary.innerHTML = "<span class='dim'>no transitions yet</span>";
+    } else {
+      order.forEach(k => {
+        const c = tc[k] || 0;
+        const share = ts.total_pairs ? (c / ts.total_pairs) : 0;
+        const tr = document.createElement("tr");
+        tr.innerHTML =
+          "<td>" + labels[k] + "</td>" +
+          "<td>" + c + "</td>" +
+          "<td>" + (share * 100).toFixed(1) + "%</td>";
+        transBody.appendChild(tr);
+      });
+      transSummary.innerHTML =
+        "<b>" + ts.total_pairs + "</b> adjacent-decision pair" + (ts.total_pairs === 1 ? "" : "s") +
+        " &middot; " +
+        "<b>" + ts.stays + "</b> stays (" + (ts.stay_share * 100).toFixed(1) + "%)" +
+        " &middot; " +
+        "<b>" + ts.flips + "</b> flips (" + (ts.flip_share * 100).toFixed(1) + "%)";
     }
   }
 
