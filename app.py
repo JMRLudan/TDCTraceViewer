@@ -2097,67 +2097,131 @@ def api_annotation(ann_id: str):
 # ===========================================================================
 
 
-def _analyses_for_runs(run_ids: list[str] | None = None) -> list[dict]:
-    rids = run_ids or list(REG.run_order)
+# On-disk location for precomputed per-run analysis JSON. Populated
+# offline by build_run_analysis.py and shipped in the data bundle under
+# /data/run_analysis/. The live process never calls _compute_run_analysis
+# at request time — it just reads these files.
+_RUN_ANALYSIS_DIR = Path(
+    os.environ.get("RUN_ANALYSIS_DIR", "/data/run_analysis")
+)
+
+
+def _load_run_analysis_from_disk(run_id: str) -> dict | None:
+    """Return the precomputed analysis for run_id if on disk, else None."""
+    p = _RUN_ANALYSIS_DIR / f"{run_id}.json"
+    try:
+        if p.exists():
+            with open(p) as f:
+                return json.load(f)
+    except Exception as exc:
+        print(f"[run_analysis] failed to load {p}: {exc}")
+    return None
+
+
+def _run_analysis_available() -> list[dict]:
+    """Enumerate runs with either a precomputed file on disk or an
+    indexed TraceIndex. Used to populate the analysis page shell."""
     out = []
-    for rid in rids:
+    seen: set[str] = set()
+    idx_path = _RUN_ANALYSIS_DIR / "_index.json"
+    if idx_path.exists():
+        try:
+            with open(idx_path) as f:
+                idx = json.load(f)
+            for e in idx.get("runs", []):
+                rid = e.get("run_id")
+                if not rid:
+                    continue
+                out.append({
+                    "run_id": rid,
+                    "n_total": e.get("n_total", 0),
+                    "n_steps": e.get("n_steps", 0),
+                    "precomputed": True,
+                })
+                seen.add(rid)
+        except Exception as exc:
+            print(f"[run_analysis] failed to read index: {exc}")
+    # Fall back: list runs known to the registry that aren't precomputed
+    # (live build would be too slow/expensive on Render but we still
+    # surface them so local dev sees them).
+    for rid in REG.run_order:
+        if rid in seen:
+            continue
         ti = REG.runs.get(rid)
         if ti is None:
             continue
-        out.append(get_run_analysis(ti))
+        out.append({
+            "run_id": rid,
+            "n_total": sum(g.n_samples for g in ti.groups),
+            "n_steps": len({g.step for g in ti.groups}),
+            "precomputed": False,
+        })
     return out
 
 
 @app.get("/analysis/", response_class=HTMLResponse)
-def analysis_page(request: Request, run: str | None = None):
-    """Failure-analysis dashboard: KNN obedience, retrieval quality, tool
-    usage, and model accuracy over training step. Multi-run if none
-    selected; single run if `?run=...` is provided."""
-    if not REG.runs:
-        return templates.TemplateResponse(
-            request,
-            "analysis.html",
-            {
-                **_nav_context(),
-                "active_tab": "analysis",
-                "analyses": [],
-                "selected_run": None,
-                "empty": True,
-            },
-        )
+def analysis_page(request: Request):
+    """Failure-analysis dashboard.
 
-    if run and run in REG.runs:
-        analyses = [get_run_analysis(REG.runs[run])]
-        selected = run
-    else:
-        analyses = _analyses_for_runs()
-        selected = None
-
+    Renders a lightweight shell — tab nav + run picker. The heavy
+    per-run analysis is fetched lazily via /api/analysis/run/{run_id}
+    when the user activates the per-run tab and clicks Load. This keeps
+    the initial page load O(runs listed) instead of O(samples × groups).
+    """
     return templates.TemplateResponse(
         request,
         "analysis.html",
         {
             **_nav_context(),
             "active_tab": "analysis",
-            "analyses": analyses,
-            "selected_run": selected,
-            "empty": False,
+            "available_runs": _run_analysis_available(),
+            "empty": not REG.runs,
         },
     )
 
 
+@app.get("/api/analysis/run/{run_id}")
+def api_analysis_run(run_id: str):
+    """Return the precomputed analysis for one run.
+
+    Reads /data/run_analysis/<run_id>.json off disk — cheap. If the
+    precomputed file is missing (e.g. local dev without a bundle), fall
+    back to computing live via get_run_analysis on the registry.
+    """
+    disk = _load_run_analysis_from_disk(run_id)
+    if disk is not None:
+        return JSONResponse(disk)
+
+    ti = REG.runs.get(run_id)
+    if ti is None:
+        raise HTTPException(404, f"run {run_id!r} not found")
+    res = get_run_analysis(ti)
+    # strip the per-sample raw rows — big, not used by the page.
+    return JSONResponse({k: v for k, v in res.items() if k != "samples"})
+
+
 @app.get("/api/analysis")
 def api_analysis(run: str | None = None, include_samples: bool = False):
-    analyses = _analyses_for_runs([run] if run else None)
-    if not include_samples:
-        for a in analyses:
-            a = {k: v for k, v in a.items() if k != "samples"}
-    return JSONResponse(
-        [
-            {k: v for k, v in a.items() if include_samples or k != "samples"}
-            for a in analyses
-        ]
-    )
+    """Legacy endpoint: list-of-run-analyses.
+
+    Kept for backwards compatibility. Prefer /api/analysis/run/{run_id}
+    which hits the precomputed disk cache. This endpoint falls back to
+    live compute when no precomputed file exists, which is slow."""
+    rids = [run] if run else list(REG.run_order)
+    out = []
+    for rid in rids:
+        disk = _load_run_analysis_from_disk(rid)
+        if disk is not None:
+            out.append(disk)
+            continue
+        ti = REG.runs.get(rid)
+        if ti is None:
+            continue
+        res = get_run_analysis(ti)
+        if not include_samples:
+            res = {k: v for k, v in res.items() if k != "samples"}
+        out.append(res)
+    return JSONResponse(out)
 
 
 # ===========================================================================
