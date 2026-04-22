@@ -1,0 +1,15 @@
+{
+  "decisions": [
+    {
+      "after_tool_idx": 0,
+      "tool": "compare_similar_mols",
+      "decision": "B",
+      "confidence": "committed",
+      "evidence": "Across the six neighbors, all three mutagenic neighbors and even the three non-mutagenic neighbors point in the same direction: the query carries an azo group, is smaller and less lipophilic than several of the analogs, and shows a pattern of physicochemical shifts that does not convincingly move it away from the mutagenic analogs. The negative-neighbor comparisons are not actually protective enough to outweigh the repeated azo-linked signal, so the combined evidence supports option (B): is mutagenic.",
+      "is_last_before_final": true
+    }
+  ],
+  "final_answer": "B",
+  "n_windows": 1,
+  "version": 1
+}

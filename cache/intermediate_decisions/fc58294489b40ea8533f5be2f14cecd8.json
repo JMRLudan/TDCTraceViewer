@@ -1,0 +1,15 @@
+{
+  "decisions": [
+    {
+      "after_tool_idx": 0,
+      "tool": "compare_similar_mols",
+      "decision": "A",
+      "confidence": "committed",
+      "evidence": "Across all six neighbors, the recurring pattern is that the query repeatedly carries one or more mutagenicity-associated features such as peroxo, but these are consistently counterbalanced by charge-related, size/lipophilicity, or other context-specific features that favor the non-mutagenic class. The positive neighbors and the negative neighbors both end up with overall comparisons pointing to option (A), so the combined neighbor evidence supports the final prediction that the query is not mutagenic.",
+      "is_last_before_final": true
+    }
+  ],
+  "final_answer": "A",
+  "n_windows": 1,
+  "version": 1
+}

@@ -1,0 +1,15 @@
+{
+  "decisions": [
+    {
+      "after_tool_idx": 0,
+      "tool": "compare_similar_mols",
+      "decision": "A",
+      "confidence": "committed",
+      "evidence": " Overall, the three positive neighbors and the three negative neighbors both place the query in a local region where it repeatedly carries a tertiary amide, higher saturation, and in several cases lower acidic/basic functionality relative to nearby substrates. Some individual features such as higher QED, higher sp3 content, or slightly lower partial-charge extrema point in mixed directions, but the repeated absence of an acidic site, the repeated tertiary-amide pattern, and the local analog comparisons overall support option (A): is not a substrate to the enzyme CYP2C9.",
+      "is_last_before_final": true
+    }
+  ],
+  "final_answer": "A",
+  "n_windows": 1,
+  "version": 1
+}

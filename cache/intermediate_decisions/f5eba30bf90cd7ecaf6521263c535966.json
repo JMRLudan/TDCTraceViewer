@@ -1,0 +1,15 @@
+{
+  "decisions": [
+    {
+      "after_tool_idx": 0,
+      "tool": "compare_similar_mols",
+      "decision": "B",
+      "confidence": "committed",
+      "evidence": "Putting the six comparisons together, the same core features recur: phenazine is present in the query but absent in every neighbor, the query repeatedly has 2 primary aromatic amines, and it also shows a higher ionizable-site burden and heteroatom burden than the analogs. A few secondary descriptors such as ring count, partial charge, neutral fraction, pKa, and polar surface area vary in mixed ways, but none of them overturn the repeated structural-alert signal. Overall, the neighbor evidence is more consistent with the query being mutagenic, so the final prediction is option (B): is mutagenic.",
+      "is_last_before_final": true
+    }
+  ],
+  "final_answer": "B",
+  "n_windows": 1,
+  "version": 1
+}

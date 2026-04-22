@@ -1,0 +1,15 @@
+{
+  "decisions": [
+    {
+      "after_tool_idx": 0,
+      "tool": "compare_similar_mols",
+      "decision": "B",
+      "confidence": "committed",
+      "evidence": "Across all six neighbors, the positive neighbors consistently support option (B), and the three negative neighbors do not provide a clean counterpattern because their own pairwise comparisons still favor the query on several features associated with the substrate side. The repeated presence of decahydroisoquinoline in the query, together with favorable shifts in pKa, logD, sp3 fraction in some cases, neutral fraction, topological polar surface area, ring counts, and partial-charge descriptors, makes the aggregate comparison lean toward option (B): is a substrate to the enzyme CYP3A4.",
+      "is_last_before_final": true
+    }
+  ],
+  "final_answer": "B",
+  "n_windows": 1,
+  "version": 1
+}

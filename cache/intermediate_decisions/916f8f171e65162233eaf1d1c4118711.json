@@ -1,0 +1,15 @@
+{
+  "decisions": [
+    {
+      "after_tool_idx": 0,
+      "tool": "compare_similar_mols",
+      "decision": "A",
+      "confidence": "committed",
+      "evidence": "Across all six neighbors, the same picture emerges: the query repeatedly differs by having more fluoroalkene character, lower Labute surface area, lower topological polar surface area when those values are available, and in several cases lower hydrogen-bond acceptor burden and lower QED. A few isolated features, such as the acyl chloride in Neighbor 2 or the alkenes in Neighbors 4 to 6, point toward the mutagenic side, but they do not outweigh the broader pattern. Since every neighbor-level comparison ultimately aligns more strongly with the non-mutagenic side, the overall prediction is option (A): is not mutagenic.",
+      "is_last_before_final": true
+    }
+  ],
+  "final_answer": "A",
+  "n_windows": 1,
+  "version": 1
+}

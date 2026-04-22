@@ -1,0 +1,15 @@
+{
+  "decisions": [
+    {
+      "after_tool_idx": 0,
+      "tool": "compare_similar_mols",
+      "decision": "A",
+      "confidence": "committed",
+      "evidence": "Across all six comparisons, the query repeatedly looks smaller in ring count, less lipophilic in logD where that feature appears, and often closer to the non-mutagenic analogs on charge and drug-likeness. The combined neighbor evidence therefore supports the final prediction that the compound is not mutagenic, option (A).",
+      "is_last_before_final": true
+    }
+  ],
+  "final_answer": "A",
+  "n_windows": 1,
+  "version": 1
+}

@@ -1,0 +1,15 @@
+{
+  "decisions": [
+    {
+      "after_tool_idx": 0,
+      "tool": "compare_similar_mols",
+      "decision": "A",
+      "confidence": "committed",
+      "evidence": "Across the set, the query repeatedly shows lower sp3 character, added secondary aliphatic amine in several comparisons, and multiple structural shifts that in these analog pairs align more often with the non-binding side. Although the query also has some favorable fragment-like elements such as an aromatic heterocycle, furan, and aryl fluoride, the full neighbor evidence is more consistent with option (A): does not bind SARS-CoV-2 3CL protease.",
+      "is_last_before_final": true
+    }
+  ],
+  "final_answer": "A",
+  "n_windows": 1,
+  "version": 1
+}
