@@ -309,9 +309,16 @@ class Group:
 
     @property
     def samples(self) -> list[dict]:
-        if self._samples_cache is None:
-            self._samples_cache = self._load_samples()
-        return self._samples_cache
+        # If samples were provided eagerly at construction (e.g. first_ever),
+        # keep that cache — it's a single-sample group. For every other
+        # group, reload from disk on each access: caching here would
+        # accumulate 24 samples × ~10KB per group view with no bound, and
+        # previously OOM-killed the 512Mi Render instance after a browsing
+        # session of ~100 groups. Reload is ~5–15ms and the OS FS cache
+        # keeps it hot.
+        if self._samples_cache is not None:
+            return self._samples_cache
+        return self._load_samples()
 
     @samples.setter
     def samples(self, value: list[dict]) -> None:
@@ -321,7 +328,7 @@ class Group:
             self._sample_rewards = [s.get("reward", 0.0) for s in value]
 
     def unload_samples(self) -> None:
-        """Drop the in-memory copy; next access will reload from disk."""
+        """Drop any eager cache; lazy groups are already non-caching."""
         self._samples_cache = None
 
     @property
@@ -1511,7 +1518,12 @@ def _render_segments_for_template(segs: list[Segment]) -> list[dict]:
 
 
 def _group_summary(g: Group) -> dict:
-    rewards = [s.get("reward", 0.0) for s in g.samples]
+    # Use cached per-sample rewards to avoid triggering a lazy sample load.
+    # _sample_rewards was captured when the group was first indexed; it has
+    # one float per sample and is enough for all the list-page stats. This
+    # must NOT touch g.samples — list pages iterate every group, so loading
+    # full sample text here would blow up memory on the 512Mi Render box.
+    rewards = g._sample_rewards or g.group_rewards or []
     return {
         "uid": g.uid,
         "run_id": g.run_id,
@@ -1520,7 +1532,7 @@ def _group_summary(g: Group) -> dict:
         "type": g.group_type,
         "datasource": g.datasource or "?",
         "label": g.label,
-        "n_samples": len(g.samples),
+        "n_samples": g.n_samples,
         "mean_reward": round(statistics.fmean(rewards), 3) if rewards else 0.0,
         "min_reward": round(min(rewards), 3) if rewards else 0.0,
         "max_reward": round(max(rewards), 3) if rewards else 0.0,
