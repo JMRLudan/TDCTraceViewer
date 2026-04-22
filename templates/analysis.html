@@ -208,7 +208,186 @@
     {% endfor %}
   </section>
 
+  <section class="analysis-table" id="flip-section">
+    <h2>Answer-flip patterns</h2>
+    <p class="dim" style="max-width:780px;">
+      For each sample we look up the gpt-5-nano per-window decision sequence
+      (one A/B call after every tool response). The pattern below is the
+      run-length-compressed sequence — so a sample that "thought" A after
+      tool 1, A after tool 2, then B after tool 3 shows up as
+      <code>A→B</code>. Counts use only samples that have at least one
+      committed A/B decision; samples whose cache miss or whose every window
+      was uncommitted are reported separately.
+    </p>
+
+    <form id="flip-filters" class="flip-filters" onsubmit="return false;">
+      <label>source
+        <select name="source">
+          <option value="all">all</option>
+        </select>
+      </label>
+      <label>run
+        <select name="run"><option value="">— any —</option></select>
+      </label>
+      <label>archive
+        <select name="archive"><option value="">— any —</option></select>
+      </label>
+      <label>step
+        <select name="step"><option value="">— any —</option></select>
+      </label>
+      <label>task
+        <select name="task"><option value="">— any —</option></select>
+      </label>
+      <label>group type
+        <select name="group_type"><option value="">— any —</option></select>
+      </label>
+      <button type="button" id="flip-reset">reset</button>
+    </form>
+
+    <div id="flip-summary" class="flip-summary">loading…</div>
+
+    <table class="groups" id="flip-table">
+      <thead>
+        <tr>
+          <th>pattern</th>
+          <th>count</th>
+          <th>share</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+
+    <details style="margin-top:0.8rem;">
+      <summary class="dim">flip-count distribution</summary>
+      <table class="groups" id="flip-dist-table" style="margin-top:0.4rem;">
+        <thead><tr><th># flips</th><th>samples</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </details>
+  </section>
+
+  <style>
+    .flip-filters { display:flex; flex-wrap:wrap; gap:0.6rem 1rem; align-items:flex-end; margin:0.6rem 0 0.8rem; }
+    .flip-filters label { display:flex; flex-direction:column; font-size:0.8rem; color:#6a6a7a; }
+    .flip-filters select { font-size:0.9rem; padding:0.2rem 0.3rem; }
+    .flip-filters button { padding:0.3rem 0.7rem; font-size:0.85rem; cursor:pointer; }
+    .flip-summary { margin:0.4rem 0 0.6rem; font-size:0.95rem; }
+    .flip-summary .dim { color:#6a6a7a; }
+    #flip-table td:first-child { font-family: ui-monospace, "SF Mono", Menlo, monospace; }
+  </style>
+
 </main>
+
+<script>
+(function () {
+  const form = document.getElementById("flip-filters");
+  const summary = document.getElementById("flip-summary");
+  const tbody = document.querySelector("#flip-table tbody");
+  const distBody = document.querySelector("#flip-dist-table tbody");
+  const resetBtn = document.getElementById("flip-reset");
+
+  function setOptions(select, values, current) {
+    // keep the leading default option (— any — / all), drop the rest
+    const keep = select.options[0];
+    select.innerHTML = "";
+    select.appendChild(keep);
+    values.forEach(v => {
+      const o = document.createElement("option");
+      o.value = String(v);
+      o.textContent = String(v);
+      if (current !== undefined && current !== null && String(current) === String(v)) {
+        o.selected = true;
+      }
+      select.appendChild(o);
+    });
+  }
+
+  function buildQuery() {
+    const fd = new FormData(form);
+    const params = new URLSearchParams();
+    for (const [k, v] of fd.entries()) {
+      if (v && v !== "") params.set(k, v);
+    }
+    return params.toString();
+  }
+
+  async function refresh() {
+    summary.textContent = "loading…";
+    tbody.innerHTML = "";
+    distBody.innerHTML = "";
+    const qs = buildQuery();
+    const url = "/api/analysis/flip_patterns" + (qs ? ("?" + qs) : "");
+    let data;
+    try {
+      const r = await fetch(url);
+      data = await r.json();
+    } catch (e) {
+      summary.textContent = "failed to load: " + e;
+      return;
+    }
+
+    // populate filter dropdowns from server-known values (preserves selection)
+    const af = data.available_filters || {};
+    const cur = data.filters_applied || {};
+    setOptions(form.elements["source"], af.sources || [], cur.source);
+    setOptions(form.elements["run"], af.runs || [], cur.run);
+    setOptions(form.elements["archive"], af.archives || [], cur.archive);
+    setOptions(form.elements["step"], af.steps || [], cur.step);
+    setOptions(form.elements["task"], af.tasks || [], cur.task);
+    setOptions(form.elements["group_type"], af.group_types || [], cur.group_type);
+
+    // header summary
+    const total = data.total_traces;
+    const withDec = data.n_with_decisions;
+    const without = data.n_without_decisions;
+    summary.innerHTML =
+      "<b>" + total + "</b> trace" + (total === 1 ? "" : "s") +
+      " match the filter &middot; " +
+      "<b>" + withDec + "</b> with at least one A/B decision &middot; " +
+      "<span class='dim'>" + without + " without (cache miss or all windows uncommitted)</span>";
+
+    // pattern table
+    const rows = data.pattern_counts || [];
+    if (rows.length === 0) {
+      const tr = document.createElement("tr");
+      tr.innerHTML = "<td colspan='3' class='dim'>no decisions in this slice</td>";
+      tbody.appendChild(tr);
+    } else {
+      rows.forEach(row => {
+        const tr = document.createElement("tr");
+        tr.innerHTML =
+          "<td>" + row.pattern + "</td>" +
+          "<td>" + row.count + "</td>" +
+          "<td>" + (row.share * 100).toFixed(1) + "%</td>";
+        tbody.appendChild(tr);
+      });
+    }
+
+    // flip-count distribution
+    const dist = data.flip_count_distribution || {};
+    const keys = Object.keys(dist).sort((a, b) => Number(a) - Number(b));
+    if (keys.length === 0) {
+      const tr = document.createElement("tr");
+      tr.innerHTML = "<td colspan='2' class='dim'>—</td>";
+      distBody.appendChild(tr);
+    } else {
+      keys.forEach(k => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = "<td>" + k + "</td><td>" + dist[k] + "</td>";
+        distBody.appendChild(tr);
+      });
+    }
+  }
+
+  form.addEventListener("change", refresh);
+  resetBtn.addEventListener("click", () => {
+    form.reset();
+    refresh();
+  });
+
+  refresh();
+})();
+</script>
 
 <script id="analyses-data" type="application/json">{{ analyses|tojson }}</script>
 <script>

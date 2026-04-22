@@ -1507,6 +1507,7 @@ def api_reindex():
     REG.rescan()
     ANN_STORE.rescan()
     _invalidate_analysis_cache()
+    _invalidate_flip_index()
     return {
         "n_runs": len(REG.runs),
         "n_sft": len(REG.sft),
@@ -2216,3 +2217,271 @@ def _sft_sample_lookup(doc: dict, sample_ref: str) -> tuple[str | None, dict | N
     if 0 <= idx < len(pool):
         return pool[idx].get("response", ""), pool[idx]
     return None, None
+
+
+# ===========================================================================
+# Routes: Answer-flip pattern analysis
+# ===========================================================================
+#
+# For each sample we look up its cached intermediate-decision sequence and
+# build a "flip pattern" — the run-length-compressed sequence of A/B
+# decisions across tool-call windows (so AABBA → A→B→A). Aggregating these
+# across a filter (source/run/step/task) lets us see how often the model
+# changes its mind from one tool call to the next.
+#
+# Index is built lazily, in-memory, from the on-disk decision cache (cheap:
+# one file read per sample, sha256 keyed). Invalidated when the run
+# registry rescans.
+
+_FLIP_INDEX: list[dict] | None = None
+
+
+def _flip_pattern_from_decisions(decisions: list[dict]) -> tuple[str | None, int, int]:
+    """Return (compressed pattern, n_decisions, n_flips) for one sample.
+
+    Pattern is run-length-compressed (consecutive duplicate decisions
+    merged) so the table reads as a flip trajectory. Decisions with
+    decision == None are skipped (the extractor couldn't pin down a
+    letter for that window).
+    """
+    if not decisions:
+        return None, 0, 0
+    # defensive sort by after_tool_idx in case the cache ever reorders
+    ds = sorted(decisions, key=lambda d: d.get("after_tool_idx") or 0)
+    letters = [d.get("decision") for d in ds if d.get("decision") in ("A", "B")]
+    if not letters:
+        return None, 0, 0
+    compressed: list[str] = []
+    for letter in letters:
+        if not compressed or compressed[-1] != letter:
+            compressed.append(letter)
+    pattern = "→".join(compressed)
+    n_flips = max(0, len(compressed) - 1)
+    return pattern, len(letters), n_flips
+
+
+def _build_flip_index() -> list[dict]:
+    """Walk every indexed sample, look up its cached decisions, build
+    a flat record list. Records carry the filter-able fields and the
+    derived pattern so /api/analysis/flip_patterns can aggregate cheaply.
+    """
+    out: list[dict] = []
+
+    # GRPO samples
+    for run_id in REG.run_order:
+        ti = REG.runs.get(run_id)
+        if ti is None:
+            continue
+        for g in ti.groups:
+            for idx, smp in enumerate(g.samples):
+                response_text = smp.get("response_text", "")
+                if not response_text:
+                    continue
+                cached = _id_cache_get(response_text)
+                if cached is None:
+                    out.append({
+                        "source": "grpo",
+                        "run_id": run_id,
+                        "archive_id": None,
+                        "step": g.step,
+                        "task": g.datasource,
+                        "group_id": g.group_id,
+                        "group_type": g.group_type,
+                        "sample_idx": idx,
+                        "pattern": None,
+                        "n_decisions": 0,
+                        "n_flips": 0,
+                        "final_answer": None,
+                        "cached": False,
+                    })
+                    continue
+                decisions = cached.get("decisions") or []
+                pattern, n_dec, n_flips = _flip_pattern_from_decisions(decisions)
+                out.append({
+                    "source": "grpo",
+                    "run_id": run_id,
+                    "archive_id": None,
+                    "step": g.step,
+                    "task": g.datasource,
+                    "group_id": g.group_id,
+                    "group_type": g.group_type,
+                    "sample_idx": idx,
+                    "pattern": pattern,
+                    "n_decisions": n_dec,
+                    "n_flips": n_flips,
+                    "final_answer": cached.get("final_answer"),
+                    "cached": True,
+                })
+
+    # SFT samples — load each step/task doc lazily; samples include
+    # named items (best_correct, worst_wrong) and the per-sample pool.
+    for archive_id, arc in REG.sft.items():
+        for step in arc.steps:
+            for task in arc.tasks_at(step):
+                doc = arc.load_task(step, task)
+                if doc is None:
+                    continue
+                items: list[tuple[str, dict]] = []
+                for ref in ("best_correct", "worst_wrong"):
+                    s = doc.get(ref)
+                    if isinstance(s, dict) and s.get("response"):
+                        items.append((ref, s))
+                for s in (doc.get("samples") or []):
+                    if not isinstance(s, dict):
+                        continue
+                    if not s.get("response"):
+                        continue
+                    sid = s.get("index")
+                    items.append((str(sid) if sid is not None else "?", s))
+                for ref, s in items:
+                    response_text = s.get("response", "")
+                    if not response_text:
+                        continue
+                    cached = _id_cache_get(response_text)
+                    if cached is None:
+                        out.append({
+                            "source": "sft",
+                            "run_id": None,
+                            "archive_id": archive_id,
+                            "step": step,
+                            "task": task,
+                            "group_id": None,
+                            "group_type": None,
+                            "sample_idx": ref,
+                            "pattern": None,
+                            "n_decisions": 0,
+                            "n_flips": 0,
+                            "final_answer": None,
+                            "cached": False,
+                        })
+                        continue
+                    decisions = cached.get("decisions") or []
+                    pattern, n_dec, n_flips = _flip_pattern_from_decisions(decisions)
+                    out.append({
+                        "source": "sft",
+                        "run_id": None,
+                        "archive_id": archive_id,
+                        "step": step,
+                        "task": task,
+                        "group_id": None,
+                        "group_type": None,
+                        "sample_idx": ref,
+                        "pattern": pattern,
+                        "n_decisions": n_dec,
+                        "n_flips": n_flips,
+                        "final_answer": cached.get("final_answer"),
+                        "cached": True,
+                    })
+    return out
+
+
+def _get_flip_index() -> list[dict]:
+    global _FLIP_INDEX
+    if _FLIP_INDEX is None:
+        _FLIP_INDEX = _build_flip_index()
+    return _FLIP_INDEX
+
+
+def _invalidate_flip_index() -> None:
+    global _FLIP_INDEX
+    _FLIP_INDEX = None
+
+
+@app.get("/api/analysis/flip_patterns")
+def api_flip_patterns(
+    source: str | None = None,
+    run: str | None = None,
+    archive: str | None = None,
+    step: int | None = None,
+    task: str | None = None,
+    group_type: str | None = None,
+):
+    """Aggregate answer-flip pattern counts under a filter.
+
+    Returns:
+        {
+          "filters_applied": {...},
+          "total_traces": int,             # samples that match filter
+          "n_with_decisions": int,         # subset that had >= 1 decision
+          "n_without_decisions": int,
+          "pattern_counts": [{"pattern": str, "count": int, "share": float}, ...],
+          "flip_count_distribution": {"0": int, "1": int, ...},
+          "available_filters": {
+            "sources": [...], "runs": [...], "archives": [...],
+            "steps": [...], "tasks": [...], "group_types": [...],
+          },
+        }
+    """
+    idx = _get_flip_index()
+
+    def matches(rec: dict) -> bool:
+        if source and source != "all" and rec["source"] != source:
+            return False
+        if run and rec.get("run_id") != run:
+            return False
+        if archive and rec.get("archive_id") != archive:
+            return False
+        if step is not None and rec.get("step") != step:
+            return False
+        if task and rec.get("task") != task:
+            return False
+        if group_type and rec.get("group_type") != group_type:
+            return False
+        return True
+
+    filtered = [r for r in idx if matches(r)]
+    n_total = len(filtered)
+    n_with = sum(1 for r in filtered if r["pattern"])
+    n_without = n_total - n_with
+
+    pattern_counts: dict[str, int] = {}
+    flip_dist: dict[int, int] = {}
+    for r in filtered:
+        if r["pattern"]:
+            pattern_counts[r["pattern"]] = pattern_counts.get(r["pattern"], 0) + 1
+            flip_dist[r["n_flips"]] = flip_dist.get(r["n_flips"], 0) + 1
+
+    pattern_rows = sorted(
+        (
+            {
+                "pattern": p,
+                "count": c,
+                "share": (c / n_with) if n_with else 0.0,
+            }
+            for p, c in pattern_counts.items()
+        ),
+        key=lambda d: (-d["count"], d["pattern"]),
+    )
+
+    # available filter values — derived from the full index so the UI
+    # can show every choice even when the current filter zeros things out
+    sources = sorted({r["source"] for r in idx})
+    runs = sorted({r["run_id"] for r in idx if r.get("run_id")})
+    archives = sorted({r["archive_id"] for r in idx if r.get("archive_id")})
+    steps = sorted({r["step"] for r in idx if r.get("step") is not None})
+    tasks = sorted({r["task"] for r in idx if r.get("task")})
+    group_types = sorted({r["group_type"] for r in idx if r.get("group_type")})
+
+    return JSONResponse({
+        "filters_applied": {
+            "source": source or "all",
+            "run": run,
+            "archive": archive,
+            "step": step,
+            "task": task,
+            "group_type": group_type,
+        },
+        "total_traces": n_total,
+        "n_with_decisions": n_with,
+        "n_without_decisions": n_without,
+        "pattern_counts": pattern_rows,
+        "flip_count_distribution": {str(k): flip_dist[k] for k in sorted(flip_dist)},
+        "available_filters": {
+            "sources": sources,
+            "runs": runs,
+            "archives": archives,
+            "steps": steps,
+            "tasks": tasks,
+            "group_types": group_types,
+        },
+    })
