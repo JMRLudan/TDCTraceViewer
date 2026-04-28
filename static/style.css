@@ -462,7 +462,11 @@ table.sft-grid th.task-col {
   transform: rotate(-20deg);
   transform-origin: center left;
   min-width: 60px;
-  padding: 20px 4px 4px 4px;
+  /* Long rotated task names (e.g. CYP2C9_Substrate_CarbonMangels)
+     extend ~80–100px above the cell box at -20°. Pad the top so the
+     header row gives them room instead of clipping at the page edge. */
+  padding: 90px 4px 4px 4px;
+  vertical-align: bottom;
   font-size: 10.5px;
 }
 table.sft-grid .step-col {
